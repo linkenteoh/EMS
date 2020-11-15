@@ -6,17 +6,18 @@
     <edmx:Diagrams>
       <Diagram DiagramId="41ed6b36fb9c4deaa67df0ad533950c2" Name="Diagram1">
         <EntityTypeShape EntityType="DBModel.Advertisement" Width="1.5" PointX="3" PointY="11.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="0.75" PointY="2.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.payment" Width="1.5" PointX="5.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="3" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="0.875" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="3.125" PointY="2.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DBModel.Venue" Width="1.5" PointX="3.75" PointY="7.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.Venue_Booking" Width="1.5" PointX="6" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBModel.Venue_Booking" Width="1.5" PointX="9" PointY="2.625" IsExpanded="true" />
         <AssociationConnector Association="DBModel.FK_Table_User" ManuallyRouted="false" />
         <AssociationConnector Association="DBModel.FK_Registration_Event" ManuallyRouted="false" />
         <AssociationConnector Association="DBModel.FK_Venue_Booking_Event" ManuallyRouted="false" />
         <AssociationConnector Association="DBModel.FK_Registration_User" ManuallyRouted="false" />
         <AssociationConnector Association="DBModel.FK_Venue_Booking_Venue" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DBModel.Payment" Width="1.5" PointX="5.25" PointY="2.75" />
+        <AssociationConnector Association="DBModel.FK_Payment_Registration" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -154,7 +154,7 @@
     <Compile Include="Models\Event.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\payment.cs">
+    <Compile Include="Models\Payment.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Registration.cs">
