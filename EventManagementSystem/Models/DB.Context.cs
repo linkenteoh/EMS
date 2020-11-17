@@ -27,10 +27,10 @@ namespace EventManagementSystem.Models
     
         public virtual DbSet<Advertisement> Advertisements { get; set; }
         public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<Registration> Registrations { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Venue> Venues { get; set; }
         public virtual DbSet<Venue_Booking> Venue_Booking { get; set; }
-        public virtual DbSet<Payment> Payments { get; set; }
     }
 }
