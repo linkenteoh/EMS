@@ -1,0 +1,21 @@
+﻿@model IEnumerable<User>
+
+@{
+    ViewBag.Title = "User Profile";
+}
+
+<h2>User Profile</h2>
+<div>Picture</div>
+<table>
+    @foreach (var u in Model)
+    {
+        <tr>
+            <td>@u.Id</td>
+            <td>@u.name</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    }
+</table>

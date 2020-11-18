@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Advertisement">
           <Key>
             <PropertyRef Name="Id" />
@@ -28,15 +28,18 @@
           <Property Name="des" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="availability" Type="int" Nullable="false" />
-          <Property Name="participate_limit" Type="int" Nullable="false" />
+          <Property Name="participants" Type="int" Nullable="false" />
           <Property Name="startDate" Type="date" Nullable="false" />
           <Property Name="endDate" Type="date" Nullable="false" />
-          <Property Name="duration" Type="int" Nullable="false" />
+          <Property Name="startTime" Type="time" Precision="7" Nullable="false" />
+          <Property Name="endTime" Type="time" Precision="7" Nullable="false" />
+          <Property Name="duration" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="organized_by" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="approvalStat" Type="bit" Nullable="false" />
           <Property Name="status" Type="bit" Nullable="false" />
+          <Property Name="venueId" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="payment">
+        <EntityType Name="Payment">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -67,11 +70,11 @@
           <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="username" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="role" Type="char" MaxLength="1" Nullable="false" />
-          <Property Name="organizer" Type="bit" Nullable="false" />
-          <Property Name="status" Type="int" Nullable="false" />
-          <Property Name="recoveryCode" Type="char" MaxLength="6" Nullable="false" />
-          <Property Name="activationCode" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="role" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="organizer" Type="bit" />
+          <Property Name="status" Type="bit" Nullable="false" />
+          <Property Name="recoveryCode" Type="char" MaxLength="6" />
+          <Property Name="activationCode" Type="char" MaxLength="6" />
         </EntityType>
         <EntityType Name="Venue">
           <Key>
@@ -83,17 +86,30 @@
           <Property Name="equipment" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="capacity" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="Venue_Booking">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="eventId" Type="int" Nullable="false" />
-          <Property Name="venueId" Type="int" Nullable="false" />
-          <Property Name="startTime" Type="time" Precision="7" Nullable="false" />
-          <Property Name="endTime" Type="time" Precision="7" Nullable="false" />
-          <Property Name="status" Type="bit" Nullable="false" />
-        </EntityType>
+        <Association Name="FK_Event_Venue">
+          <End Role="Venue" Type="Self.Venue" Multiplicity="1" />
+          <End Role="Event" Type="Self.Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Venue">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="venueId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Payment_Registration">
+          <End Role="Registration" Type="Self.Registration" Multiplicity="1" />
+          <End Role="Payment" Type="Self.Payment" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Registration">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Registration_Event">
           <End Role="Event" Type="Self.Event" Multiplicity="1" />
           <End Role="Registration" Type="Self.Registration" Multiplicity="*" />
@@ -130,38 +146,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Venue_Booking_Event">
-          <End Role="Event" Type="Self.Event" Multiplicity="1" />
-          <End Role="Venue_Booking" Type="Self.Venue_Booking" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Event">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Venue_Booking">
-              <PropertyRef Name="eventId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Venue_Booking_Venue">
-          <End Role="Venue" Type="Self.Venue" Multiplicity="1" />
-          <End Role="Venue_Booking" Type="Self.Venue_Booking" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Venue">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Venue_Booking">
-              <PropertyRef Name="venueId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="DBModelStoreContainer">
           <EntitySet Name="Advertisement" EntityType="Self.Advertisement" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="payment" EntityType="Self.payment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Registration" EntityType="Self.Registration" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Venue" EntityType="Self.Venue" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Venue_Booking" EntityType="Self.Venue_Booking" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Event_Venue" Association="Self.FK_Event_Venue">
+            <End Role="Venue" EntitySet="Venue" />
+            <End Role="Event" EntitySet="Event" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Payment_Registration" Association="Self.FK_Payment_Registration">
+            <End Role="Registration" EntitySet="Registration" />
+            <End Role="Payment" EntitySet="Payment" />
+          </AssociationSet>
           <AssociationSet Name="FK_Registration_Event" Association="Self.FK_Registration_Event">
             <End Role="Event" EntitySet="Event" />
             <End Role="Registration" EntitySet="Registration" />
@@ -174,64 +173,87 @@
             <End Role="User" EntitySet="User" />
             <End Role="Advertisement" EntitySet="Advertisement" />
           </AssociationSet>
-          <AssociationSet Name="FK_Venue_Booking_Event" Association="Self.FK_Venue_Booking_Event">
-            <End Role="Event" EntitySet="Event" />
-            <End Role="Venue_Booking" EntitySet="Venue_Booking" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Venue_Booking_Venue" Association="Self.FK_Venue_Booking_Venue">
-            <End Role="Venue" EntitySet="Venue" />
-            <End Role="Venue_Booking" EntitySet="Venue_Booking" />
-          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="DBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Advertisements" EntityType="DBModel.Advertisement" />
+          <EntitySet Name="Events" EntityType="DBModel.Event" />
+          <EntitySet Name="Payments" EntityType="DBModel.Payment" />
+          <EntitySet Name="Registrations" EntityType="DBModel.Registration" />
+          <EntitySet Name="Users" EntityType="DBModel.User" />
+          <EntitySet Name="Venues" EntityType="DBModel.Venue" />
+          <AssociationSet Name="FK_Table_User" Association="DBModel.FK_Table_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Advertisement" EntitySet="Advertisements" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Event_Venue" Association="DBModel.FK_Event_Venue">
+            <End Role="Venue" EntitySet="Venues" />
+            <End Role="Event" EntitySet="Events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Registration_Event" Association="DBModel.FK_Registration_Event">
+            <End Role="Event" EntitySet="Events" />
+            <End Role="Registration" EntitySet="Registrations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Payment_Registration" Association="DBModel.FK_Payment_Registration">
+            <End Role="Registration" EntitySet="Registrations" />
+            <End Role="Payment" EntitySet="Payments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Registration_User" Association="DBModel.FK_Registration_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Registration" EntitySet="Registrations" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="Advertisement">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="des" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="des" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="startDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="endDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="duration" Type="Int32" Nullable="false" />
-          <Property Name="charge" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="charge" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="status" Type="Boolean" Nullable="false" />
           <Property Name="userId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Table_User" FromRole="Advertisement" ToRole="User" />
+          <NavigationProperty Name="User" Relationship="DBModel.FK_Table_User" FromRole="Advertisement" ToRole="User" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="des" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="des" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="availability" Type="Int32" Nullable="false" />
-          <Property Name="participate_limit" Type="Int32" Nullable="false" />
+          <Property Name="participants" Type="Int32" Nullable="false" />
           <Property Name="startDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="endDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="duration" Type="Int32" Nullable="false" />
-          <Property Name="organized_by" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="startTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="endTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="duration" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="organized_by" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="approvalStat" Type="Boolean" Nullable="false" />
           <Property Name="status" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Registrations" Relationship="Self.FK_Registration_Event" FromRole="Event" ToRole="Registration" />
-          <NavigationProperty Name="Venue_Booking" Relationship="Self.FK_Venue_Booking_Event" FromRole="Event" ToRole="Venue_Booking" />
+          <Property Name="venueId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Venue" Relationship="DBModel.FK_Event_Venue" FromRole="Event" ToRole="Venue" />
+          <NavigationProperty Name="Registrations" Relationship="DBModel.FK_Registration_Event" FromRole="Event" ToRole="Registration" />
         </EntityType>
-        <EntityType Name="payment">
+        <EntityType Name="Payment">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="paymentdate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="duedate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="gst" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="gst" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Registration" Relationship="DBModel.FK_Payment_Registration" FromRole="Payment" ToRole="Registration" />
         </EntityType>
         <EntityType Name="Registration">
           <Key>
@@ -242,54 +264,42 @@
           <Property Name="userId" Type="Int32" Nullable="false" />
           <Property Name="status" Type="Boolean" Nullable="false" />
           <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="Event" Relationship="Self.FK_Registration_Event" FromRole="Registration" ToRole="Event" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Registration_User" FromRole="Registration" ToRole="User" />
+          <NavigationProperty Name="Event" Relationship="DBModel.FK_Registration_Event" FromRole="Registration" ToRole="Event" />
+          <NavigationProperty Name="Payment" Relationship="DBModel.FK_Payment_Registration" FromRole="Registration" ToRole="Payment" />
+          <NavigationProperty Name="User" Relationship="DBModel.FK_Registration_User" FromRole="Registration" ToRole="User" />
         </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="contact_no" Type="String" MaxLength="12" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="role" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="organizer" Type="Boolean" Nullable="false" />
-          <Property Name="status" Type="Int32" Nullable="false" />
-          <Property Name="recoveryCode" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="activationCode" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Advertisements" Relationship="Self.FK_Table_User" FromRole="User" ToRole="Advertisement" />
-          <NavigationProperty Name="Registrations" Relationship="Self.FK_Registration_User" FromRole="User" ToRole="Registration" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="contact_no" Type="String" Nullable="false" MaxLength="12" FixedLength="true" Unicode="false" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="role" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="organizer" Type="Boolean" />
+          <Property Name="status" Type="Boolean" Nullable="false" />
+          <Property Name="recoveryCode" Type="String" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="activationCode" Type="String" MaxLength="6" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Advertisements" Relationship="DBModel.FK_Table_User" FromRole="User" ToRole="Advertisement" />
+          <NavigationProperty Name="Registrations" Relationship="DBModel.FK_Registration_User" FromRole="User" ToRole="Registration" />
         </EntityType>
         <EntityType Name="Venue">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="location" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="equipment" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="equipment" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="capacity" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Venue_Booking" Relationship="Self.FK_Venue_Booking_Venue" FromRole="Venue" ToRole="Venue_Booking" />
-        </EntityType>
-        <EntityType Name="Venue_Booking">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="eventId" Type="Int32" Nullable="false" />
-          <Property Name="venueId" Type="Int32" Nullable="false" />
-          <Property Name="startTime" Type="Time" Nullable="false" Precision="7" />
-          <Property Name="endTime" Type="Time" Nullable="false" Precision="7" />
-          <Property Name="status" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Event" Relationship="Self.FK_Venue_Booking_Event" FromRole="Venue_Booking" ToRole="Event" />
-          <NavigationProperty Name="Venue" Relationship="Self.FK_Venue_Booking_Venue" FromRole="Venue_Booking" ToRole="Venue" />
+          <NavigationProperty Name="Events" Relationship="DBModel.FK_Event_Venue" FromRole="Venue" ToRole="Event" />
         </EntityType>
         <Association Name="FK_Table_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Advertisement" Type="Self.Advertisement" Multiplicity="*" />
+          <End Type="DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="DBModel.Advertisement" Role="Advertisement" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
@@ -299,9 +309,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Event_Venue">
+          <End Type="DBModel.Venue" Role="Venue" Multiplicity="1" />
+          <End Type="DBModel.Event" Role="Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Venue">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="venueId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Registration_Event">
-          <End Role="Event" Type="Self.Event" Multiplicity="1" />
-          <End Role="Registration" Type="Self.Registration" Multiplicity="*" />
+          <End Type="DBModel.Event" Role="Event" Multiplicity="1" />
+          <End Type="DBModel.Registration" Role="Registration" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Event">
               <PropertyRef Name="Id" />
@@ -311,21 +333,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Venue_Booking_Event">
-          <End Role="Event" Type="Self.Event" Multiplicity="1" />
-          <End Role="Venue_Booking" Type="Self.Venue_Booking" Multiplicity="*" />
+        <Association Name="FK_Payment_Registration">
+          <End Type="DBModel.Registration" Role="Registration" Multiplicity="1" />
+          <End Type="DBModel.Payment" Role="Payment" Multiplicity="0..1" />
           <ReferentialConstraint>
-            <Principal Role="Event">
+            <Principal Role="Registration">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Venue_Booking">
-              <PropertyRef Name="eventId" />
+            <Dependent Role="Payment">
+              <PropertyRef Name="Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Registration_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Registration" Type="Self.Registration" Multiplicity="*" />
+          <End Type="DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="DBModel.Registration" Role="Registration" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
@@ -335,48 +357,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Venue_Booking_Venue">
-          <End Role="Venue" Type="Self.Venue" Multiplicity="1" />
-          <End Role="Venue_Booking" Type="Self.Venue_Booking" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Venue">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Venue_Booking">
-              <PropertyRef Name="venueId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityContainer Name="DBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Advertisements" EntityType="Self.Advertisement" />
-          <EntitySet Name="Events" EntityType="Self.Event" />
-          <EntitySet Name="payments" EntityType="Self.payment" />
-          <EntitySet Name="Registrations" EntityType="Self.Registration" />
-          <EntitySet Name="Users" EntityType="Self.User" />
-          <EntitySet Name="Venues" EntityType="Self.Venue" />
-          <EntitySet Name="Venue_Booking" EntityType="Self.Venue_Booking" />
-          <AssociationSet Name="FK_Table_User" Association="Self.FK_Table_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Advertisement" EntitySet="Advertisements" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Registration_Event" Association="Self.FK_Registration_Event">
-            <End Role="Event" EntitySet="Events" />
-            <End Role="Registration" EntitySet="Registrations" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Venue_Booking_Event" Association="Self.FK_Venue_Booking_Event">
-            <End Role="Event" EntitySet="Events" />
-            <End Role="Venue_Booking" EntitySet="Venue_Booking" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Registration_User" Association="Self.FK_Registration_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Registration" EntitySet="Registrations" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Venue_Booking_Venue" Association="Self.FK_Venue_Booking_Venue">
-            <End Role="Venue" EntitySet="Venues" />
-            <End Role="Venue_Booking" EntitySet="Venue_Booking" />
-          </AssociationSet>
-        </EntityContainer>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -385,96 +366,87 @@
           <EntitySetMapping Name="Advertisements">
             <EntityTypeMapping TypeName="DBModel.Advertisement">
               <MappingFragment StoreEntitySet="Advertisement">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="des" ColumnName="des" />
-                <ScalarProperty Name="startDate" ColumnName="startDate" />
-                <ScalarProperty Name="endDate" ColumnName="endDate" />
-                <ScalarProperty Name="duration" ColumnName="duration" />
-                <ScalarProperty Name="charge" ColumnName="charge" />
-                <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="charge" ColumnName="charge" />
+                <ScalarProperty Name="duration" ColumnName="duration" />
+                <ScalarProperty Name="endDate" ColumnName="endDate" />
+                <ScalarProperty Name="startDate" ColumnName="startDate" />
+                <ScalarProperty Name="des" ColumnName="des" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Events">
             <EntityTypeMapping TypeName="DBModel.Event">
               <MappingFragment StoreEntitySet="Event">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="des" ColumnName="des" />
-                <ScalarProperty Name="price" ColumnName="price" />
-                <ScalarProperty Name="availability" ColumnName="availability" />
-                <ScalarProperty Name="participate_limit" ColumnName="participate_limit" />
-                <ScalarProperty Name="startDate" ColumnName="startDate" />
-                <ScalarProperty Name="endDate" ColumnName="endDate" />
-                <ScalarProperty Name="duration" ColumnName="duration" />
-                <ScalarProperty Name="organized_by" ColumnName="organized_by" />
-                <ScalarProperty Name="approvalStat" ColumnName="approvalStat" />
+                <ScalarProperty Name="venueId" ColumnName="venueId" />
                 <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="approvalStat" ColumnName="approvalStat" />
+                <ScalarProperty Name="organized_by" ColumnName="organized_by" />
+                <ScalarProperty Name="duration" ColumnName="duration" />
+                <ScalarProperty Name="endTime" ColumnName="endTime" />
+                <ScalarProperty Name="startTime" ColumnName="startTime" />
+                <ScalarProperty Name="endDate" ColumnName="endDate" />
+                <ScalarProperty Name="startDate" ColumnName="startDate" />
+                <ScalarProperty Name="participants" ColumnName="participants" />
+                <ScalarProperty Name="availability" ColumnName="availability" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="des" ColumnName="des" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="payments">
-            <EntityTypeMapping TypeName="DBModel.payment">
-              <MappingFragment StoreEntitySet="payment">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="price" ColumnName="price" />
-                <ScalarProperty Name="paymentdate" ColumnName="paymentdate" />
-                <ScalarProperty Name="duedate" ColumnName="duedate" />
-                <ScalarProperty Name="gst" ColumnName="gst" />
+          <EntitySetMapping Name="Payments">
+            <EntityTypeMapping TypeName="DBModel.Payment">
+              <MappingFragment StoreEntitySet="Payment">
                 <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="gst" ColumnName="gst" />
+                <ScalarProperty Name="duedate" ColumnName="duedate" />
+                <ScalarProperty Name="paymentdate" ColumnName="paymentdate" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Registrations">
             <EntityTypeMapping TypeName="DBModel.Registration">
               <MappingFragment StoreEntitySet="Registration">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="eventId" ColumnName="eventId" />
-                <ScalarProperty Name="userId" ColumnName="userId" />
-                <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="eventId" ColumnName="eventId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="DBModel.User">
               <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="contact_no" ColumnName="contact_no" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="username" ColumnName="username" />
-                <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="role" ColumnName="role" />
-                <ScalarProperty Name="organizer" ColumnName="organizer" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="recoveryCode" ColumnName="recoveryCode" />
                 <ScalarProperty Name="activationCode" ColumnName="activationCode" />
+                <ScalarProperty Name="recoveryCode" ColumnName="recoveryCode" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="organizer" ColumnName="organizer" />
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="contact_no" ColumnName="contact_no" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Venues">
             <EntityTypeMapping TypeName="DBModel.Venue">
               <MappingFragment StoreEntitySet="Venue">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="location" ColumnName="location" />
-                <ScalarProperty Name="equipment" ColumnName="equipment" />
                 <ScalarProperty Name="capacity" ColumnName="capacity" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Venue_Booking">
-            <EntityTypeMapping TypeName="DBModel.Venue_Booking">
-              <MappingFragment StoreEntitySet="Venue_Booking">
+                <ScalarProperty Name="equipment" ColumnName="equipment" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="eventId" ColumnName="eventId" />
-                <ScalarProperty Name="venueId" ColumnName="venueId" />
-                <ScalarProperty Name="startTime" ColumnName="startTime" />
-                <ScalarProperty Name="endTime" ColumnName="endTime" />
-                <ScalarProperty Name="status" ColumnName="status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

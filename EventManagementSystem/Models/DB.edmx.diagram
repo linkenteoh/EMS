@@ -4,19 +4,18 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="41ed6b36fb9c4deaa67df0ad533950c2" Name="Diagram1">
-        <EntityTypeShape EntityType="DBModel.Advertisement" Width="1.5" PointX="3" PointY="11.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="0.75" PointY="2.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.payment" Width="1.5" PointX="5.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="3" PointY="2.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.Venue" Width="1.5" PointX="3.75" PointY="7.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.Venue_Booking" Width="1.5" PointX="6" PointY="2.625" IsExpanded="true" />
-        <AssociationConnector Association="DBModel.FK_Table_User" ManuallyRouted="false" />
-        <AssociationConnector Association="DBModel.FK_Registration_Event" ManuallyRouted="false" />
-        <AssociationConnector Association="DBModel.FK_Venue_Booking_Event" ManuallyRouted="false" />
-        <AssociationConnector Association="DBModel.FK_Registration_User" ManuallyRouted="false" />
-        <AssociationConnector Association="DBModel.FK_Venue_Booking_Venue" ManuallyRouted="false" />
+      <Diagram DiagramId="41ed6b36fb9c4deaa67df0ad533950c2" Name="Diagram1" ZoomLevel="64">
+        <EntityTypeShape EntityType="DBModel.Advertisement" Width="1.5" PointX="5.875" PointY="7.5" />
+        <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="12.875" PointY="7.5" />
+        <EntityTypeShape EntityType="DBModel.Payment" Width="1.5" PointX="10.375" PointY="4.25" />
+        <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="10.625" PointY="8.125" />
+        <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="8.5" PointY="6.5" />
+        <EntityTypeShape EntityType="DBModel.Venue" Width="1.5" PointX="15.25" PointY="8.25" />
+        <AssociationConnector Association="DBModel.FK_Table_User" />
+        <AssociationConnector Association="DBModel.FK_Event_Venue" />
+        <AssociationConnector Association="DBModel.FK_Registration_Event" />
+        <AssociationConnector Association="DBModel.FK_Payment_Registration" />
+        <AssociationConnector Association="DBModel.FK_Registration_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

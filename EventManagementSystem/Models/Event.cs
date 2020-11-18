@@ -18,7 +18,6 @@ namespace EventManagementSystem.Models
         public Event()
         {
             this.Registrations = new HashSet<Registration>();
-            this.Venue_Booking = new HashSet<Venue_Booking>();
         }
     
         public int Id { get; set; }
@@ -26,17 +25,19 @@ namespace EventManagementSystem.Models
         public string des { get; set; }
         public decimal price { get; set; }
         public int availability { get; set; }
-        public int participate_limit { get; set; }
+        public int participants { get; set; }
         public System.DateTime startDate { get; set; }
         public System.DateTime endDate { get; set; }
-        public int duration { get; set; }
+        public System.TimeSpan startTime { get; set; }
+        public System.TimeSpan endTime { get; set; }
+        public string duration { get; set; }
         public string organized_by { get; set; }
         public bool approvalStat { get; set; }
         public bool status { get; set; }
+        public int venueId { get; set; }
     
+        public virtual Venue Venue { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Registration> Registrations { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Venue_Booking> Venue_Booking { get; set; }
     }
 }

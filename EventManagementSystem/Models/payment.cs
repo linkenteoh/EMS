@@ -12,7 +12,7 @@ namespace EventManagementSystem.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class payment
+    public partial class Payment
     {
         public int Id { get; set; }
         public decimal price { get; set; }
@@ -20,5 +20,7 @@ namespace EventManagementSystem.Models
         public System.DateTime duedate { get; set; }
         public decimal gst { get; set; }
         public bool status { get; set; }
+    
+        public virtual Registration Registration { get; set; }
     }
 }
