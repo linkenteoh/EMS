@@ -49,6 +49,7 @@
           <Property Name="duedate" Type="date" Nullable="false" />
           <Property Name="gst" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="status" Type="bit" Nullable="false" />
+          <Property Name="registerId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Registration">
           <Key>
@@ -101,6 +102,7 @@
         <Association Name="FK_Payment_Registration">
           <End Role="Registration" Type="Self.Registration" Multiplicity="1" />
           <End Role="Payment" Type="Self.Payment" Multiplicity="0..1" />
+
           <ReferentialConstraint>
             <Principal Role="Registration">
               <PropertyRef Name="Id" />
@@ -267,6 +269,7 @@
           <NavigationProperty Name="Event" Relationship="DBModel.FK_Registration_Event" FromRole="Registration" ToRole="Event" />
           <NavigationProperty Name="Payment" Relationship="DBModel.FK_Payment_Registration" FromRole="Registration" ToRole="Payment" />
           <NavigationProperty Name="User" Relationship="DBModel.FK_Registration_User" FromRole="Registration" ToRole="User" />
+
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -285,6 +288,7 @@
           <Property Name="activationCode" Type="String" MaxLength="6" FixedLength="true" Unicode="false" />
           <NavigationProperty Name="Advertisements" Relationship="DBModel.FK_Table_User" FromRole="User" ToRole="Advertisement" />
           <NavigationProperty Name="Registrations" Relationship="DBModel.FK_Registration_User" FromRole="User" ToRole="Registration" />
+
         </EntityType>
         <EntityType Name="Venue">
           <Key>
@@ -358,6 +362,7 @@
           </ReferentialConstraint>
         </Association>
         </Schema>
+
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -446,6 +451,19 @@
                 <ScalarProperty Name="equipment" ColumnName="equipment" />
                 <ScalarProperty Name="location" ColumnName="location" />
                 <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Payments">
+            <EntityTypeMapping TypeName="DBModel.Payment">
+              <MappingFragment StoreEntitySet="Payment">
+                <ScalarProperty Name="registerId" ColumnName="registerId" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="gst" ColumnName="gst" />
+                <ScalarProperty Name="duedate" ColumnName="duedate" />
+                <ScalarProperty Name="paymentdate" ColumnName="paymentdate" />
+                <ScalarProperty Name="price" ColumnName="price" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

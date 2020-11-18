@@ -31,5 +31,6 @@ namespace EventManagementSystem.Models
         public virtual DbSet<Registration> Registrations { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Venue> Venues { get; set; }
+
     }
 }

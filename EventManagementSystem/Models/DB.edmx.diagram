@@ -16,6 +16,7 @@
         <AssociationConnector Association="DBModel.FK_Registration_Event" />
         <AssociationConnector Association="DBModel.FK_Payment_Registration" />
         <AssociationConnector Association="DBModel.FK_Registration_User" />
+
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
