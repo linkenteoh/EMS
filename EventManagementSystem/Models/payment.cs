@@ -20,7 +20,6 @@ namespace EventManagementSystem.Models
         public System.DateTime duedate { get; set; }
         public decimal gst { get; set; }
         public bool status { get; set; }
-        public int registerId { get; set; }
     
         public virtual Registration Registration { get; set; }
     }

@@ -17,7 +17,7 @@ namespace EventManagementSystem.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Venue()
         {
-            this.Venue_Booking = new HashSet<Venue_Booking>();
+            this.Events = new HashSet<Event>();
         }
     
         public int Id { get; set; }
@@ -27,6 +27,6 @@ namespace EventManagementSystem.Models
         public int capacity { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Venue_Booking> Venue_Booking { get; set; }
+        public virtual ICollection<Event> Events { get; set; }
     }
 }
