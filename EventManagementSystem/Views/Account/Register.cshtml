@@ -12,7 +12,7 @@
         }
 
         .radio input {
-            display: none;
+            display: block;
         }
 
         .radio {
@@ -78,8 +78,8 @@
             <!--First step: Choosing role-->
             <h2><b>What is your role?</b></h2>
             <div style="text-align:center">
-                <label class="radio" id="stud">@Html.RadioButtonFor(m => m.role, "S", new { id = "student" })<span class="roleText">TARC Student(TBA)</span></label>
-                <label class="radio" id="outs">@Html.RadioButtonFor(m => m.role, "O")<span class="roleText">Outsider(TBA)</span></label>
+                <label class="radio" id="stud">@Html.RadioButtonFor(m => m.role, "Student", new { id = "student" })<span class="roleText">Student(TBA)</span></label>
+                <label class="radio" id="outs">@Html.RadioButtonFor(m => m.role, "Outsider")<span class="roleText">Outsider(TBA)</span></label>
             </div>
         </div>
 
@@ -96,13 +96,13 @@
 
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <div id="cameraDiv" style="display:none">
+                    <div id="cameraDiv" style="display:none;text-align:center">
                         <div id="Camera" style="border-radius:50%;"></div>
                         <input type="button" class="btn btn-warning" value="Capture" onclick="webcam.capture();" />
                     </div>
 
                     <div id="optDiv" style="text-align:center;display: block">
-                        <img id="blah" src="~/Images/userPlaceholder.png" alt="your image" style="width:250px; height: 250px; border-radius:50%;" />
+                        <img id="blah" src="~/Images/userPlaceholder.png" alt="your image" style="width:250px; height: 250px; border-radius:50%; object-fit:cover" />
                         <label class="custom-file-upload">
                             <input type="file" id="imgInp" />
                             <i class="fa fa-upload" style="font-size:48px;color:darkcyan"></i>
@@ -115,36 +115,37 @@
                     <div class="form-group col-md-6">
                         @Html.LabelFor(m => m.name, "Name")
                         @Html.TextBoxFor(m => m.name, new { @class = "form-control", placeholder = "Your name" })
-                        @*Validation*@
+                        @Html.ValidationMessageFor(m => m.name,"", new { @class = "text-danger" })
                     </div>
                     <div class="form-group col-md-6">
                         @Html.LabelFor(m => m.username, "Username")
                         @Html.TextBoxFor(m => m.username, new { @class = "form-control", placeholder = "Username" })
-                        @*Validation*@
+                        @Html.ValidationMessageFor(m => m.username,"", new { @class = "text-danger" })
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             @Html.LabelFor(m => m.email, "Email")
                             @Html.TextBoxFor(m => m.email, new { @class = "form-control", placeholder = "Email" })
-                            @*Validation*@
+                            @Html.ValidationMessageFor(m => m.email,"", new { @class = "text-danger" })
                         </div>
                         <div class="form-group col-md-6">
                             @Html.LabelFor(m => m.contact_no, "Contact")
-                            @Html.TextBoxFor(m => m.contact_no, new { @class = "form-control", placeholder = "01XXXXXXXX" })
-                            @*Validation*@
+                            @Html.TextBoxFor(m => m.contact_no, new { @class = "form-control", placeholder = "0123456789" })
+                            @Html.ValidationMessageFor(m => m.contact_no, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             @Html.LabelFor(m => m.password, "Password")
-                            @Html.TextBoxFor(m => m.password, new { @class = "form-control", placeholder = "Password" })
-                            @*Validation*@
+                            @Html.TextBoxFor(m => m.password, new { @class = "form-control", placeholder = "Password", type = "password" })
+                            @Html.ValidationMessageFor(m => m.password, "", new { @class = "text-danger" })
                         </div>
                         <div class="form-group col-md-6">
-                            @Html.Label("confirmPass", "Confirm password")
-                            @Html.TextBox("confirmPass", "", new { @class = "form-control", placeholder = "Confirm password" })
-                            @*Validation*@
+                            @Html.LabelFor(m => m.confirmPassword, "Confirm password")
+                            @Html.TextBoxFor(m => m.confirmPassword, "", new { @class = "form-control", placeholder = "Confirm password", type = "password" })
+                            @Html.ValidationMessageFor(m => m.confirmPassword, "", new { @class = "text-danger" })
+
                         </div>
                     </div>
 
@@ -176,6 +177,7 @@
     <script src="@Url.Content("~/Scripts/jquery.webcam.js")">
     </script>
     <script>
+
         function toggleCamera() {
             $("#cameraDiv").css('display', 'block');
             $("#optDiv").css('display', 'none');
@@ -225,6 +227,15 @@
             onLoad: function () {
 
             }
-         });
+        });
+
+        function isPostBack() {
+            return document.referrer.indexOf(document.location.href) > -1;
+        }
+
+        if (isPostBack()) {
+            $("#first").css('display', 'none');
+            $("#second").css('display', 'block');
+        }
     </script>
 }

@@ -8,7 +8,7 @@ using EventManagementSystem.Models;
 
 namespace EventManagementSystem.Controllers
 {
-    public class UserController : Controller
+    public class AccountController : Controller
     {
         DBEntities db = new DBEntities();
 
@@ -18,7 +18,7 @@ namespace EventManagementSystem.Controllers
             return View();
         }
 
-        // GET: User/Register
+        // GET: Account/Register
         public ActionResult Register()
         {
 
@@ -50,17 +50,25 @@ namespace EventManagementSystem.Controllers
             return bytes;
         }
 
-        // POST: User/Register
+        // POST: Account/Register
         [HttpPost]
         public ActionResult Register(User model)
         {
-            model.status = true;
-            model.recoveryCode = "ABCDEF";
-            model.activationCode = "ABCDEF";
-            db.Users.Add(model);
-            db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                int userCount = db.Users.Count() + 1;
+                model.Id = userCount;
+                model.status = true;
+                model.recoveryCode = Guid.NewGuid().ToString();
+                model.activationCode = "ABCDEF";
+                db.Users.Add(model);
+                db.SaveChanges();
 
-            return RedirectToAction("Register");
+                TempData["Info"] = "New user created";
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(model);
         }
     }
 }
