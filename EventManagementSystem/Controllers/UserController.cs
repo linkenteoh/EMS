@@ -80,7 +80,6 @@ namespace EventManagementSystem.Controllers
         {
             var u = db.Users.Find(model.Id);
 
-
             if (u == null)
             {
                 return RedirectToAction("Edit");
@@ -104,10 +103,34 @@ namespace EventManagementSystem.Controllers
 
         public ActionResult EventList(int id = 1)
         {
+            // Get userID in registration
             var reg = db.Registrations.Where(r => id.Equals(r.userId));
+
+            // Get EventID in registration that contains the userID
+
+
+            // LIst event based on EventID
+
+            var model = db.Events;
             //var eventList = db.Events.Where(e => reg.Contains(e.Id);
             // reg.userId = 
-            return View();
+            return View(model);
         }
+
+        public ActionResult EventDetail(int id)
+        {
+            var model = db.Events.Find(id);
+          
+            if (model == null)
+            {
+                return RedirectToAction("EventList");
+            }
+            //if (Request.IsAjaxRequest())
+            //    return PartialView("_Detail", model);
+
+            return View(model);
+        }
+
+      
     }
 }

@@ -233,6 +233,8 @@
     <Content Include="Views\Shared\_Navbar.cshtml" />
     <Content Include="Views\User\Register.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\User\EventList.cshtml" />
+    <Content Include="Views\User\EventDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
