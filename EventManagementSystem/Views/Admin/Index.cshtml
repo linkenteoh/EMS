@@ -6,6 +6,8 @@
 }
 
 <h1>Events List</h1>
+<input class="btn btn-primary" data-get="/Admin/Insert" type="button" value="Add new event">
+
 <p>@Model.Count() record(s) in event list</p>
 <table class="table table-hover">
     <thead class="thead-dark">
@@ -52,14 +54,19 @@
                         <label class="custom-control-label" for="customSwitches">@s.status</label>
                     </div>
                 </td>
-                <td>
-                    <a href="/Admin/Edit?id=@s.Id" class="btn btn-primary">Edit</a>
+                <td> 
+                    <a href="/Admin/Edit/@s.Id">
+                        <input class="btn btn-primary" data-get="/Admin/Edit?id=@s.Id" type="button" value="Edit">
+                    </a>
                 </td>
-                <td><a href="/Admin/Delete?id=@s.Id" class="btn btn-primary">Delete</a></td>
+                <td>
+                    <a href="/Admin/Delete/@s.Id">
+                    <input class="btn btn-primary" data-get="/Admin/Delete?id=@s.Id" type="button" value="Delete">
+                    </a>
+                </td>
             </tr>
         }
 
     </tbody>
 </table>
-
 

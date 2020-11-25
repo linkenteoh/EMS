@@ -32,6 +32,7 @@ namespace EventManagementSystem.Models
         public bool status { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
+        public string photo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Advertisement> Advertisements { get; set; }
