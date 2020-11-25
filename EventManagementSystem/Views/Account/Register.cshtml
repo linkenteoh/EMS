@@ -1,4 +1,5 @@
 ﻿@model EventManagementSystem.Models.RegisterVM
+@using EventManagementSystem.reCAPTCHA
 @{
     ViewBag.Title = "Register";
 
@@ -12,10 +13,17 @@
         }
 
         .radio input {
+            position: absolute;
             display: block;
+            left: 99%;
+            bottom: 90%;
+        }
+
+        .radio :checked{
         }
 
         .radio {
+            position:relative;
             border-radius: 10px;
             width: 49%;
             padding-top: 13vh;
@@ -73,7 +81,7 @@
     <h3>Register Form</h3>
     <hr />
 
-    <form method="post" enctype="multipart/form-data" id="myForm" name="myForm">
+    <form method="post" enctype="multipart/form-data" id="myForm" name="myForm" class="myForm">
         <div id="first" style="display:compact">
             <!--First step: Choosing role-->
             <h2><b>What is your role?</b></h2>
@@ -89,6 +97,8 @@
 
             <h2><b>Fill in your details</b></h2>
 
+            @Html.AntiForgeryToken()
+
             <div class="form-row">
 
             </div>
@@ -103,7 +113,7 @@
 
                     <div id="optDiv" style="text-align:center;display: block">
                         <label class="upload custom-file-upload">
-                            @Html.TextBoxFor(m => m.Photo, new { type = "file", accept = "image/jpeg,image/png", hidden = "" })
+                            @Html.TextBoxFor(m => m.Photo, new { type = "file", accept = "image/jpeg,image/png", hidden = "", id="photoInput" })
                             <img id="blah" src="~/Images/userPlaceholder.png" alt="your image" style="width:250px; height: 250px; border-radius:50%; object-fit:cover" />
                         </label><br />
                         @Html.ValidationMessageFor(m => m.Photo, "", new { @class = "text-danger" })<br />
@@ -114,42 +124,50 @@
 
                 <div class="form-group col-md-8">
                     <div class="form-group col-md-6">
+
                         @Html.LabelFor(m => m.name, "Name")
-                        @Html.TextBoxFor(m => m.name, new { @class = "form-control", placeholder = "Your name" })
                         @Html.ValidationMessageFor(m => m.name, "", new { @class = "text-danger" })
+                        @Html.TextBoxFor(m => m.name, new { @class = "form-control", placeholder = "Your name" })
                     </div>
                     <div class="form-group col-md-6">
                         @Html.LabelFor(m => m.username, "Username")
-                        @Html.TextBoxFor(m => m.username, new { @class = "form-control", placeholder = "Username" })
                         @Html.ValidationMessageFor(m => m.username, "", new { @class = "text-danger" })
+                        @Html.TextBoxFor(m => m.username, new { @class = "form-control", placeholder = "Username" })
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             @Html.LabelFor(m => m.email, "Email")
-                            @Html.TextBoxFor(m => m.email, new { @class = "form-control", placeholder = "Email" })
                             @Html.ValidationMessageFor(m => m.email, "", new { @class = "text-danger" })
+                            @Html.TextBoxFor(m => m.email, new { @class = "form-control", placeholder = "Email" })
                         </div>
                         <div class="form-group col-md-6">
                             @Html.LabelFor(m => m.contact_no, "Contact")
-                            @Html.TextBoxFor(m => m.contact_no, new { @class = "form-control", placeholder = "0123456789" })
                             @Html.ValidationMessageFor(m => m.contact_no, "", new { @class = "text-danger" })
+                            @Html.TextBoxFor(m => m.contact_no, new { @class = "form-control", placeholder = "0123456789" })
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             @Html.LabelFor(m => m.password, "Password")
-                            @Html.TextBoxFor(m => m.password, new { @class = "form-control", placeholder = "Password", type = "password" })
                             @Html.ValidationMessageFor(m => m.password, "", new { @class = "text-danger" })
+                            @Html.TextBoxFor(m => m.password, new { @class = "form-control", placeholder = "Password", type = "password" })
                         </div>
                         <div class="form-group col-md-6">
                             @Html.LabelFor(m => m.confirmPassword, "Confirm password")
-                            @Html.TextBoxFor(m => m.confirmPassword, "", new { @class = "form-control", placeholder = "Confirm password", type = "password" })
                             @Html.ValidationMessageFor(m => m.confirmPassword, "", new { @class = "text-danger" })
+                            @Html.TextBoxFor(m => m.confirmPassword, "", new { @class = "form-control", placeholder = "Confirm password", type = "password" })
 
                         </div>
                     </div>
 
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            @Html.GoogleCaptcha()
+                            @Html.InvalidGoogleCaptchaLabel("Captcha is not valid")
+                        </div>
+                    </div>                    
+                    
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <hr />
@@ -181,6 +199,10 @@
     </script>
 
     <script>
+        $('#photoInput').validate({
+            ignore: [],
+            // any other options and/or rules
+        });
 
         function toggleCamera() {
             $("#cameraDiv").css('display', 'block');
@@ -246,7 +268,7 @@
                 $("#optDiv").css('display', 'block');
              },
              onCapture: function () {
-                 webcam.save("@Url.Content("~/User/Capture")/");
+                 webcam.save("@Url.Content("~/Account/Capture")/");
 
                 
              },
@@ -255,9 +277,5 @@
 
             }
         });
-
-
-
-
     </script>
 }

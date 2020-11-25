@@ -9,6 +9,7 @@ using EventManagementSystem.Models;
 using System.Data.Entity.Validation;
 using System.Text.RegularExpressions;
 using System.Web.Helpers;
+using EventManagementSystem.reCAPTCHA;
 
 namespace EventManagementSystem.Controllers
 {
@@ -19,13 +20,6 @@ namespace EventManagementSystem.Controllers
         // GET: User
         public ActionResult Index()
         {
-            return View();
-        }
-
-        // GET: Account/Register
-        public ActionResult Register()
-        {
-
             return View();
         }
 
@@ -102,10 +96,20 @@ namespace EventManagementSystem.Controllers
             return name;
         }
 
+        // GET: Account/Register
+        public ActionResult Register()
+        {
+
+            return View();
+        }
+
         // POST: Account/Register
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateGoogleCaptcha]
         public ActionResult Register(RegisterVM model)
         {
+            //If entered here captcha = valid
             string err = ValidatePhoto(model.Photo);
             if (err != null)
             {
@@ -129,28 +133,16 @@ namespace EventManagementSystem.Controllers
                     photo = SavePhoto(model.Photo)
                 };
 
-/*                model.Id = userCount;
-                model.status = 0; //0- Inactive, 1- Active, 2- Deleted
-                model.recoveryCode = null ;
-                model.activationCode = Guid.NewGuid().ToString();*/
 
-             
-                MailMessage mail = new MailMessage();
-                mail.To.Add(model.email);
-                mail.From = new MailAddress("imrp1234@gmail.com");
-                mail.Subject = "Activate your TARUC Event Management account";
                 string link = "https://localhost:44302/Account/Activation?activationCode=" + user.activationCode + "&userid=" + user.Id;
-                string Body = link;
-                mail.Body = Body;
-                mail.IsBodyHtml = true;
-                SmtpClient smtp = new SmtpClient();
-                smtp.Host = "smtp.gmail.com";
-                smtp.Port = 587;
-                smtp.UseDefaultCredentials = false;
-                string email = "imrp1234@gmail.com";
-                smtp.Credentials = new System.Net.NetworkCredential(email, ""); // Enter seders User name and password   
-                smtp.EnableSsl = true;
-                smtp.Send(mail);
+                string mail = @"";
+
+                MailMessage m = new MailMessage();
+                m.To.Add(model.email);
+                m.Subject = "Activate your TARUC EMS account";
+                m.Body = link;
+                m.IsBodyHtml = true; //Can send HTML FORMATTED Mail
+                new SmtpClient().Send(m);
 
                 try
                 {
@@ -189,27 +181,18 @@ namespace EventManagementSystem.Controllers
             {
                 if(model.activationCode == activationCode)
                 {
-                    try
-                    {
-                        model.status = 1;
-                        db.SaveChanges();
-                        return Content("ACTIVATED");
-                    }
-                    catch (DbEntityValidationException dbEx)
-                    {
-                        foreach (var validationErrors in dbEx.EntityValidationErrors)
-                        {
-                            foreach (var validationError in validationErrors.ValidationErrors)
-                            {
-                                System.Diagnostics.Debug.WriteLine("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
-                            }
-                        }   
-                    }
-
+                    model.status = 1;
+                    db.SaveChanges();
+                    return View("Activated");
                 }
-                    return Content(model.activationCode);
+                    return Content(model.activationCode);//INCOMPLETE
             }
 
+            return View();
+        }
+        //GET
+        public ActionResult Login()
+        {
             return View();
         }
     }

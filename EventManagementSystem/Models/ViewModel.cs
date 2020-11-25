@@ -10,17 +10,17 @@ namespace EventManagementSystem.Models
     {
         public int Id { get; set; }
         [Required]
-        [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only.")]
+        [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only")]
         public string name { get; set; }
         [Required(ErrorMessage = "The contact number field is required")]
-        [RegularExpression(@"(\+?6?01)[0-46-9]-*[0-9]{7,8}", ErrorMessage = "Invalid format.")]
+        [RegularExpression(@"(\+?6?01)[0-46-9]-*[0-9]{7,8}", ErrorMessage = "Invalid format")]
         public string contact_no { get; set; }
         [Required]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Invalid format")]
         public string email { get; set; }
         [Required]
-        [MinLength(5, ErrorMessage = "Username should contain atleast 5 alphabets.")]
-        [MaxLength(15, ErrorMessage = "Username cannot have more than 15 alphabets.")]
+        [MinLength(5, ErrorMessage = "5 minimum length")]
+        [MaxLength(15, ErrorMessage = "15 maximum length")]
         public string username { get; set; }
         [Required]
         public string password { get; set; }
