@@ -4,6 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
+
       <Diagram DiagramId="41ed6b36fb9c4deaa67df0ad533950c2" Name="Diagram1" ZoomLevel="73">
         <EntityTypeShape EntityType="DBModel.Advertisement" Width="1.5" PointX="3" PointY="6.125" />
         <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="0.75" PointY="7" />
@@ -11,7 +12,6 @@
         <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="3" PointY="2" />
         <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="0.75" PointY="2.375" />
         <EntityTypeShape EntityType="DBModel.Venue" Width="1.5" PointX="1.5" PointY="13.125" />
-
         <AssociationConnector Association="DBModel.FK_Table_User" />
         <AssociationConnector Association="DBModel.FK_Event_Venue" />
         <AssociationConnector Association="DBModel.FK_Registration_Event" />
