@@ -77,6 +77,7 @@
           <Property Name="recoveryCode" Type="varchar" MaxLength="50" />
           <Property Name="activationCode" Type="varchar" MaxLength="50" />
           <Property Name="photo" Type="varchar(max)" />
+
         </EntityType>
         <EntityType Name="Venue">
           <Key>
@@ -243,6 +244,7 @@
           <Property Name="status" Type="Boolean" Nullable="false" />
           <Property Name="venueId" Type="Int32" Nullable="false" />
           <Property Name="photoURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+
           <NavigationProperty Name="Venue" Relationship="DBModel.FK_Event_Venue" FromRole="Event" ToRole="Venue" />
           <NavigationProperty Name="Registrations" Relationship="DBModel.FK_Registration_Event" FromRole="Event" ToRole="Registration" />
         </EntityType>
@@ -386,6 +388,7 @@
             <EntityTypeMapping TypeName="DBModel.Event">
               <MappingFragment StoreEntitySet="Event">
                 <ScalarProperty Name="photoURL" ColumnName="photoURL" />
+
                 <ScalarProperty Name="venueId" ColumnName="venueId" />
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="approvalStat" ColumnName="approvalStat" />

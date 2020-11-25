@@ -130,6 +130,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -184,10 +185,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Images\jquery\jquery.js" />
-    <Content Include="Images\jquery\jquery.min.js" />
-    <Content Include="Images\jquery\jquery.slim.js" />
-    <Content Include="Images\jquery\jquery.slim.min.js" />
     <Content Include="Models\DB.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DB.Context.cs</LastGenOutput>
@@ -201,8 +198,6 @@
     <Content Include="Scripts\app.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Images\jquery\jquery.min.map" />
-    <Content Include="Images\jquery\jquery.slim.min.map" />
     <EntityDeploy Include="Models\DB.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DB.Designer.cs</LastGenOutput>
@@ -240,8 +235,11 @@
     <Content Include="Views\Shared\_Navbar.cshtml" />
     <Content Include="Views\Admin\Edit.cshtml" />
     <Content Include="Views\Admin\Insert.cshtml" />
+    <Content Include="Views\User\Register.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

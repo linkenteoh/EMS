@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using EventManagementSystem.Models;
 
 namespace EventManagementSystem.Controllers
 {
@@ -64,10 +65,7 @@ namespace EventManagementSystem.Controllers
             var model = db.Events;
             return View(model);
         }
-        public ActionResult Insert()
-        {
-            return View();
-        }
+
         [HttpPost]
         public ActionResult Insert(EventInsertVM model)
         {   
