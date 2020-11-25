@@ -54,7 +54,7 @@ namespace EventManagementSystem.Controllers
         [HttpPost]
         public ActionResult Register(User model)
         {
-            model.status = true;
+            model.status = 1;
             model.recoveryCode = "ABCDEF";
             model.activationCode = "ABCDEF";
             db.Users.Add(model);

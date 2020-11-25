@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "Activated";
+}
+
+<div>
+    <div>
+        <h2>Verification completed</h2>
+        <hr />
+    </div>
+    <div>
+        <h4>You have successfully activated your account. You may login now!</h4>
+    </div>
+    <div>
+        <small>You will be directed to login page after 5 seconds.</small>
+    </div>
+</div>
+
+@section foot{
+    <script>
+        window.setTimeout(function () {
+            window.location.href = '/Account/Login';
+        }, 5500);
+    </script>
+
+}

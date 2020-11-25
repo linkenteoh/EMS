@@ -38,7 +38,7 @@
           <Property Name="approvalStat" Type="bit" Nullable="false" />
           <Property Name="status" Type="bit" Nullable="false" />
           <Property Name="venueId" Type="int" Nullable="false" />
-          <Property Name="photoURL" Type="varchar(max)" />
+          <Property Name="photoURL" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -73,11 +73,10 @@
           <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="role" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="organizer" Type="bit" />
-          <Property Name="status" Type="bit" Nullable="false" />
+          <Property Name="status" Type="int" Nullable="false" />
           <Property Name="recoveryCode" Type="varchar" MaxLength="50" />
           <Property Name="activationCode" Type="varchar" MaxLength="50" />
           <Property Name="photo" Type="varchar(max)" />
-
         </EntityType>
         <EntityType Name="Venue">
           <Key>
@@ -243,8 +242,7 @@
           <Property Name="approvalStat" Type="Boolean" Nullable="false" />
           <Property Name="status" Type="Boolean" Nullable="false" />
           <Property Name="venueId" Type="Int32" Nullable="false" />
-          <Property Name="photoURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-
+          <Property Name="photoURL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Venue" Relationship="DBModel.FK_Event_Venue" FromRole="Event" ToRole="Venue" />
           <NavigationProperty Name="Registrations" Relationship="DBModel.FK_Registration_Event" FromRole="Event" ToRole="Registration" />
         </EntityType>
@@ -285,7 +283,7 @@
           <Property Name="password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="role" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="organizer" Type="Boolean" />
-          <Property Name="status" Type="Boolean" Nullable="false" />
+          <Property Name="status" Type="Int32" Nullable="false" />
           <Property Name="recoveryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="activationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -388,7 +386,6 @@
             <EntityTypeMapping TypeName="DBModel.Event">
               <MappingFragment StoreEntitySet="Event">
                 <ScalarProperty Name="photoURL" ColumnName="photoURL" />
-
                 <ScalarProperty Name="venueId" ColumnName="venueId" />
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="approvalStat" ColumnName="approvalStat" />
