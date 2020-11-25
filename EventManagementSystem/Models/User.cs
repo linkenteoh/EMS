@@ -12,6 +12,7 @@ namespace EventManagementSystem.Models
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Web.Mvc;
 
     public partial class User
     {
@@ -28,13 +29,13 @@ namespace EventManagementSystem.Models
         public string email { get; set; }
         public string username { get; set; }
         public string password { get; set; }
-        [NotMapped]
         public string confirmPassword { get; set; }
         public string role { get; set; }
         public Nullable<bool> organizer { get; set; }
-        public bool status { get; set; }
+        public int status { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
+        public string photo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Advertisement> Advertisements { get; set; }

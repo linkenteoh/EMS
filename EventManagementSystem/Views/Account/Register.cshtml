@@ -1,4 +1,4 @@
-﻿@model EventManagementSystem.Models.User
+﻿@model EventManagementSystem.Models.RegisterVM
 @{
     ViewBag.Title = "Register";
 
@@ -73,7 +73,7 @@
     <h3>Register Form</h3>
     <hr />
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" id="myForm" name="myForm">
         <div id="first" style="display:compact">
             <!--First step: Choosing role-->
             <h2><b>What is your role?</b></h2>
@@ -102,12 +102,13 @@
                     </div>
 
                     <div id="optDiv" style="text-align:center;display: block">
-                        <img id="blah" src="~/Images/userPlaceholder.png" alt="your image" style="width:250px; height: 250px; border-radius:50%; object-fit:cover" />
-                        <label class="custom-file-upload">
-                            <input type="file" id="imgInp" />
-                            <i class="fa fa-upload" style="font-size:48px;color:darkcyan"></i>
-                        </label>
+                        <label class="upload custom-file-upload">
+                            @Html.TextBoxFor(m => m.Photo, new { type = "file", accept = "image/jpeg,image/png", hidden = "" })
+                            <img id="blah" src="~/Images/userPlaceholder.png" alt="your image" style="width:250px; height: 250px; border-radius:50%; object-fit:cover" />
+                        </label><br />
+                        @Html.ValidationMessageFor(m => m.Photo, "", new { @class = "text-danger" })<br />
                         <i class="fa fa-camera" style="font-size:48px;color:darkslateblue;cursor:pointer" aria-hidden="true" onclick="toggleCamera()"></i>
+
                     </div>
                 </div>
 
@@ -115,19 +116,19 @@
                     <div class="form-group col-md-6">
                         @Html.LabelFor(m => m.name, "Name")
                         @Html.TextBoxFor(m => m.name, new { @class = "form-control", placeholder = "Your name" })
-                        @Html.ValidationMessageFor(m => m.name,"", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(m => m.name, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group col-md-6">
                         @Html.LabelFor(m => m.username, "Username")
                         @Html.TextBoxFor(m => m.username, new { @class = "form-control", placeholder = "Username" })
-                        @Html.ValidationMessageFor(m => m.username,"", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(m => m.username, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             @Html.LabelFor(m => m.email, "Email")
                             @Html.TextBoxFor(m => m.email, new { @class = "form-control", placeholder = "Email" })
-                            @Html.ValidationMessageFor(m => m.email,"", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.email, "", new { @class = "text-danger" })
                         </div>
                         <div class="form-group col-md-6">
                             @Html.LabelFor(m => m.contact_no, "Contact")
@@ -152,8 +153,10 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <hr />
+                            <small>*Photo uploaded should not larger than 1mb and JPG/PNG allowed only.</small>
                         </div>
                     </div>
+                    
 
                     <div class="form-row">
                         <div class="form-group col-md-10">
@@ -176,6 +179,7 @@
 @section foot{
     <script src="@Url.Content("~/Scripts/jquery.webcam.js")">
     </script>
+
     <script>
 
         function toggleCamera() {
@@ -183,30 +187,53 @@
             $("#optDiv").css('display', 'none');
         }
 
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
+        $('body').on('click', 'input[type="radio"]', function () {
+            $("#first").css('display', 'none');
+            $("#second").css('display', 'block');
+        });
 
-                reader.onload = function (e) {
-                    $('#blah').attr('src', e.target.result);
-                }
-
-                reader.readAsDataURL(input.files[0]); // convert to base64 string
-            }
+        function isPostBack() {
+            return document.referrer.indexOf(document.location.href) > -1;
         }
 
-        $("#imgInp").change(function () {
-            readURL(this);
+        if (isPostBack()) {
+            $("#first").css('display', 'none');
+            $("#second").css('display', 'block');
+        }
+
+        function validatePhoto(f) {
+            let reType = /^image\/(jpeg|png)$/i;
+            let reName = /^.+\.(jpg|jpeg|png)$/i;
+
+            return f &&
+                f.size <= 1 * 1024 * 1024 &&
+                reType.test(f.type) &&
+                reName.test(f.name);
+        }
+
+        let src = null;
+
+        $('.upload input').change(e => {
+            let f = e.target.files[0];
+            let img = $(e.target).siblings('img')[0];
+
+            if (!src) src = img.src;
+
+            if (validatePhoto(f)) {
+                img.src = URL.createObjectURL(f);
+            }
+            else {
+                img.src = src;
+                e.target.value = '';
+            }
+
+            $(e.target).valid();
         });
 
         function bckFunc() {
             $("#first").css('display', 'block');
             $("#second").css('display', 'none');        }
 
-        $('body').on('click', 'input[type="radio"]', function () {
-            $("#first").css('display', 'none');
-            $("#second").css('display', 'block');
-        });
 
         $("#Camera").webcam({
              width: 320,
@@ -229,13 +256,8 @@
             }
         });
 
-        function isPostBack() {
-            return document.referrer.indexOf(document.location.href) > -1;
-        }
 
-        if (isPostBack()) {
-            $("#first").css('display', 'none');
-            $("#second").css('display', 'block');
-        }
+
+
     </script>
 }
