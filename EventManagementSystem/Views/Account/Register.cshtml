@@ -19,11 +19,11 @@
             bottom: 90%;
         }
 
-        .radio :checked{
+        .radio :checked {
         }
 
         .radio {
-            position:relative;
+            position: relative;
             border-radius: 10px;
             width: 49%;
             padding-top: 13vh;
@@ -32,10 +32,10 @@
             box-shadow: 1px 3px 6px 1px rgba(148,129,148,1);
         }
 
-        .radio:hover {
-            box-shadow: 2px 10px 21px 1px rgba(148,129,148,1);
-            animation: pop 0.4s forwards;
-        }
+            .radio:hover {
+                box-shadow: 2px 10px 21px 1px rgba(148,129,148,1);
+                animation: pop 0.4s forwards;
+            }
 
         @@keyframes pop {
             from {
@@ -113,7 +113,7 @@
 
                     <div id="optDiv" style="text-align:center;display: block">
                         <label class="upload custom-file-upload">
-                            @Html.TextBoxFor(m => m.Photo, new { type = "file", accept = "image/jpeg,image/png", hidden = "", id="photoInput" })
+                            @Html.TextBoxFor(m => m.Photo, new { type = "file", accept = "image/jpeg,image/png", hidden = "", id = "photoInput" })
                             <img id="blah" src="~/Images/userPlaceholder.png" alt="your image" style="width:250px; height: 250px; border-radius:50%; object-fit:cover" />
                         </label><br />
                         @Html.ValidationMessageFor(m => m.Photo, "", new { @class = "text-danger" })<br />
@@ -166,15 +166,15 @@
                             @Html.GoogleCaptcha()
                             @Html.InvalidGoogleCaptchaLabel("Captcha is not valid")
                         </div>
-                    </div>                    
-                    
+                    </div>
+
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <hr />
                             <small>*Photo uploaded should not larger than 1mb and JPG/PNG allowed only.</small>
                         </div>
                     </div>
-                    
+
 
                     <div class="form-row">
                         <div class="form-group col-md-10">
@@ -270,7 +270,7 @@
              onCapture: function () {
                  webcam.save("@Url.Content("~/Account/Capture")/");
 
-                
+
              },
              debug: function () { },
             onLoad: function () {

@@ -119,7 +119,8 @@ namespace EventManagementSystem.Controllers
             if (ModelState.IsValid)
             {
                 int userCount = db.Users.Count() + 1;
-                var user = new User {
+                var user = new User
+                {
                     Id = userCount,
                     name = model.name,
                     contact_no = model.contact_no,
@@ -177,15 +178,15 @@ namespace EventManagementSystem.Controllers
         public ActionResult Activation(string activationCode, int userId)
         {
             var model = db.Users.Find(userId);
-            if(model != null)
+            if (model != null)
             {
-                if(model.activationCode == activationCode)
+                if (model.activationCode == activationCode)
                 {
                     model.status = 1;
                     db.SaveChanges();
                     return View("Activated");
                 }
-                    return Content(model.activationCode);//INCOMPLETE
+                return Content(model.activationCode);//INCOMPLETE
             }
 
             return View();
