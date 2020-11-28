@@ -5,11 +5,14 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using EventManagementSystem.Models;
 
 namespace EventManagementSystem
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        DBEntities db = new DBEntities();
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -17,5 +20,13 @@ namespace EventManagementSystem
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+/*        protected void Session_Start()
+        {
+            if (User.IsInRole("Student") || User.IsInRole("Outsider"))
+            {
+                Session["PhotoURL"] = db.Users.Find(User.Identity.Name).photo;
+            }
+        }*/
     }
 }

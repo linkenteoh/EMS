@@ -10,6 +10,8 @@ using System.Data.Entity.Validation;
 using System.Text.RegularExpressions;
 using System.Web.Helpers;
 using EventManagementSystem.reCAPTCHA;
+using System.Security.Claims;
+using Microsoft.Owin.Security;
 
 namespace EventManagementSystem.Controllers
 {
@@ -21,6 +23,29 @@ namespace EventManagementSystem.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+        // Check if username aldy exists in database
+        public JsonResult IsUserNameAvailable(RegisterVM model)
+        {
+            return Json(!db.Users.Any(u => u.username == model.username), JsonRequestBehavior.AllowGet);
+        }
+
+        private void SignIn(string username, string role, bool rememberMe)
+        {
+            // TODO(1): Identity and claims
+            var iden = new ClaimsIdentity("AUTH");
+            iden.AddClaim(new Claim(ClaimTypes.Name, username));
+            iden.AddClaim(new Claim(ClaimTypes.Role, role));
+
+            // TODO(2): Remember me
+            var prop = new AuthenticationProperties
+            {
+                IsPersistent = rememberMe //Remember
+            };
+
+            // TODO(3): Sign in
+            Request.GetOwinContext().Authentication.SignIn(prop, iden);
+
         }
 
         public void Capture()
@@ -191,10 +216,52 @@ namespace EventManagementSystem.Controllers
 
             return View();
         }
-        //GET
+        // GET: Account/Login
         public ActionResult Login()
         {
             return View();
+        }
+
+        // POST: Account/Login
+        [HttpPost]
+        public ActionResult Login(LoginVM model, string returnUrl = "")
+        {
+            if (ModelState.IsValid)
+            {
+                //Get user record based on username
+                var user = db.Users.FirstOrDefault(u => u.username == model.Username);
+
+                //Check pass
+                if(user!=null && user.password == model.Password)
+                {
+                    SignIn(user.username, user.role, model.RememberMe);
+                    Session["PhotoURL"] = user.photo;
+
+                    //Handle return url
+                    if (returnUrl == "")
+                    {
+                        TempData["Info"] = "You have successfully logged in.";
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Password", "Username and password not matched.");
+                }
+
+
+            }
+            return View(model);
+        }
+
+        // GET: Account/Logout
+        public ActionResult Logout()
+        {
+            // TODO: Sign out user + session
+            Session.Remove("PhotoURL");
+            Request.GetOwinContext().Authentication.SignOut();
+            TempData["Info"] = "You have successfully logged out.";
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -58,6 +58,7 @@ namespace EventManagementSystem.Models
         [EmailAddress(ErrorMessage = "Invalid format")]
         public string email { get; set; }
         [Required]
+        [Remote("IsUserNameAvailable", "Account", ErrorMessage = "Username already exists")]
         [MinLength(5, ErrorMessage = "5 minimum length")]
         [MaxLength(15, ErrorMessage = "15 maximum length")]
         public string username { get; set; }
@@ -74,5 +75,15 @@ namespace EventManagementSystem.Models
         public string activationCode { get; set; }
     }
 
+    public class LoginVM
+    {
+        [Required]
+        public string Username { get; set; }
+
+        [Required]
+        public string Password { get; set; }
+
+        public bool RememberMe { get; set; }
+    }
 
 }
