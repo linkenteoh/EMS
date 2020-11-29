@@ -38,6 +38,7 @@
           <Property Name="approvalStat" Type="bit" Nullable="false" />
           <Property Name="status" Type="bit" Nullable="false" />
           <Property Name="venueId" Type="int" />
+
           <Property Name="photoURL" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Payment">
@@ -73,7 +74,7 @@
           <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="role" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="organizer" Type="bit" />
-          <Property Name="status" Type="bit" Nullable="false" />
+          <Property Name="status" Type="int" Nullable="false" />
           <Property Name="recoveryCode" Type="varchar" MaxLength="50" />
           <Property Name="activationCode" Type="varchar" MaxLength="50" />
           <Property Name="photo" Type="varchar(max)" />
@@ -283,7 +284,7 @@
           <Property Name="password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="role" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="organizer" Type="Boolean" />
-          <Property Name="status" Type="Boolean" Nullable="false" />
+          <Property Name="status" Type="Int32" Nullable="false" />
           <Property Name="recoveryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="activationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />

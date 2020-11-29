@@ -1,0 +1,50 @@
+﻿@model Event
+
+<style>
+    .outerDiv {
+        padding: 5px 50px;
+        margin-top: 30px;
+    }
+
+    #eventImg {
+        border: 1px solid black;
+        margin-top: 10px;
+    }
+
+    #eventDetails {
+        border: 1px solid black;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="outerDiv">
+    <p onclick="bckFunc()" id="bckBtn" class="btn btn-primary" style="font-weight: bold"><</p>
+    <div class="container" id="eventImg">
+        Image Here
+    </div>
+    <div class="container" id="eventDetails">
+        <table class="table">
+            <tr>
+                <th>Id</th>
+                <td>: @Model.Id</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>: @Model.name</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>: @Model.des</td>
+            </tr>
+            <tr>
+                <th>Price (RM)</th>
+                <td>: @Model.price</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script>
+        function bckFunc() {
+            location.href = '@Url.Action("EventList", "User")';
+        }
+</script>

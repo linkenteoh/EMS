@@ -76,7 +76,7 @@ namespace EventManagementSystem.Controllers
         [HttpPost]
         public ActionResult InsertEvent(EventInsertVM model)
         {   
-/*            var id = db.Events.Count() + 1;*/  
+
           string error = ValidatePhoto(model.Photo);
             if(error != null)
             {

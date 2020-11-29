@@ -12,6 +12,8 @@
     @RenderSection("head", false)
 </head>
 <body>
+    <div class="info">@TempData["Info"]</div>
+
     <div class="navbar navbar-inverse navbar-fixed-top bg-light">
         <div class="container">
             <div class="navbar-header">
@@ -33,16 +35,24 @@
                     <li>@Html.ActionLink("Events", "Events", "Home")</li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right right-aligned-items">
-                    <li>@Html.ActionLink("Sign Up", "Register", "User")</li>
-                    <li>@Html.ActionLink("Login", "Login", "Home")</li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown">User1234<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Events joined", "EventsJoined", "Home")</li>
-                            <li>@Html.ActionLink("Settings", "EventsJoined", "Home")</li>
-                            <li>@Html.ActionLink("Logout", "Logout", "Home")</li>
-                        </ul>
-                    </li>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Sign Up", "Register", "Account")</li>
+                        <li>@Html.ActionLink("Login", "Login", "Account")</li>
+
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown">@User.Identity.Name<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Events Joined", "EventList", "User")</li>
+                                <li>@Html.ActionLink("Settings", "Edit", "User")</li>
+                                <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
+                            </ul>
+                        </li>
+                    }
+
                 </ul>
 
             </div>
@@ -62,9 +72,9 @@
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
     <script src="~/Scripts/app.js"></script>
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-   
     @RenderSection("foot", false)
 </body>
 </html>
