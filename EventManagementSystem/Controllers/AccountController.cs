@@ -143,10 +143,8 @@ namespace EventManagementSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                int userCount = db.Users.Count() + 1;
                 var user = new User
                 {
-                    Id = userCount,
                     name = model.name,
                     contact_no = model.contact_no,
                     email = model.email,
