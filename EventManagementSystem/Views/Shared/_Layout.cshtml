@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="stylesheet" href="~/Content/app.css">
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("head", false)
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top bg-light">
@@ -30,7 +33,7 @@
                     <li>@Html.ActionLink("Events", "Events", "Home")</li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right right-aligned-items">
-                    <li>@Html.ActionLink("Sign Up", "Register", "Home")</li>
+                    <li>@Html.ActionLink("Sign Up", "Register", "User")</li>
                     <li>@Html.ActionLink("Login", "Login", "Home")</li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown">User1234<span class="caret"></span></a>
@@ -62,5 +65,6 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
    
+    @RenderSection("foot", false)
 </body>
 </html>
