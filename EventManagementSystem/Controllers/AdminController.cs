@@ -14,7 +14,7 @@ namespace EventManagementSystem.Controllers
     {
         DBEntities db = new DBEntities();
         // GET: Admin
-
+        //update
         //-- helper func
         private string ValidatePhoto(HttpPostedFileBase f)
         {
