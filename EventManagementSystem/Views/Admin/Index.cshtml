@@ -43,20 +43,21 @@
                 <td scope="row">@s.duration hour(s)</td>
                 <td scope="row">@s.organized_by</td>
                 <td scope="row">
+                    <div class="custom-control custom-switch" >
 
-                    <div class="custom-control custom-switch">                      
-                        @if (s.approvalStat == true)
-                        {
+        @if (s.approvalStat == true)
+        {
 
-                            <input type="checkbox" class="custom-control-input" id="customSwitches"
-                                   checked>
-                            <label class="custom-control-label" for="customSwitches">@s.approvalStat</label>
-                        }
-                        else
-                        {
-                            <input type="checkbox" class="custom-control-input" id="customSwitches">
-                            <label class="custom-control-label" for="customSwitches">@s.approvalStat</label>
-                        }
+            <input type="checkbox" class="custom-control-input" id="@s.Id"
+                   checked disabled>
+            <label class="custom-control-label"  for="@s.Id">@s.approvalStat</label>
+
+        }
+        else
+        {
+            <input type="checkbox" class="custom-control-input" id="@s.Id" disabled>
+            <label class="custom-control-label"for="@s.Id">@s.approvalStat</label>
+        }
                     </div>
                 </td>
                 <td> 

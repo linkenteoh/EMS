@@ -18,7 +18,7 @@ namespace EventManagementSystem.Controllers
         //-- helper func
         private string ValidatePhoto(HttpPostedFileBase f)
         {
-            var reType = new Regex(@"^image\/(jpeg|png)$", RegexOptions.IgnoreCase); ;
+            var reType = new Regex(@"^image\/(jpeg|png)$", RegexOptions.IgnoreCase); 
             var reName = new Regex(@"^.+\.(jpg|jpeg|png)$", RegexOptions.IgnoreCase);
 
             if (f == null)
@@ -98,7 +98,7 @@ namespace EventManagementSystem.Controllers
                     endTime = model.endTime,
                     duration = duration.ToString(),
                     organized_by = model.organized_by,
-                    approvalStat = false,
+                    approvalStat = model.approvalStat,
                     status = true,
                     venueId = null,
                     photoURL = SavePhoto(model.Photo)
