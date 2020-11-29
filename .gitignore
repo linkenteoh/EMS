@@ -59,6 +59,10 @@ artifacts/
 # StyleCop
 StyleCopReport.xml
 
+.mdf
+.ldf
+
+
 # Files built by Visual Studio
 *_i.c
 *_p.c
@@ -338,3 +342,4 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/EventManagementSystem/App_Data

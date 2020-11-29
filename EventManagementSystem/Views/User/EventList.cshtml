@@ -1,0 +1,161 @@
+﻿@model IEnumerable<Event>
+
+@{
+    ViewBag.Title = "Events Joined";
+
+    // TODO: AJAX option
+    var ao = new AjaxOptions
+    {
+        Url = "/User/EventDetail",
+        HttpMethod = "get",
+        UpdateTargetId = "contentHere",
+        //LoadingElementId = "loader"
+    };
+}
+
+@section head{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        #role {
+            cursor: pointer;
+        }
+
+        .radio input {
+            display: none;
+        }
+
+        .radio {
+            border-radius: 10px;
+            width: 49%;
+            padding-top: 13vh;
+            padding-bottom: 13vh;
+            cursor: pointer;
+            box-shadow: 1px 3px 6px 1px rgba(148,129,148,1);
+        }
+
+            .radio:hover {
+                box-shadow: 2px 10px 21px 1px rgba(148,129,148,1);
+                animation: pop 0.4s forwards;
+            }
+
+        @@keyframes pop {
+            from {
+                bottom: 0px
+            }
+
+            to {
+                bottom: 1em
+            }
+        }
+
+        #stud {
+            float: left;
+        }
+
+        #outs {
+            float: right;
+            margin-top: 10px;
+        }
+
+        .roleText {
+            font-size: 3em;
+            font-weight: 300;
+        }
+
+        .outerDiv {
+            padding: 5px 50px;
+            margin-top: 30px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
+        #eventTable {
+            margin: 10px 10px 10px 10px;
+        }
+    </style>
+}
+
+
+<div class="outerDiv">
+    <h3>@ViewBag.Title</h3>
+    <hr />
+
+    <form method="post" enctype="multipart/form-data">
+
+        <div id="second" style="display:block;">
+            <!--Back to Homepage-->
+            <p onclick="bckFunc()" id="bckBtn" class="btn btn-primary" style="font-weight: bold"><</p>
+        </div>
+
+        <div id="eventTable">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Start Date</th>
+                        <th> End  Date</th>
+                        <th>Start Time</th>
+                        <th> End  Time</th>
+                        <th>Duration</th>
+                        <th>Organised by</th>
+                        <th>View Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Event s in Model)
+                    {
+                        <tr>
+                            <td>@s.name</td>
+                            <td>@s.des</td>
+                            <td>@s.price</td>
+                            <td>@s.startDate</td>
+                            <td>@s.endDate</td>
+                            <td>@s.startTime</td>
+                            <td>@s.endTime</td>
+                            <td>@s.duration</td>
+                            <td>@s.organized_by</td>
+                            <td>
+                                @Ajax.ActionLink("Detail", "EventDetail", new { Id = s.Id }, ao, new { @class = "btn btn-default modalBtn" })
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>
+
+
+
+@section foot{
+    <script src="@Url.Content("~/Scripts/jquery.webcam.js")">
+    </script>
+    <script>
+        function bckFunc() {
+            location.href = '@Url.Action("Index", "Home")';
+        }
+
+        @*$('.modalBtn').click(e => {
+            e.preventDefault();
+            $("#eventModal").modal('show');
+        });
+
+        $('#saveChanges').click(e => {
+            e.preventDefault();
+            $("#eventModal").modal('hide');
+        });*@
+
+    </script>
+}

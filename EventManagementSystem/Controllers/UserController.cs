@@ -54,7 +54,7 @@ namespace EventManagementSystem.Controllers
         [HttpPost]
         public ActionResult Register(User model)
         {
-            model.status = true;
+            model.status = 1;
             model.recoveryCode = "ABCDEF";
             model.activationCode = "ABCDEF";
             db.Users.Add(model);
@@ -62,5 +62,75 @@ namespace EventManagementSystem.Controllers
 
             return RedirectToAction("Register");
         }
+
+        // Edit users
+        public ActionResult Edit(int id = 1)
+        {
+            var Model = db.Users.Find(id);
+            if(Model == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View(Model);
+        }
+
+        // POST : Edit User
+        [HttpPost]
+        public ActionResult Edit(User model)
+        {
+            var u = db.Users.Find(model.Id);
+
+            if (u == null)
+            {
+                return RedirectToAction("Edit");
+            }
+
+            if (ModelState.IsValid)
+            {
+                u.name = model.name;
+                u.username = model.username;
+                u.email = model.email;
+                u.contact_no = model.contact_no;
+                u.password = model.password;
+                
+                db.SaveChanges();
+                // TODO: TempData
+                // TempData["Info"] = "Student record edited successfully!";
+                return RedirectToAction("Index", "Home");
+            }
+            return View(model);
+        }
+
+        public ActionResult EventList(int id = 1)
+        {
+            // Get userID in registration
+            var reg = db.Registrations.Where(r => id.Equals(r.userId));
+
+            // Get EventID in registration that contains the userID
+
+
+            // LIst event based on EventID
+
+            var model = db.Events;
+            //var eventList = db.Events.Where(e => reg.Contains(e.Id);
+            // reg.userId = 
+            return View(model);
+        }
+
+        public ActionResult EventDetail(int id)
+        {
+            var model = db.Events.Find(id);
+          
+            if (model == null)
+            {
+                return RedirectToAction("EventList");
+            }
+            //if (Request.IsAjaxRequest())
+            //    return PartialView("_Detail", model);
+
+            return View(model);
+        }
+
+      
     }
 }
