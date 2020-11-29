@@ -1,0 +1,78 @@
+﻿body {
+}
+
+.form > section,
+.validation-summary-valid,
+.validation-summary-errors {
+    grid-column: 1 / -1;
+}
+
+.validation-summary-errors,
+.field-validation-error {
+    color: red;
+}
+
+/* Flash message -------------------------------------------------------------- */
+.info:not(:empty) {
+    position: absolute;
+    background: #666;
+    color: #fff;
+    border: 1px solid #333;
+    border-radius: 5px;
+    padding: 10px 20px;
+    max-width: 500px;
+    left: 50%;
+    transform: translate(-50%);
+    top: -100px;
+    opacity: 0;
+    animation: fade 5s linear 0s 1 normal;
+}
+
+@keyframes fade {
+    0% {
+        top: -100px;
+        opacity: 0;
+    }
+
+    10% {
+        top: 100px;
+        opacity: 1;
+    }
+
+    90% {
+        top: 100px;
+        opacity: 1;
+    }
+
+    100% {
+        top: -100px;
+        opacity: 0;
+    }
+}
+
+/* Popup ---------------------------------------------------------------------- */
+.popup {
+    position: relative;
+}
+
+    .popup > div {
+        position: absolute;
+        background: #fff;
+        border: 1px solid #333;
+        padding: 5px;
+        white-space: nowrap;
+        z-index: 1;
+        top: 50%;
+        left: 50%;
+        transform: translate(0, -50%);
+        display: none;
+    }
+
+    .popup:hover > div {
+        display: block;
+    }
+/* AJAX ----------------------------------------------------------------------- */
+#loader {
+    display: inline-block;
+    vertical-align: text-bottom;
+}

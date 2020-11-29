@@ -61,3 +61,4 @@ $('[data-checkable]').click(e => {
     }
 
 });
+

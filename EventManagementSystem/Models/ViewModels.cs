@@ -29,21 +29,76 @@ namespace EventManagementSystem.Models
         public TimeSpan startTime { get; set; }
         [Required]
         public TimeSpan endTime { get; set; }
-        [Required]
         public string duration { get; set; }
         [Required]
         public string organized_by { get; set; }
-        [Required]
         public bool approvalStat { get; set; }
-        [Required]
         public bool status { get; set; }
-        [Required]
-        public int venueId { get; set; }
+        public int? venueId { get; set; }
         [Required]
         public HttpPostedFileBase Photo { get; set; }
 
+    } 
 
+    public class EventEditVM
+    {
+        public int Id { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string name { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string des { get; set; }
+        [Required]
+        public decimal price { get; set; }
+        [Required]
+        public int availability { get; set; }
+        [Required]
+        public int participants { get; set; }
+        [Required]
+        public DateTime startDate { get; set; }
+        [Required]
+        public DateTime endDate { get; set; }
+        [Required]
+        public TimeSpan startTime { get; set; }
+        [Required]
+        public TimeSpan endTime { get; set; }
+        public string duration { get; set; }
+        [Required]
+        public string organized_by { get; set; }
+        public bool approvalStat { get; set; }
+        public HttpPostedFileBase Photo { get; set; }
+        public string photoURL { get; set; }
     }
+    public class EventDisplayVM
+    {
+        [Required]
+        [StringLength(100)]
+        public string name { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string des { get; set; }
+        [Required]
+        public decimal price { get; set; }
+        [Required]
+        public int availability { get; set; }
+        [Required]
+        public int participants { get; set; }
+        [Required]
+        public DateTime startDate { get; set; }
+        [Required]
+        public DateTime endDate { get; set; }
+        [Required]
+        public TimeSpan startTime { get; set; }
+        [Required]
+        public TimeSpan endTime { get; set; }
+        public string duration { get; set; }
+        [Required]
+        public string organized_by { get; set; }
+        public bool approvalStat { get; set; }
+        public bool status { get; set; }
+    }
+   
 
     public class RegisterVM
     {
