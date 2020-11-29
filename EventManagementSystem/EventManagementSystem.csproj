@@ -274,6 +274,7 @@
     <Content Include="Views\Account\Activation.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Activated.cshtml" />
+    <Content Include="Views\User\_EventResults.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

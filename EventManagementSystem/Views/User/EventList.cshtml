@@ -8,8 +8,14 @@
     {
         Url = "/User/EventDetail",
         HttpMethod = "get",
-        UpdateTargetId = "contentHere",
+        //UpdateTargetId = "contentHere",
         //LoadingElementId = "loader"
+    };
+
+    var results = new AjaxOptions { 
+        Url = "/User/EventSearch",
+        HttpMethod = "get",
+        UpdateTargetId = "eventTable",
     };
 }
 
@@ -95,44 +101,33 @@
             <!--Back to Homepage-->
             <p onclick="bckFunc()" id="bckBtn" class="btn btn-primary" style="font-weight: bold"><</p>
         </div>
-
+        <table class="table">
+            <tr>
+                <td>Name</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Price</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2">@Ajax.ActionLink("Search", "EventDetail", new { Id = "Name" }, ao, new { @class = "btn btn-default modalBtn" })</td>
+            </tr>
+        </table>
         <div id="eventTable">
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Price</th>
-                        <th>Start Date</th>
-                        <th> End  Date</th>
-                        <th>Start Time</th>
-                        <th> End  Time</th>
-                        <th>Duration</th>
-                        <th>Organised by</th>
-                        <th>View Details</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (Event s in Model)
-                    {
-                        <tr>
-                            <td>@s.name</td>
-                            <td>@s.des</td>
-                            <td>@s.price</td>
-                            <td>@s.startDate</td>
-                            <td>@s.endDate</td>
-                            <td>@s.startTime</td>
-                            <td>@s.endTime</td>
-                            <td>@s.duration</td>
-                            <td>@s.organized_by</td>
-                            <td>
-                                @Ajax.ActionLink("Detail", "EventDetail", new { Id = s.Id }, ao, new { @class = "btn btn-default modalBtn" })
-                            </td>
-                        </tr>
-                    }
-
-                </tbody>
-            </table>
+          
         </div>
     </form>
 </div>

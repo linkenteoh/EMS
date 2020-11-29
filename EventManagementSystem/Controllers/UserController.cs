@@ -64,19 +64,34 @@ namespace EventManagementSystem.Controllers
         }
 
         // Edit users
-        public ActionResult Edit(int id = 1)
+        public ActionResult Edit()
         {
-            var Model = db.Users.Find(id);
-            if(Model == null)
+            var name = User.Identity.Name;
+            var u = db.Users.Where(x => x.username == name).FirstOrDefault();
+            if(u == null)
             {
                 return RedirectToAction("Index", "Home");
             }
+            var Model = new EditProfileVM
+            {
+                Id = u.Id,
+                username = u.username,
+                name = u.name,
+                status = u.status,
+                contact_no = u.contact_no,
+                email = u.email,
+                organizer = u.organizer,
+                role = u.role,
+                password = u.password,
+                recoveryCode = u.recoveryCode,
+                
+            };
             return View(Model);
         }
 
         // POST : Edit User
         [HttpPost]
-        public ActionResult Edit(User model)
+        public ActionResult Edit(EditProfileVM model)
         {
             var u = db.Users.Find(model.Id);
 
@@ -98,6 +113,13 @@ namespace EventManagementSystem.Controllers
                 // TempData["Info"] = "Student record edited successfully!";
                 return RedirectToAction("Index", "Home");
             }
+            return View(model);
+        }
+
+        public ActionResult EventSearch(EventSearchModel searchModel)
+        {
+            var results = new EventSearchCriteria();
+            var model = results.GetEvents(searchModel);
             return View(model);
         }
 

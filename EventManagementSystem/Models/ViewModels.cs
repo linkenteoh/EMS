@@ -75,6 +75,36 @@ namespace EventManagementSystem.Models
         public string activationCode { get; set; }
     }
 
+    public class EditProfileVM
+    {
+        public int Id { get; set; }
+        [Required]
+        [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only")]
+        public string name { get; set; }
+        [Required(ErrorMessage = "The contact number field is required")]
+        [RegularExpression(@"(\+?6?01)[0-46-9]-*[0-9]{7,8}", ErrorMessage = "Invalid format")]
+        public string contact_no { get; set; }
+        [Required]
+        [EmailAddress(ErrorMessage = "Invalid format")]
+        public string email { get; set; }
+        [Required]
+        [Remote("IsUserNameAvailable", "Account", ErrorMessage = "Username already exists")]
+        [MinLength(5, ErrorMessage = "5 minimum length")]
+        [MaxLength(15, ErrorMessage = "15 maximum length")]
+        public string username { get; set; }
+        [Required]
+        public string password { get; set; }
+        [System.ComponentModel.DataAnnotations.Compare("password", ErrorMessage = "Password not matched")]
+        public string confirmPassword { get; set; }
+        [Required]
+        public HttpPostedFileBase Photo { get; set; }
+        public string role { get; set; }
+        public Nullable<bool> organizer { get; set; }
+        public int status { get; set; }
+        public string recoveryCode { get; set; }
+        public string activationCode { get; set; }
+    }
+
     public class LoginVM
     {
         [Required]
@@ -84,6 +114,52 @@ namespace EventManagementSystem.Models
         public string Password { get; set; }
 
         public bool RememberMe { get; set; }
+    }
+
+    public class EventSearchModel
+    {
+        public int? Id { get; set; }
+        public string name { get; set; }
+        public string des { get; set; }
+        public decimal price { get; set; }
+        public int? availability { get; set; }
+        public int? participants { get; set; }
+        public System.DateTime startDate { get; set; }
+        public System.DateTime endDate { get; set; }
+        public System.TimeSpan startTime { get; set; }
+        public System.TimeSpan endTime { get; set; }
+        public string duration { get; set; }
+        public string organized_by { get; set; }
+        public bool approvalStat { get; set; }
+        public bool status { get; set; }
+        public int? venueId { get; set; }
+     
+    }
+
+    public class EventSearchCriteria
+    {
+        private DBEntities db;
+        public EventSearchCriteria()
+        {
+            db = new DBEntities();
+        }
+
+        public IQueryable<Event> GetEvents(EventSearchModel searchModel)
+        {
+            var result = db.Events.AsQueryable();
+            if (searchModel != null)
+            {
+                if (searchModel.Id.HasValue)
+                    result = result.Where(x => x.Id == searchModel.Id);
+                if (!string.IsNullOrEmpty(searchModel.name))
+                    result = result.Where(x => x.name.Contains(searchModel.name));
+                //if (searchModel.price != null)
+                //    result = result.Where(x => x.price >= searchModel.price);
+                //if (searchModel.PriceTo.HasValue)
+                //    result = result.Where(x => x.Price <= searchModel.PriceTo);
+            }
+            return result;
+        }
     }
 
 }

@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Event>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Start Date</th>
+            <th> End  Date</th>
+            <th>Start Time</th>
+            <th> End  Time</th>
+            <th>Duration</th>
+            <th>Organised by</th>
+            <th>Venue</th>
+            <th>View Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Event s in Model)
+        {
+            <tr>
+                <td>@s.name</td>
+                <td>@s.des</td>
+                <td>@s.price</td>
+                <td>@s.startDate</td>
+                <td>@s.endDate</td>
+                <td>@s.startTime</td>
+                <td>@s.endTime</td>
+                <td>@s.duration</td>
+                <td>@s.Venue.name</td>
+                <td>@s.organized_by</td>
+                <td>
+                    @*@Ajax.ActionLink("Detail", "EventDetail", new { Id = s.Id }, ao, new { @class = "btn btn-default modalBtn" })*@
+                    <button class="btn btn-default modalBtn" data-get="/User/Detail=@s.Id">Edit</button>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
