@@ -1,5 +1,13 @@
-﻿@model IEnumerable<Event>
-
+﻿@*@model EventSearchModel*@
+@model IEnumerable<EventSearchModel>
+@{ 
+    var ao = new AjaxOptions
+    {
+        Url = "/User/EventDetail",
+        HttpMethod = "get",
+        @*UpdateTargetId = "eventTabl",*@
+    };
+}
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
@@ -17,25 +25,13 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (Event s in Model)
-        {
-            <tr>
-                <td>@s.name</td>
-                <td>@s.des</td>
-                <td>@s.price</td>
-                <td>@s.startDate</td>
-                <td>@s.endDate</td>
-                <td>@s.startTime</td>
-                <td>@s.endTime</td>
-                <td>@s.duration</td>
-                <td>@s.Venue.name</td>
-                <td>@s.organized_by</td>
-                <td>
-                    @*@Ajax.ActionLink("Detail", "EventDetail", new { Id = s.Id }, ao, new { @class = "btn btn-default modalBtn" })*@
-                    <button class="btn btn-default modalBtn" data-get="/User/Detail=@s.Id">Edit</button>
-                </td>
-            </tr>
-        }
-
+       
     </tbody>
 </table>
+<script>
+    @*$('[data-get]').click(e => {
+        e.preventDefault();
+        let url = $(e.target).data('get');
+        location = url || location;
+    });*@
+</script>

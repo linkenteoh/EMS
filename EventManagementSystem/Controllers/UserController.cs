@@ -109,33 +109,23 @@ namespace EventManagementSystem.Controllers
                 u.password = model.password;
                 
                 db.SaveChanges();
-                // TODO: TempData
-                // TempData["Info"] = "Student record edited successfully!";
+                TempData["Info"] = "Profile edited successfully!";
                 return RedirectToAction("Index", "Home");
             }
             return View(model);
         }
 
-        public ActionResult EventSearch(EventSearchModel searchModel)
+        public ActionResult EventSearchIndex(EventSearchModel searchModel)
         {
+            //var model = db.Events
+            //if(str1 == "") 
             var results = new EventSearchCriteria();
             var model = results.GetEvents(searchModel);
-            return View(model);
-        }
-
-        public ActionResult EventList(int id = 1)
-        {
-            // Get userID in registration
-            var reg = db.Registrations.Where(r => id.Equals(r.userId));
-
-            // Get EventID in registration that contains the userID
-
-
-            // LIst event based on EventID
-
-            var model = db.Events;
-            //var eventList = db.Events.Where(e => reg.Contains(e.Id);
-            // reg.userId = 
+            //else
+            //model = model as EventSearchModel;
+            //var model = db.Events.Where(m => m.name.Contains(str1));
+            if (Request.IsAjaxRequest())
+                return PartialView("_EventResults", model);
             return View(model);
         }
 
@@ -147,9 +137,6 @@ namespace EventManagementSystem.Controllers
             {
                 return RedirectToAction("EventList");
             }
-            //if (Request.IsAjaxRequest())
-            //    return PartialView("_Detail", model);
-
             return View(model);
         }
 

@@ -118,21 +118,21 @@ namespace EventManagementSystem.Models
 
     public class EventSearchModel
     {
-        public int? Id { get; set; }
+        //public int? Id { get; set; }
         public string name { get; set; }
-        public string des { get; set; }
-        public decimal price { get; set; }
-        public int? availability { get; set; }
-        public int? participants { get; set; }
-        public System.DateTime startDate { get; set; }
-        public System.DateTime endDate { get; set; }
-        public System.TimeSpan startTime { get; set; }
-        public System.TimeSpan endTime { get; set; }
-        public string duration { get; set; }
-        public string organized_by { get; set; }
-        public bool approvalStat { get; set; }
-        public bool status { get; set; }
-        public int? venueId { get; set; }
+        //public string des { get; set; }
+        //public decimal price { get; set; }
+        //public int? availability { get; set; }
+        //public int? participants { get; set; }
+        //public System.DateTime startDate { get; set; }
+        //public System.DateTime endDate { get; set; }
+        //public System.TimeSpan startTime { get; set; }
+        //public System.TimeSpan endTime { get; set; }
+        //public string duration { get; set; }
+        //public string organized_by { get; set; }
+        //public bool approvalStat { get; set; }
+        //public bool status { get; set; }
+        //public int? venueId { get; set; }
      
     }
 
@@ -149,8 +149,8 @@ namespace EventManagementSystem.Models
             var result = db.Events.AsQueryable();
             if (searchModel != null)
             {
-                if (searchModel.Id.HasValue)
-                    result = result.Where(x => x.Id == searchModel.Id);
+                //if (searchModel.Id.HasValue)
+                //    result = result.Where(x => x.Id == searchModel.Id);
                 if (!string.IsNullOrEmpty(searchModel.name))
                     result = result.Where(x => x.name.Contains(searchModel.name));
                 //if (searchModel.price != null)
