@@ -115,15 +115,50 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
 
-        public ActionResult EventSearchIndex(EventSearchModel searchModel)
+        public ActionResult EventSearchIndex(string name ="", string startDate ="", string endDate="", 
+            string startTime = "", string endTime = "")
         {
-            //var model = db.Events
-            //if(str1 == "") 
-            var results = new EventSearchCriteria();
-            var model = results.GetEvents(searchModel);
-            //else
-            //model = model as EventSearchModel;
-            //var model = db.Events.Where(m => m.name.Contains(str1));
+            ViewBag.StatusList = new SelectList(db.Events, "status");
+            var model = db.Events.AsQueryable();
+            // Name
+            if(!string.IsNullOrEmpty(name))
+            {
+                model = db.Events.Where(m => m.name.Contains(name));
+            }
+            // Start Date && End Date
+            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
+            {
+                var dtFrom = DateTime.Parse(startDate);
+                var dtTo = DateTime.Parse(endDate);
+                model = db.Events.Where(x => x.startDate >= dtFrom && x.endDate <= dtTo);
+            }else if (!string.IsNullOrEmpty(startDate))
+            {
+                var dtFrom = DateTime.Parse(startDate);
+                model = db.Events.Where(x => x.startDate >= dtFrom);
+            }
+            else if (!string.IsNullOrEmpty(endDate))
+            {
+                var dtTo = DateTime.Parse(endDate);
+                model = db.Events.Where(x => x.endDate <= dtTo);
+            }
+            // Start Time && End Time
+            if (!string.IsNullOrEmpty(startTime) && !string.IsNullOrEmpty(endTime))
+            {
+                var timeFrom = TimeSpan.Parse(startTime);
+                var timeTo = TimeSpan.Parse(endTime);
+                model = db.Events.Where(x => x.startTime >= timeFrom && x.endTime <= timeTo);
+            }
+            else if (!string.IsNullOrEmpty(startTime))
+            {
+                var timeFrom = TimeSpan.Parse(startTime);
+                model = db.Events.Where(x => x.startTime >= timeFrom);
+            }
+            else if (!string.IsNullOrEmpty(endTime))
+            {
+                var timeTo = TimeSpan.Parse(endTime);
+                model = db.Events.Where(x => x.endTime <= timeTo);
+            }
+
             if (Request.IsAjaxRequest())
                 return PartialView("_EventResults", model);
             return View(model);

@@ -1,5 +1,5 @@
 ﻿@*@model EventSearchModel*@
-@model IEnumerable<EventSearchModel>
+@model IEnumerable<Event>
 @{ 
     var ao = new AjaxOptions
     {
@@ -25,7 +25,25 @@
         </tr>
     </thead>
     <tbody>
-       
+        @foreach (Event s in Model)
+        {
+            <tr>
+                <td>@s.name</td>
+                <td>@s.des</td>
+                <td>@s.price</td>
+                <td>@s.startDate.ToString("dd-MM-yyyy")</td>
+                <td>@s.endDate.ToString("dd-MM-yyyy")</td>
+                <td>@s.startTime</td>
+                <td>@s.endTime</td>
+                <td>@s.duration</td>
+                <td>@s.organized_by</td>
+                <td>@s.Venue.name</td>
+                <td>
+                    @Ajax.ActionLink("Detail", "EventDetail", new { Id = s.Id }, ao, new { @class = "btn btn-default " })
+                    @*<button class="btn btn-default" data-get="/User/EventDetail=@s.Id">Edit</button>*@
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 <script>

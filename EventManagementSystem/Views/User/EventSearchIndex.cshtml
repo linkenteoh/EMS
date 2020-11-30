@@ -13,6 +13,9 @@
         LoadingElementId = "loader",
         UpdateTargetId = "eventTable",
     };
+    var attr = new { 
+        @class = "form-inline"
+    };
 }
 
 @section head{
@@ -95,17 +98,42 @@
     </div>
     <br />
 
-    @using (Ajax.BeginForm(results))
+    @using (Ajax.BeginForm(null, null, results, attr))
     {
-        @*@Html.LabelFor(m => m.name)
-            @Html.TextBoxFor(m => m.name, new { maxlength = "10", data_upper = "", autofocus = "" })
-            @Html.ValidationMessageFor(m => m.name)*@
-        @Html.Label("name")
-        @Html.TextBox("name", null, new { maxlength = "10", data_upper = "", autofocus = "" })
-        @Html.ValidationMessage("name")
-        @*@Html.TextBox("Name", null, new { maxlength = "10", data_upper = "", autofocus = "" })*@
+        <div class="form-group">
+            @Html.Label("name")
+            @Html.TextBox("name", null,
+           new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.Label("startDate")
+            @Html.TextBox("startDate", "{0: yyyy-MM-dd}",
+            new { type = "date", @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.Label("endDate")
+            @Html.TextBox("endDate", "{0: yyyy-MM-dd}",
+            new { type = "date", @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.Label("startTime")
+            @Html.TextBox("startTime", "{0: HH:mm}",
+            new { type = "time", @class = "form-control timepicker" })
+        </div>
+        <div class="form-group">
+            @Html.Label("endTime")
+            @Html.TextBox("endTime", "{0: HH:mm}",
+            new { type = "time", @class = "form-control timepicker" })
+        </div>
+        <div class="form-group">
+            @Html.Label("status")
+            @Html.DropDownList("status", ViewBag.StatusList as SelectList, " -Select One - ",
+            new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-default searchBtn" name="Search" value="search" />
+        </div>
 
-        <input type="submit" class="btn btn-default searchBtn" name="Search" value="search" />
         <img src="~/Images/loader.gif" id="loader" style="display: none;">
     }
 
@@ -114,30 +142,12 @@
     </div>
 </div>
 
-@section foot{
-    <script src="@Url.Content("~/Scripts/jquery.webcam.js")">
-    </script>
-    <script>
+        @section foot{
+            <script src="@Url.Content("~/Scripts/jquery.webcam.js")">
+            </script>
+            <script>
         function bckFunc() {
             location.href = '@Url.Action("Index", "Home")';
         }
-
-        @*$('.searchBtn').click(e => {
-
-            $.ajax({
-                type: "GET",
-                url: "User/_EventResults",
-                dataType: "html",
-                success: function (response) {
-                    e.preventDefault();
-                    $('#eventTable').html(response);
-                },
-                error: function () {
-
-                }
-            });
-        });*@
-
-
-    </script>
-}
+            </script>
+        }
