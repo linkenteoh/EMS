@@ -17,9 +17,11 @@ namespace EventManagementSystem.Models
         public string des { get; set; }
         [Required]
         public decimal price { get; set; }
+
         [Required]
         public int availability { get; set; }
         [Required]
+
         public int participants { get; set; }
         [Required]
         public DateTime startDate { get; set; }

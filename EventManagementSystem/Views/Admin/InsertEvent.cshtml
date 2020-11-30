@@ -63,14 +63,11 @@
                 height: 200px;
                 object-fit: cover;
             }
-
-        textarea {
-            resize: none;
-        }
     </style>
     }
-<form class="form" method="post" enctype="multipart/form-data">
 
+<form class="form" method="post" enctype="multipart/form-data">
+    @Html.ValidationSummary(true)
     <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
             <div class="col-md-3 border-right">
@@ -84,8 +81,8 @@
                        hidden = ""
                         })
                         @Html.ValidationMessageFor(e => e.Photo)
-                    </label>           
-                </div>  
+                    </label>
+                </div>
             </div>
 
             <div class="col-md-5 border-right">
