@@ -151,22 +151,12 @@ namespace EventManagementSystem.Controllers
                     username = model.username,
                     password = model.password,
                     role = model.role,
-                    status = 0, //0- Inactive, 1- Active, 2- Deleted
+                    status = true,
+                    activated = false,
                     recoveryCode = null,
                     activationCode = Guid.NewGuid().ToString(),
                     photo = SavePhoto(model.Photo)
                 };
-
-
-                string link = "https://localhost:44302/Account/Activation?activationCode=" + user.activationCode + "&userid=" + user.Id;
-                string mail = @"";
-
-                MailMessage m = new MailMessage();
-                m.To.Add(model.email);
-                m.Subject = "Activate your TARUC EMS account";
-                m.Body = link;
-                m.IsBodyHtml = true; //Can send HTML FORMATTED Mail
-                new SmtpClient().Send(m);
 
                 try
                 {
@@ -184,6 +174,18 @@ namespace EventManagementSystem.Controllers
                     }
                 }
 
+                var u = db.Users.FirstOrDefault(r => r.username == user.username);
+
+
+                string link = "https://localhost:44302/Account/Activation?activationCode=" + user.activationCode + "&userid=" + u.Id;
+                string mail = @"";
+
+                MailMessage m = new MailMessage();
+                m.To.Add(model.email);
+                m.Subject = "Activate your TARUC EMS account";
+                m.Body = link;
+                m.IsBodyHtml = true; //Can send HTML FORMATTED Mail
+                new SmtpClient().Send(m);
 
                 TempData["Info"] = "Registered successfully!";
                 return RedirectToAction("Awaitactivation", "Account", new { email = model.email });
@@ -205,11 +207,11 @@ namespace EventManagementSystem.Controllers
             {
                 if (model.activationCode == activationCode)
                 {
-                    model.status = 1;
+                    model.activated = true;
                     db.SaveChanges();
                     return View("Activated");
                 }
-                return Content(model.activationCode);//INCOMPLETE
+                return Content("Activation failed");//INCOMPLETE
             }
 
             return View();
@@ -222,8 +224,12 @@ namespace EventManagementSystem.Controllers
 
         // POST: Account/Login
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateGoogleCaptcha]
         public ActionResult Login(LoginVM model, string returnUrl = "")
         {
+
+
             if (ModelState.IsValid)
             {
                 //Get user record based on username
@@ -232,6 +238,11 @@ namespace EventManagementSystem.Controllers
                 //Check pass
                 if(user!=null && user.password == model.Password)
                 {
+                    if (!user.activated)
+                    {
+                        return RedirectToAction("Awaitactivation", "Account", new { email = user.email });
+                    }
+
                     SignIn(user.username, user.role, model.RememberMe);
                     Session["PhotoURL"] = user.photo;
 
