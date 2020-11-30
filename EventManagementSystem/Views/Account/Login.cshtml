@@ -1,19 +1,25 @@
 ﻿@model LoginVM
+@using EventManagementSystem.reCAPTCHA
+
 @{
     ViewBag.Title = "Login";
 }
 
 <h2>Login</h2>
 <form class="form" method="post">
+    @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
+    <div>
+        @Html.LabelFor(m => m.Username)
+        @Html.TextBoxFor(m => m.Username, new { autofocus = "", @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+    </div>
 
-    @Html.LabelFor(m => m.Username)
-    @Html.TextBoxFor(m => m.Username, new { autofocus = "", @class = "form-control" })
-    @Html.ValidationMessageFor(m => m.Username, "", new { @class="text-danger"})
-
-    @Html.LabelFor(m => m.Password)
-    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-    @Html.ValidationMessageFor(m => m.Password,"", new { @class = "text-danger" })
+    <div>
+        @Html.LabelFor(m => m.Password)
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+    </div>
 
     <br>
     <div>
@@ -22,6 +28,10 @@
         </label>
     </div>
     <br>
+    <div>
+        @Html.GoogleCaptcha()
+        @Html.InvalidGoogleCaptchaLabel("Captcha is not valid")
+    </div>
 
     <section>
         <button class="btn btn-primary">Login</button>

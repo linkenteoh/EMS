@@ -14,6 +14,7 @@ namespace EventManagementSystem.Controllers
 
         public ActionResult Index()
         {
+
             return View();
         }
 
