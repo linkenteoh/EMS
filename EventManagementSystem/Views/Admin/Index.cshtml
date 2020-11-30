@@ -1,4 +1,7 @@
-﻿@model IEnumerable<Event>
+﻿
+@using PagedList
+@using PagedList.Mvc
+@model IPagedList<Event>
 
 @{
     ViewBag.Title = "Event List";
@@ -8,7 +11,7 @@
 <h1>Events List</h1>
 <input class="btn btn-primary" data-get="/Admin/InsertEvent" type="button" value="Add new event">
 
-<p>@Model.Count() record(s) in event list</p>
+<p>@Model.Where(e=>e.status == true).Count() record(s) in event list</p>
 <table class="table table-hover">
     <thead class="thead-dark">
         <tr>
@@ -31,6 +34,9 @@
     <tbody>
         @foreach (var s in Model)
         {
+            if(s.status==true)
+            {
+           
             <tr>
                 <td scope="row">@s.Id</td>
                 <td scope="row">@s.name</td>
@@ -43,31 +49,47 @@
                 <td scope="row">@s.duration hour(s)</td>
                 <td scope="row">@s.organized_by</td>
                 <td scope="row">
-
                     <div class="custom-control custom-switch">
                         @if (s.approvalStat == true)
                         {
 
-                            <input type="checkbox" class="custom-control-input" id="customSwitches"
-                                   checked>
-                            <label class="custom-control-label" for="customSwitches">@s.approvalStat</label>
+                            <input type="checkbox" class="custom-control-input" id="@s.Id"
+                                   checked disabled>
+                            <label class="custom-control-label" for="@s.Id">@s.approvalStat</label>
+
                         }
                         else
                         {
-                            <input type="checkbox" class="custom-control-input" id="customSwitches">
-                            <label class="custom-control-label" for="customSwitches">@s.approvalStat</label>
+                            <input type="checkbox" class="custom-control-input" id="@s.Id" disabled>
+                            <label class="custom-control-label" for="@s.Id">@s.approvalStat</label>
                         }
                     </div>
                 </td>
-                <td> 
-                        <input class="btn btn-primary" data-get="/Admin/EditEvent?id=@s.Id" type="button" value="Edit">
+                <td>
+                    <input class="btn btn-primary" data-get="/Admin/EditEvent?id=@s.Id" type="button" value="Edit">
                 </td>
                 <td>
-                    <input class="btn btn-primary" data-get="/Admin/DeleteEvent?id=@s.Id" type="button" value="Delete">  
+                    <input class="btn btn-primary" data-get="/Admin/DeleteEvent?id=@s.Id" type="button" value="Delete">
                 </td>
             </tr>
+            }
         }
 
     </tbody>
 </table>
 
+
+@{
+    var options = PagedListRenderOptions.ClassicPlusFirstAndLast;
+    options.LinkToFirstPageFormat = "First";
+    options.LinkToLastPageFormat = "Last";
+    options.LinkToNextPageFormat = "Next";
+    options.LinkToPreviousPageFormat = "Previous";
+}
+
+
+@Html.PagedListPager(
+    Model,
+    p => "?page=" + p,
+    options
+)

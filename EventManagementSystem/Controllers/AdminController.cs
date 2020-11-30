@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using PagedList;
 
 namespace EventManagementSystem.Controllers
 {
@@ -18,7 +19,7 @@ namespace EventManagementSystem.Controllers
         //-- helper func
         private string ValidatePhoto(HttpPostedFileBase f)
         {
-            var reType = new Regex(@"^image\/(jpeg|png)$", RegexOptions.IgnoreCase); ;
+            var reType = new Regex(@"^image\/(jpeg|png)$", RegexOptions.IgnoreCase); 
             var reName = new Regex(@"^.+\.(jpg|jpeg|png)$", RegexOptions.IgnoreCase);
 
             if (f == null)
@@ -39,7 +40,8 @@ namespace EventManagementSystem.Controllers
         private void DeletePhoto(string name)
         {
             name = System.IO.Path.GetFileName(name);
-            string path = Server.MapPath($"~/Photo/{name}");
+            string path = Server.MapPath($"~/Images/{name}");
+            
             System.IO.File.Delete(path);
         }
         private string SavePhoto(HttpPostedFileBase f)
@@ -63,17 +65,26 @@ namespace EventManagementSystem.Controllers
             img.Resize(201, 201).Crop(1, 1).Save(path, "jpeg");
             return name;
         }
+        [Authorize(Roles = "Admin")]
         //--------------------------------------------------
-        public ActionResult Index()
+        public ActionResult Index(int page=1)
         {
-            var model = db.Events;
+            Func<Event, object> fn = e => e.Id;
+
+
+            var events = db.Events.OrderBy(fn);
+            var model = events.ToPagedList(page, 10);
+
             return View(model);
+
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult InsertEvent()
         {
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult InsertEvent(EventInsertVM model)
         {   
 
@@ -98,7 +109,7 @@ namespace EventManagementSystem.Controllers
                     endTime = model.endTime,
                     duration = duration.ToString(),
                     organized_by = model.organized_by,
-                    approvalStat = false,
+                    approvalStat = model.approvalStat,
                     status = true,
                     venueId = null,
                     photoURL = SavePhoto(model.Photo)
@@ -116,7 +127,7 @@ namespace EventManagementSystem.Controllers
             }
             return View(model);
         }
-        
+        [Authorize(Roles = "Admin")]
         public ActionResult EditEvent(int id)
         {
              var e = db.Events.Find(id);
@@ -144,8 +155,8 @@ namespace EventManagementSystem.Controllers
             };
             return View(model);
         }
-        
-        
+
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult EditEvent(EventEditVM model)
         {
@@ -181,14 +192,15 @@ namespace EventManagementSystem.Controllers
             }
             return View(model);
         }
-
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteEvent(int id)
         {
             var e = db.Events.Find(id);
             if(e != null)
             {
-                db.Events.Remove(e);
+                e.status = false;
                 db.SaveChanges();
+                TempData["info"] = "Event record deleleted successfully";
             }
 
             var url = Request.UrlReferrer?.AbsolutePath ?? "/";
