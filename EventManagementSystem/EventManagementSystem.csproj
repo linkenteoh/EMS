@@ -162,6 +162,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -184,6 +185,9 @@
       <DependentUpon>DB.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Event.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Organiser.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Payment.cs">
@@ -220,10 +224,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Images\jquery\jquery.js" />
-    <Content Include="Images\jquery\jquery.min.js" />
-    <Content Include="Images\jquery\jquery.slim.js" />
-    <Content Include="Images\jquery\jquery.slim.min.js" />
     <Content Include="Models\DB.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DB.Context.cs</LastGenOutput>
@@ -237,8 +237,6 @@
     <Content Include="Scripts\app.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Images\jquery\jquery.min.map" />
-    <Content Include="Images\jquery\jquery.slim.min.map" />
     <EntityDeploy Include="Models\DB.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DB.Designer.cs</LastGenOutput>
@@ -300,6 +298,10 @@
     <Content Include="Views\Event\_B.cshtml" />
     <Content Include="Views\Event\_C.cshtml" />
     <Content Include="Views\Home\Events.cshtml" />
+    <Content Include="Views\User\RegOrganiser.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
     <Content Include="Views\Admin\DisplayUser.cshtml" />
     <Content Include="Views\Admin\InsertUser.cshtml" />
     <Content Include="Views\Admin\EditUser.cshtml" />
@@ -308,7 +310,6 @@
     <Content Include="Views\Admin\InsertAdvert.cshtml" />
     <Content Include="Views\Admin\EditAdvert.cshtml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

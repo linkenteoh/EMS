@@ -14,6 +14,7 @@
         <AssociationConnector Association="DBModel.FK_Table_User" />
         <AssociationConnector Association="DBModel.FK_Event_Venue" />
         <AssociationConnector Association="DBModel.FK_Registration_Event" />
+        <AssociationConnector Association="DBModel.FK_Organiser_User" />
         <AssociationConnector Association="DBModel.FK_Payment_Registration" />
         <AssociationConnector Association="DBModel.FK_Registration_User" />
       </Diagram>

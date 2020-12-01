@@ -236,5 +236,12 @@ namespace EventManagementSystem.Models
         public int? userId { get; set; }
         public HttpPostedFileBase Photo { get; set; }
         public string photoURL { get; set; }
+      
+    public class RegOrgVM
+    {
+        [Required]
+        public string represent { get; set; }
+        [Required]
+        public string position { get; set; }
     }
 }

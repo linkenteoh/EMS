@@ -4,7 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.IO;
+using System.Security.Claims;
 using EventManagementSystem.Models;
+using EventManagementSystem.reCAPTCHA;
 using System.Text.RegularExpressions;
 using System.Web.Helpers;
 using PagedList;
@@ -20,50 +22,38 @@ namespace EventManagementSystem.Controllers
         {
             return View();
         }
-
-        // GET: User/Register
-        public ActionResult Register()
+        // GET: User/RegOrganiser
+        [Authorize]
+        public ActionResult RegOrganiser()
         {
-
             return View();
         }
 
-        public void Capture()
-        {
-            var stream = Request.InputStream;
-            string dump;
-
-            using (var reader = new StreamReader(stream))
-                dump = reader.ReadToEnd();
-
-            var path = Server.MapPath("~/Captures/test.jpg"); //TODO: Add in random strings to the name
-            System.IO.File.WriteAllBytes(path, String_To_Bytes2(dump));
-        }
-
-        private byte[] String_To_Bytes2(string strInput)
-        {
-            int numBytes = (strInput.Length) / 2;
-            byte[] bytes = new byte[numBytes];
-
-            for (int x = 0; x < numBytes; ++x)
-            {
-                bytes[x] = Convert.ToByte(strInput.Substring(x * 2, 2), 16);
-            }
-
-            return bytes;
-        }
-
-        // POST: User/Register
+        // POST: User/RegOrganiser
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        [ValidateGoogleCaptcha]
         [HttpPost]
-        public ActionResult Register(User model)
+        public ActionResult RegOrganiser(RegOrgVM model)
         {
-            model.status = 1;
-            model.recoveryCode = "ABCDEF";
-            model.activationCode = "ABCDEF";
-            db.Users.Add(model);
-            db.SaveChanges();
 
-            return RedirectToAction("Register");
+            if (ModelState.IsValid)
+            {
+                var id = db.Users.First(u => u.username == User.Identity.Name).Id;
+
+                var oragniser = new Organiser
+                {
+                    Id = id,
+                    represent = model.represent,
+                    position = model.position,
+                    status = false
+                };
+
+                db.Organisers.Add(oragniser);
+                db.SaveChanges();
+                TempData["Info"] = "You've registered successfully. Please wait until it is accepted by an admin.";
+            }
+            return View(model);
         }
 
         private string SavePhoto(HttpPostedFileBase f)
