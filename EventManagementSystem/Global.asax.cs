@@ -6,7 +6,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using EventManagementSystem.Models;
+using System.Web.Helpers;
+using System.Security.Claims;
 
 namespace EventManagementSystem
 {
@@ -19,8 +20,9 @@ namespace EventManagementSystem
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Name;
         }
-
+      
 /*        protected void Session_Start()
         {
             if (User.IsInRole("Student") || User.IsInRole("Outsider"))

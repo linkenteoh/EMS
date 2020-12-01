@@ -19,8 +19,11 @@ namespace EventManagementSystem.Models
         public string des { get; set; }
         public System.DateTime startDate { get; set; }
         public System.DateTime endDate { get; set; }
-        public int duration { get; set; }
+        public System.TimeSpan startTime { get; set; }
+        public System.TimeSpan endTime { get; set; }
+        public string duration { get; set; }
         public decimal charge { get; set; }
+        public string photoURL { get; set; }
         public bool status { get; set; }
         public int userId { get; set; }
     

@@ -69,9 +69,7 @@ namespace EventManagementSystem.Controllers
         //--------------------------------------------------
         public ActionResult Index()
         {
-
             return View();
-
         }
         public ActionResult DisplayEvent(int page = 1)
         {
@@ -123,7 +121,7 @@ namespace EventManagementSystem.Controllers
                 db.Events.Add(e);
                 db.SaveChanges();
                 TempData["info"] = "Event record inserted successfully";
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("DisplayEvent", "Admin");
 
             }
             else
@@ -193,7 +191,7 @@ namespace EventManagementSystem.Controllers
                 }
                 db.SaveChanges();
                 TempData["info"] = "Event record updated successfully";
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("DisplayEvent", "Admin");
             }
             return View(model);
         }
@@ -257,7 +255,7 @@ namespace EventManagementSystem.Controllers
                     photo = SavePhoto(model.Photo),
                     activated = true
                 };
-                // TempData["Info"] = "Event record added successfully!";
+
                 db.Users.Add(u);
                 db.SaveChanges();
                 TempData["info"] = "User record inserted successfully";
@@ -278,8 +276,7 @@ namespace EventManagementSystem.Controllers
             {
                 return RedirectToAction("Index", "Admin");
             }
-            /*            int duration = ((int)e.endTime.TotalMinutes - (int)e.startTime.TotalMinutes) / 60;
-            */
+
             var model = new UserEditVM
             {
                 Id = id,
@@ -325,16 +322,16 @@ namespace EventManagementSystem.Controllers
             }
             return View(model);
         }
-   
-      /*  public ActionResult DeleteUser()
-        { 
-            db.Users.RemoveRange(db.Users);
-            db.SaveChanges();
-            db.Database.ExecuteSqlCommand(@"DBCC CHECKIDENT([User],RESEED,0);");
-                                            
-            return View();
-        }*/
 
+        /*  public ActionResult DeleteUser()
+          { 
+              db.Users.RemoveRange(db.Users);
+              db.SaveChanges();
+              db.Database.ExecuteSqlCommand(@"DBCC CHECKIDENT([User],RESEED,0);");
+
+              return View();
+          }*/
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteUser(int id)
         {
             var u = db.Users.Find(id);
@@ -348,8 +345,135 @@ namespace EventManagementSystem.Controllers
             var url = Request.UrlReferrer?.AbsolutePath ?? "/";
             return Redirect(url);
         }
+        [Authorize(Roles = "Admin")]
+        public ActionResult DisplayAdvert(int page = 1)
+        {
+            Func<Advertisement, object> fn = a => a.Id;
+
+
+            var advertisement = db.Advertisements.OrderBy(fn);
+            var model = advertisement.ToPagedList(page, 10);
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult InsertAdvert()
+        {
+            return View();
+        }
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult InsertAdvert(AdvertManageVM model)
+        {
+            var id = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
+            string error = ValidatePhoto(model.Photo);
+            if (error != null)
+            {
+                ModelState.AddModelError("Photo", error);
+            }
+            if (ModelState.IsValid)
+            {
+                int duration = ((int)model.endTime.TotalMinutes - (int)model.startTime.TotalMinutes) / 60;
+                var a = new Advertisement
+                {
+                    name = model.name,
+                    des = model.des,
+                    charge = model.charge,
+                    startDate = model.startDate,
+                    endDate = model.endDate,
+                    startTime = model.startTime,
+                    endTime = model.endTime,
+                    duration = duration.ToString(),
+                    status = true,
+                    userId = id,    
+                    photoURL = SavePhoto(model.Photo)
+                };
+                // TempData["Info"] = "Event record added successfully!";
+                db.Advertisements.Add(a);
+                db.SaveChanges();
+                TempData["info"] = "Advertisement record inserted successfully";
+                return RedirectToAction("DisplayAdvert", "Admin");
+
+            }
+            else
+            {
+                TempData["Error"] = "Error";
+            }
+            return View(model);
+        }
+
+        public ActionResult EditAdvert(int id)
+        {
+            var a = db.Advertisements.Find(id);
+            if (a == null)
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+
+            var model = new AdvertManageVM
+            {
+                Id = id,
+                name = a.name,
+                des = a.des,
+                charge = a.charge,
+                startDate = a.startDate,
+                endDate = a.endDate,
+                startTime = a.startTime,
+                endTime = a.endTime,
+                duration = a.duration,
+                userId = a.userId,
+                photoURL = a.photoURL,
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditAdvert(AdvertManageVM model)
+        {
+            var a = db.Advertisements.Find(model.Id);
+            if (model == null)
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            int duration = ((int)model.endTime.TotalMinutes - (int)model.startTime.TotalMinutes) / 60;
+            if (ModelState.IsValid)
+            {
+                a.name = model.name;
+                a.des = model.des;
+                a.charge = model.charge;               
+                a.startDate = model.startDate;
+                a.endDate = model.endDate;
+                a.startTime = model.startTime;
+                a.endTime = model.endTime;
+                a.duration = duration.ToString();
+                if (model.Photo != null)
+                {
+                    DeletePhoto(a.photoURL);
+                    a.photoURL = SavePhoto(model.Photo);
+                }
+                db.SaveChanges();
+                TempData["info"] = "Advertisement record updated successfully";
+                return RedirectToAction("DisplayAdvert", "Admin");
+            }
+            return View(model);
+        }
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteAdvert(int id)
+        {
+            var a = db.Advertisements.Find(id);
+            if (a != null)
+            {
+                a.status = false;
+                db.SaveChanges();
+                TempData["info"] = "Advertisement record deleleted successfully";
+            }
+
+            var url = Request.UrlReferrer?.AbsolutePath ?? "/";
+            return Redirect(url);
+        }
 
     }
 
-    
 }
