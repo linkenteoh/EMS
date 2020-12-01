@@ -57,13 +57,35 @@ namespace EventManagementSystem.Controllers
         [HttpPost]
         public ActionResult Register(User model)
         {
-            model.status = 1;
+            model.status = true;
             model.recoveryCode = "ABCDEF";
             model.activationCode = "ABCDEF";
             db.Users.Add(model);
             db.SaveChanges();
 
             return RedirectToAction("Register");
+        }
+
+        private string ValidatePhoto(HttpPostedFileBase f)
+        {
+            var reType = new Regex(@"^image\/(jpeg|png)$",
+                RegexOptions.IgnoreCase);
+            var reName = new Regex(@"^.+\.(jpeg|jpg|png)$",
+                RegexOptions.IgnoreCase);
+            if (f == null)
+            {
+                return "No Photo Selected.";
+            }
+            else if (!reType.IsMatch(f.ContentType) ||
+               !reName.IsMatch(f.FileName))
+            {
+                return "Only JPG or PNG photo is allowed.";
+            }
+            else if (f.ContentLength > 1 * 1024 * 1024)
+            {
+                return "Photo Size cannot more than 1 MB.";
+            }
+            return null;
         }
 
         private string SavePhoto(HttpPostedFileBase f)
@@ -98,7 +120,6 @@ namespace EventManagementSystem.Controllers
             System.IO.File.Delete(path);
         }
 
-
         // Edit users
         public ActionResult Edit()
         {
@@ -114,7 +135,7 @@ namespace EventManagementSystem.Controllers
                 username = u.username,
                 name = u.name,
                 status = u.status,
-                contact_no = u.contact_no,
+                contact_no = u.contact_no.Trim(),
                 email = u.email,
                 password = u.password,
                 PhotoUrl = u.photo
@@ -146,7 +167,7 @@ namespace EventManagementSystem.Controllers
                     DeletePhoto(u.photo);
                     u.photo = SavePhoto(model.Photo);
                 }
-
+                 model.PhotoUrl = u.photo;
                 db.SaveChanges();
                 TempData["Info"] = "Profile edited successfully!";
                 return RedirectToAction("Index", "Home");
@@ -159,7 +180,13 @@ namespace EventManagementSystem.Controllers
             string startTime = "", string endTime = "", int page = 1)
         {
             //var model = db.Events.ToPagedList(page, 10).AsQueryable();
-            var model = db.Events.AsQueryable();
+            var username = User.Identity.Name;
+            var u = db.Users.Where(x => x.username == username).FirstOrDefault();
+            // Get userID in registration
+            var reg = db.Registrations.Where(r => u.Id.Equals(r.userId)).Select(r => r.eventId).ToArray();
+            // Get EventID in registration that contains the userID
+            var model = db.Events.Where(m => reg.Contains(m.Id)).AsQueryable();
+
             // Name
             if (!string.IsNullOrEmpty(name))
             {

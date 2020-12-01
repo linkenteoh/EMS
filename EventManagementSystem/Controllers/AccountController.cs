@@ -153,7 +153,7 @@ namespace EventManagementSystem.Controllers
                     username = model.username,
                     password = model.password,
                     role = model.role,
-                    status = 0, //0- Inactive, 1- Active, 2- Deleted
+                    status = false, //0- Inactive, 1- Active, 2- Deleted
                     recoveryCode = null,
                     activationCode = Guid.NewGuid().ToString(),
                     photo = SavePhoto(model.Photo)
@@ -207,7 +207,7 @@ namespace EventManagementSystem.Controllers
             {
                 if (model.activationCode == activationCode)
                 {
-                    model.status = 1;
+                    model.status = true;
                     db.SaveChanges();
                     return View("Activated");
                 }
