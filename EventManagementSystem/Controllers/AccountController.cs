@@ -250,7 +250,7 @@ namespace EventManagementSystem.Controllers
                     if (returnUrl == "")
                     {
                         TempData["Info"] = "You have successfully logged in.";
-                        if( user.role =="Member")
+                        if( user.role =="Student")
                         return RedirectToAction("Index", "Home");
                         else if(user.role == "Admin")
                             return RedirectToAction("Index", "Admin");

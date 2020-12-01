@@ -1,0 +1,122 @@
+﻿@model AdvertManageVM
+
+
+@{
+    ViewBag.Title = "InsertAdvert";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+    string min = DateTime.Today.ToString("dd-MM-yyyy");
+    string max = DateTime.Today.AddMonths(+12).ToString("dd-MM-yyyy");
+    string endDateMax = DateTime.Today.AddDays(+24).ToString("dd-MM-yyyy");
+}
+
+
+
+<form class="form" method="post" enctype="multipart/form-data">
+    @Html.ValidationSummary(true)
+    <div class="container rounded bg-white mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <label class="upload">
+                        <img class="img-thumbnail" src="~/Images/no-image-icon-23499.png">
+                        @Html.TextBoxFor(a => a.Photo, new
+                        {
+                       type = "file",
+                            accept = "image/jpeg, image/png",
+                       hidden = ""
+                        })
+                        @Html.ValidationMessageFor(a => a.Photo)
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Add Advertisement</h4>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            @Html.LabelFor(a => a.name, "Name")@Html.TextBoxFor(a => a.name, new { maxlength = 20, autofocus = "", @class = "form-control", placeholder = "Name" }) @Html.ValidationMessageFor(e => e.name)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(a => a.charge, "Charge")@Html.TextBoxFor(a => a.charge , new { type = "number", @class = "form-control", min = "0" }) @Html.ValidationMessageFor(e => e.charge)
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12">
+                            @Html.LabelFor(a => a.des, "Description")@Html.TextAreaFor(a => a.des, new
+                            {
+                            style = "width: 400px; height: 200px; resize: none",
+                            @class = "form-control",
+                            autofocus = "",
+                            placeholder = "Description"
+                            })
+                            @Html.ValidationMessageFor(a => a.des)
+
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            @Html.LabelFor(a => a.startDate, "Start Date")@Html.TextBoxFor(a => a.startDate, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control"})
+                            @*<small>(@min to @max )</small>*@
+                            @Html.ValidationMessageFor(a => a.startDate)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(a => a.endDate, "End Date")@Html.TextBoxFor(a => a.endDate, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control" })
+                            @Html.ValidationMessageFor(a => a.endDate)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor( a => a.startTime, "Start Time")@Html.TextBoxFor(a => a.startTime, new { type = "time", @class = "form-control" })
+                            @Html.ValidationMessageFor(a => a.startTime)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(a => a.endTime, "End Time")@Html.TextBoxFor(a => a.endTime, new { type = "time", @class = "form-control" })
+                            @Html.ValidationMessageFor(a => a.endTime)
+                        </div>
+
+                    </div>
+
+                    <div class="mt-5 text-center"><section><button class="btn btn-primary profile-button">Add Advertisement</button></section></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+@section foot{
+
+    <script>
+
+    function validatePhoto(f) {
+        let retype = /^image\/(jpeg|png)$/i;
+        let reName = /^.+\.(png|jpg|jpeg)$/i;
+        return f &&
+            f.size <= 1 * 1024 * 1024 &&
+            retype.test(f.type) &&
+            reName.test(f.name);
+    }
+
+    let src = null;
+    $('.upload input').change(e => {
+        let f = e.target.files[0];
+        let img = $(e.target).siblings('img')[0];
+
+        if (!src) src = img.src;
+
+        if (validatePhoto(f)) {
+
+            img.src = URL.createObjectURL(f);
+
+        } else {
+            img.src = src;
+            e.target.value = '';
+        }
+
+    });
+
+    </script>
+}
+

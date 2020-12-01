@@ -8,6 +8,9 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Web.Helpers;
+using System.Security.Claims;
+
 
 namespace EventManagementSystem
 {
@@ -21,7 +24,6 @@ namespace EventManagementSystem
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Name;
-
         }
 
         /*        protected void Session_Start()
