@@ -285,6 +285,14 @@
     <Content Include="Views\User\_EventResults.cshtml" />
     <Content Include="Views\User\EventSearchIndex.cshtml" />
     <Content Include="Views\Event\JoinEvent.cshtml" />
+    <Content Include="Views\Event\Index.cshtml" />
+    <Content Include="Views\Event\ProposeEvent.cshtml" />
+    <Content Include="Views\Event\VenueBooking.cshtml" />
+    <Content Include="Views\Event\EventSuccess.cshtml" />
+    <Content Include="Views\Event\_Venue.cshtml" />
+    <Content Include="Views\Event\_A.cshtml" />
+    <Content Include="Views\Event\_B.cshtml" />
+    <Content Include="Views\Event\_C.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

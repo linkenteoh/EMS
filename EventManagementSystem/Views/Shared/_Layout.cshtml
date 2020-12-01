@@ -32,7 +32,14 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Announcements", "Announcements", "Home")</li>
-                    <li>@Html.ActionLink("Events", "JoinEvent", "Event")</li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown">Event<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Browse Events", "Index", "Event")</li>
+                            <li>@Html.ActionLink("Join Events", "JoinEvent", "Event")</li>
+                            <li>@Html.ActionLink("Book Events", "BookEvent", "Event")</li>
+                        </ul>
+                    </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right right-aligned-items">
                     @if (!User.Identity.IsAuthenticated)

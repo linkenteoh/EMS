@@ -29,12 +29,25 @@ namespace EventManagementSystem.Controllers
             return View();
         }
 
-        public ActionResult BookEvent()
+        public ActionResult ProposeEvent()
+        {
+            ViewBag.step = 1;
+            return View();
+        }
+
+        public ActionResult ProposeEvent(int step)
         {
             return View();
         }
 
         public ActionResult VenueBooking()
+        {
+            if (Request.IsAjaxRequest())
+                return PartialView("_Venue");
+            return View();
+        }
+
+        public ActionResult EventSuccess()
         {
             return View();
         }

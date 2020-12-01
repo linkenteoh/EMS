@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Register Events";
+    ViewBag.Title = "Propose Your Event";
 }
 
 <style>
@@ -30,9 +30,11 @@
         <div class="bg-info dot">3</div>
     </div>
     <div class="container-fluid">
-        <button class="btn-primary">Confirm Registration</button>
+        @*<div class="container">
+            @Html.Partial("_Venue")
+        </div>*@
+        <button class="btn-primary" data-get="/Event/VenueBooking">Confirm Event</button>
     </div>
-    
 </div>
 @section foot{
     <script>
@@ -45,4 +47,4 @@
         });
     </script>
 }
-    
+
