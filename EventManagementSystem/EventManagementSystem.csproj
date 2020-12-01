@@ -288,6 +288,10 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Activated.cshtml" />
     <Content Include="Views\Home\Events.cshtml" />
+    <Content Include="Views\Admin\DisplayUser.cshtml" />
+    <Content Include="Views\Admin\InsertUser.cshtml" />
+    <Content Include="Views\Admin\EditUser.cshtml" />
+    <Content Include="Views\Admin\DisplayEvent.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
