@@ -53,17 +53,6 @@
             border: solid 1px #BA68C8
         }
 
-        .upload {
-            display: block;
-        }
-
-            .upload img {
-                display: block;
-                border: solid 1px #333;
-                width: 200px;
-                height: 200px;
-                object-fit: cover;
-            }
 
     </style>
 }
@@ -75,13 +64,14 @@
             <div class="col-md-3 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                     <label class="upload">
+                        <img class="img-thumbnail" src="~/Images/@photoURL">
                         @Html.TextBoxFor(e => e.Photo, new
                         {
                        type = "file",
                             accept = "image/jpeg, image/png",
                        hidden = ""
                         })
-                        <img class="img-thumbnail" src="~/Images/@photoURL">
+                        
                     </label>
                 </div>
             </div>
