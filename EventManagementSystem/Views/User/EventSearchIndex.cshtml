@@ -1,20 +1,14 @@
-﻿@*@model IEnumerable<EventSearchModel>*@
-@*@model EventSearchModel*@
-@{
+﻿@{
     ViewBag.Title = "Events Joined";
-
-    // TODO: AJAX option
 
     var results = new AjaxOptions
     {
-        //Url = "/User/EventSearch",
-        @*InsertionMode = InsertionMode.Replace,*@
         HttpMethod = "get",
         LoadingElementId = "loader",
         UpdateTargetId = "eventTable",
     };
     var attr = new { 
-        @class = "form-inline"
+        @class = "form-horizontal"
     };
 }
 
@@ -97,43 +91,32 @@
         <p onclick="bckFunc()" id="bckBtn" class="btn btn-primary" style="font-weight: bold"><</p>
     </div>
     <br />
-
     @using (Ajax.BeginForm(null, null, results, attr))
     {
-        <div class="form-group">
-            @Html.Label("name")
-            @Html.TextBox("name", null,
-           new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control" })
+        <div class="form-group row">
+            @Html.Label("name", "Event Name", new { @class = "control-label col-sm-2" })
+            @Html.TextBox("name", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control" })
         </div>
         <div class="form-group">
-            @Html.Label("startDate")
-            @Html.TextBox("startDate", "{0: yyyy-MM-dd}",
-            new { type = "date", @class = "form-control" })
+            @Html.Label("startDate", "Date From", new { @class = "control-label col-sm-2" })
+            @Html.TextBox("startDate", "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-4" })
+            @Html.Label("endDate", "To", new { @class = "control-label col-sm-1" })
+            @Html.TextBox("endDate", "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-4" })
         </div>
         <div class="form-group">
-            @Html.Label("endDate")
-            @Html.TextBox("endDate", "{0: yyyy-MM-dd}",
-            new { type = "date", @class = "form-control" })
+            @Html.Label("startTime", "Time From", new { @class = "control-label col-sm-2" })
+            @Html.TextBox("startTime", "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-4" })
+            @Html.Label("endTime", "To", new { @class = "control-label col-sm-1" })
+            @Html.TextBox("endTime", "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-4" })
         </div>
         <div class="form-group">
-            @Html.Label("startTime")
-            @Html.TextBox("startTime", "{0: HH:mm}",
-            new { type = "time", @class = "form-control timepicker" })
+            <div class="col-sm-offset-2 col-sm-1">
+                <input type="submit" class="btn btn-primary searchBtn" name="Search" value="search" />
+            </div>
+            <div class="col-sm-1">
+                <input type="reset" class="btn btn-primary " name="Reset" value="reset" />
+            </div>
         </div>
-        <div class="form-group">
-            @Html.Label("endTime")
-            @Html.TextBox("endTime", "{0: HH:mm}",
-            new { type = "time", @class = "form-control timepicker" })
-        </div>
-        <div class="form-group">
-            @Html.Label("status")
-            @Html.DropDownList("status", ViewBag.StatusList as SelectList, " -Select One - ",
-            new { @class = "form-control" })
-        </div>
-        <div class="form-group">
-            <input type="submit" class="btn btn-default searchBtn" name="Search" value="search" />
-        </div>
-
         <img src="~/Images/loader.gif" id="loader" style="display: none;">
     }
 
@@ -142,12 +125,12 @@
     </div>
 </div>
 
-        @section foot{
-            <script src="@Url.Content("~/Scripts/jquery.webcam.js")">
-            </script>
-            <script>
+@section foot{
+    <script src="@Url.Content("~/Scripts/jquery.webcam.js")">
+    </script>
+    <script>
         function bckFunc() {
             location.href = '@Url.Action("Index", "Home")';
         }
-            </script>
-        }
+    </script>
+}

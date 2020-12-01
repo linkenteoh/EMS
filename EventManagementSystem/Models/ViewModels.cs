@@ -96,8 +96,9 @@ namespace EventManagementSystem.Models
         public string password { get; set; }
         [System.ComponentModel.DataAnnotations.Compare("password", ErrorMessage = "Password not matched")]
         public string confirmPassword { get; set; }
-        [Required]
+        //[Required]
         public HttpPostedFileBase Photo { get; set; }
+        public string PhotoUrl { get; set; }
         public string role { get; set; }
         public Nullable<bool> organizer { get; set; }
         public int status { get; set; }

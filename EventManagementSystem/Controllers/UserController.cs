@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.IO;
 using EventManagementSystem.Models;
+using System.Text.RegularExpressions;
+using System.Web.Helpers;
 
 namespace EventManagementSystem.Controllers
 {
@@ -63,6 +65,39 @@ namespace EventManagementSystem.Controllers
             return RedirectToAction("Register");
         }
 
+        private string SavePhoto(HttpPostedFileBase f)
+        {
+            string name = Guid.NewGuid().ToString("n") + ".jpg";
+            string path = Server.MapPath($"~/Photo/{name}");
+
+            var img = new WebImage(f.InputStream);
+
+            if (img.Width > img.Height)
+            {
+                int px = (img.Width - img.Height) / 2;
+                img.Crop(0, px, 0, px);
+            }
+            else
+            {
+                int px = (img.Height - img.Width) / 2;
+                img.Crop(px, 0, px, 0);
+            }
+
+            img.Resize(201, 201)
+               .Crop(1, 1)
+               .Save(path, "jpeg");
+
+            return name;
+        }
+
+        private void DeletePhoto(string name)
+        {
+            name = System.IO.Path.GetFileName(name);
+            string path = Server.MapPath($"~/Photo/{name}");
+            System.IO.File.Delete(path);
+        }
+
+
         // Edit users
         public ActionResult Edit()
         {
@@ -80,11 +115,8 @@ namespace EventManagementSystem.Controllers
                 status = u.status,
                 contact_no = u.contact_no,
                 email = u.email,
-                organizer = u.organizer,
-                role = u.role,
                 password = u.password,
-                recoveryCode = u.recoveryCode,
-                
+               // PhotoUrl = u.photo
             };
             return View(Model);
         }
@@ -107,11 +139,18 @@ namespace EventManagementSystem.Controllers
                 u.email = model.email;
                 u.contact_no = model.contact_no;
                 u.password = model.password;
-                
+
+                //if (model.Photo != null)
+                //{
+                //    DeletePhoto(u.photo);
+                //    u.photo = SavePhoto(model.Photo);
+                //}
+               
                 db.SaveChanges();
                 TempData["Info"] = "Profile edited successfully!";
                 return RedirectToAction("Index", "Home");
             }
+            model.PhotoUrl = u.photo;
             return View(model);
         }
 
@@ -170,11 +209,10 @@ namespace EventManagementSystem.Controllers
           
             if (model == null)
             {
-                return RedirectToAction("EventList");
+                return RedirectToAction("EventSearchIndex");
             }
             return View(model);
         }
 
-      
     }
 }

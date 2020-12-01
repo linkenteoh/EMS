@@ -32,7 +32,7 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Announcements", "Announcements", "Home")</li>
-                    <li>@Html.ActionLink("Events", "Events", "Home")</li>
+                    <li>@Html.ActionLink("Events", "JoinEvent", "Event")</li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right right-aligned-items">
                     @if (!User.Identity.IsAuthenticated)

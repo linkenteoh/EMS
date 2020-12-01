@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "Register Events";
+}
+<div class="outerDiv">
+    <h3>@ViewBag.Title</h3>
+    <hr />
+    <div id="second" style="display:block;">
+        <!--Back to Homepage-->
+        <p onclick="bckFunc()" id="bckBtn" class="btn btn-primary" style="font-weight: bold"><</p>
+    </div>
+</div>
+@section foot{
+    <script>
+        function bckFunc() {
+            location.href = '@Url.Action("BookEvent", "Event")';
+        }
+    </script>
+}
+    

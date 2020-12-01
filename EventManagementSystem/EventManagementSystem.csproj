@@ -154,6 +154,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -276,6 +277,7 @@
     <Content Include="Views\Account\Activated.cshtml" />
     <Content Include="Views\User\_EventResults.cshtml" />
     <Content Include="Views\User\EventSearchIndex.cshtml" />
+    <Content Include="Views\Event\JoinEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

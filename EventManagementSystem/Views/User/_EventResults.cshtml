@@ -1,11 +1,10 @@
-﻿@*@model EventSearchModel*@
-@model IEnumerable<Event>
+﻿@model IEnumerable<Event>
+
 @{ 
     var ao = new AjaxOptions
     {
         Url = "/User/EventDetail",
         HttpMethod = "get",
-        @*UpdateTargetId = "eventTabl",*@
     };
 }
 <table class="table table-bordered table-hover">
