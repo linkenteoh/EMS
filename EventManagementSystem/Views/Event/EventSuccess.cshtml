@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "Book Your Venue";
+}
+
+<style>
+    .dot {
+        font-size: 20pt;
+        height: 100px;
+        width: 100px;
+        margin: 30px;
+        padding-left: 40px;
+        padding-right: 40px;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+</style>
+<div class="outerDiv">
+    <h3>@ViewBag.Title</h3>
+    <hr />
+    <div id="second" style="display:block;">
+        <!--Back to Homepage-->
+        <p onclick="bckFunc()" id="bckBtn" class="btn btn-primary" style="font-weight: bold"><</p>
+    </div>
+    <div align="center">
+        <div class="bg-info dot">1</div>
+        <div class="bg-info dot">2</div>
+        <div class="bg-primary dot">3</div>
+    </div>
+    <div class="container-fluid">
+        <button class="btn-primary">Confirm Venue</button>
+    </div>
+
+</div>
+@section foot{
+    <script>
+        function bckFunc() {
+            location.href = '@Url.Action("BookEvent", "Event")';
+        }
+    </script>
+}
+

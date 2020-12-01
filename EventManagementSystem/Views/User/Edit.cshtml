@@ -1,4 +1,5 @@
-﻿@model EventManagementSystem.Models.User
+﻿@model EventManagementSystem.Models.EditProfileVM
+@*@model EditProfileVM*@
 @{
     ViewBag.Title = "Edit User Settings";
 
@@ -94,7 +95,7 @@
                     </div>
 
                     <div id="optDiv" style="text-align:center;display: block">
-                        <img id="blah" src="~/Images/userPlaceholder.png" alt="your image" style="width:250px; height: 250px; border-radius:50%;" />
+                        <img id="blah" src="~/Images/@Model.PhotoUrl" alt="your image" style="width:250px; height: 250px; border-radius:50%;" />
                         <label class="custom-file-upload">
                             <input type="file" id="imgInp" />
                             <i class="fa fa-upload" style="font-size:48px;color:darkcyan"></i>
@@ -107,36 +108,36 @@
                     <div class="form-group col-md-6">
                         @Html.LabelFor(m => m.name, "Name")
                         @Html.TextBoxFor(m => m.name, new { @class = "form-control", placeholder = "Your name" })
-                        @*Validation*@
+                        @Html.ValidationMessageFor(m => m.name)
                     </div>
                     <div class="form-group col-md-6">
                         @Html.LabelFor(m => m.username, "Username")
                         @Html.TextBoxFor(m => m.username, new { @class = "form-control", placeholder = "Username" })
-                        @*Validation*@
+                        @Html.ValidationMessageFor(m => m.username)
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             @Html.LabelFor(m => m.email, "Email")
                             @Html.TextBoxFor(m => m.email, new { @class = "form-control", placeholder = "Email" })
-                            @*Validation*@
+                            @Html.ValidationMessageFor(m => m.email)
                         </div>
                         <div class="form-group col-md-6">
                             @Html.LabelFor(m => m.contact_no, "Contact")
                             @Html.TextBoxFor(m => m.contact_no, new { @class = "form-control", placeholder = "01XXXXXXXX" })
-                            @*Validation*@
+                            @Html.ValidationMessageFor(m => m.contact_no)
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             @Html.LabelFor(m => m.password, "Password")
                             @Html.TextBoxFor(m => m.password, new { @class = "form-control", placeholder = "Password" })
-                            @*Validation*@
+                            @Html.ValidationMessageFor(m => m.password)
                         </div>
                         <div class="form-group col-md-6">
-                            @Html.Label("confirmPass", "Confirm password")
-                            @Html.TextBox("confirmPass", "", new { @class = "form-control", placeholder = "Confirm password" })
-                            @*Validation*@
+                            @Html.LabelFor(m => m.password, "Confirm password")
+                            @Html.TextBoxFor(m => m.confirmPassword, new { @class = "form-control", placeholder = "Confirm password" })
+                            @Html.ValidationMessageFor(m => m.confirmPassword)
                         </div>
                     </div>
 
