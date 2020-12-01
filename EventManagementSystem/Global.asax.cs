@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EventManagementSystem.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,7 +13,6 @@ namespace EventManagementSystem
     public class MvcApplication : System.Web.HttpApplication
     {
         DBEntities db = new DBEntities();
-
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();

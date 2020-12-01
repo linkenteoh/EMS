@@ -56,8 +56,25 @@ $('[data-uncheck]').click(e => {
 $('[data-checkable]').click(e => {
     if ($(e.target).is('input, button, a')) return;
     let cb = $(e.currentTarget).find(':checkbox')[0]
-    if (cb != null) {
+    if ($(this).is(":checked")) {
+        cb.checked = !cb.checked;
+
+    } else if ($(this).is(":not(:checked)")) {
         cb.checked = !cb.checked;
     }
-
 });
+
+$('input[type="checkbox"]').click(function () {
+    if ($(this).is(":checked")) {
+        //input element where you put value
+        $("#isClicked").checked;
+        // console.log($("#isClicked").val());              
+    }
+    else if ($(this).is(":not(:checked)")) {
+        $("#isClicked").val("");
+        //  console.log( $("#isClicked").val());
+    }
+});
+
+
+

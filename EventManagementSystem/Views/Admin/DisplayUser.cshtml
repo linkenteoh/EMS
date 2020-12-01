@@ -1,0 +1,73 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<User>
+@{
+    ViewBag.Title = "User List";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+<h1>User List</h1>
+
+<input class="btn btn-primary" data-get="/Admin/InsertUser" type="button" value="Add User">
+
+<p>@Model.Where(u => u.status == true).Count() record(s) in user list</p>
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Contact Number</th>
+            <th scope="col">Email</th>
+            <th scope="col">Username</th>
+            <th scope="col">Password</th>
+            <th scope="col">Role</th>
+            <th scope="col">Organizer</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            if (u.status == true)
+            {
+
+                <tr>
+                    <td scope="row">@u.Id</td>
+                    <td scope="row">@u.name</td>
+                    <td scope="row">@u.contact_no</td>
+                    <td scope="row">@u.email</td>
+                    <td scope="row">@u.username</td>
+                    <td scope="row">@u.password</td>
+                    <td scope="row">@u.role</td>
+                    <td scope="row">@u.organizer</td>
+                    <td>
+                        <input class="btn btn-primary" data-get="/Admin/EditUser?id=@u.Id" type="button" value="Edit">
+                    </td>
+                    <td>
+                        <input class="btn btn-primary" data-get="/Admin/DeleteUser?id=@u.Id" type="button" value="Delete">
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
+
+@{
+    var options = PagedListRenderOptions.ClassicPlusFirstAndLast;
+    options.LinkToFirstPageFormat = "First";
+    options.LinkToLastPageFormat = "Last";
+    options.LinkToNextPageFormat = "Next";
+    options.LinkToPreviousPageFormat = "Previous";
+}
+
+
+@Html.PagedListPager(
+    Model,
+    p => "?page=" + p,
+    options
+)
+

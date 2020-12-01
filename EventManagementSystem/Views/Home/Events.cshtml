@@ -1,0 +1,40 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<Event>
+
+@{
+    ViewBag.Title = "Events";
+    @*    IEnumerable<Event> events = ViewBag.Events;*@
+
+}
+
+
+<h2>Events</h2>
+
+<p>@Model.Count() of @Model.TotalItemCount record(s) | Page @Model.PageNumber of @Model.PageCount</p>
+@foreach (var e in Model)
+{
+    <div class="panel" style="width: 18rem;">
+        <img class="panel-heading" src="~/Images/@e.photoURL" alt="Card image cap">
+        <div class="panel-body">
+            <h5 class="panel-title">@e.name</h5>
+            <p class="card-text">@e.des</p>
+            <a href="#" class="btn btn-primary">View event</a>
+        </div>
+    </div>
+}
+
+@{
+    var options = PagedListRenderOptions.ClassicPlusFirstAndLast;
+    options.LinkToFirstPageFormat = "First";
+    options.LinkToLastPageFormat = "Last";
+    options.LinkToNextPageFormat = "Next";
+    options.LinkToPreviousPageFormat = "Previous";
+}
+
+
+@Html.PagedListPager(
+    Model,
+    p => "?page=" + p,
+    options
+    )

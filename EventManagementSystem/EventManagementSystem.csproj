@@ -162,7 +162,6 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -209,6 +208,7 @@
     <Content Include="App_Data\DB_log.ldf">
       <DependentUpon>DB.mdf</DependentUpon>
     </Content>
+    <Content Include="Content\app.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -220,6 +220,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\jquery\jquery.js" />
+    <Content Include="Images\jquery\jquery.min.js" />
+    <Content Include="Images\jquery\jquery.slim.js" />
+    <Content Include="Images\jquery\jquery.slim.min.js" />
     <Content Include="Models\DB.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DB.Context.cs</LastGenOutput>
@@ -233,6 +237,8 @@
     <Content Include="Scripts\app.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Images\jquery\jquery.min.map" />
+    <Content Include="Images\jquery\jquery.slim.min.map" />
     <EntityDeploy Include="Models\DB.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DB.Designer.cs</LastGenOutput>
@@ -271,8 +277,8 @@
     <Content Include="Views\Shared\_Dashboard.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Shared\_Navbar.cshtml" />
-    <Content Include="Views\Admin\Edit.cshtml" />
-    <Content Include="Views\Admin\Insert.cshtml" />
+    <Content Include="Views\Admin\EditEvent.cshtml" />
+    <Content Include="Views\Admin\InsertEvent.cshtml" />
     <Content Include="Views\User\Register.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\User\EventList.cshtml" />
@@ -293,10 +299,14 @@
     <Content Include="Views\Event\_A.cshtml" />
     <Content Include="Views\Event\_B.cshtml" />
     <Content Include="Views\Event\_C.cshtml" />
+    <Content Include="Views\Home\Events.cshtml" />
+    <Content Include="Views\Admin\DisplayUser.cshtml" />
+    <Content Include="Views\Admin\InsertUser.cshtml" />
+    <Content Include="Views\Admin\EditUser.cshtml" />
+    <Content Include="Views\Admin\DisplayEvent.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Images\" />
-  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
