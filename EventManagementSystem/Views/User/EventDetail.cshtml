@@ -7,12 +7,12 @@
     }
 
     #eventImg {
-        border: 1px solid black;
+        @*border: 1px solid black;*@
         margin-top: 10px;
     }
 
     #eventDetails {
-        border: 1px solid black;
+        @*border: 1px solid black;*@
         margin-top: 10px;
     }
 </style>
@@ -45,6 +45,6 @@
 </div>
 <script>
         function bckFunc() {
-            location.href = '@Url.Action("EventList", "User")';
+            location.href = '@Url.Action("EventSearchIndex", "User")';
         }
 </script>

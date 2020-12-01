@@ -45,6 +45,7 @@
                             }
                         }
                     }
+
                 </ul>
                 <ul class="nav navbar-nav navbar-right right-aligned-items">
                     @if (!User.Identity.IsAuthenticated)
@@ -58,7 +59,7 @@
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown">@User.Identity.Name<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Events Joined", "EventList", "User")</li>
+                                <li>@Html.ActionLink("Events Joined", "EventSearchIndex", "User")</li>
                                 <li>@Html.ActionLink("Settings", "Edit", "User")</li>
                                 <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
                             </ul>

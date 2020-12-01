@@ -160,6 +160,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -285,11 +286,26 @@
     <Content Include="Views\Account\Activation.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Activated.cshtml" />
+    <Content Include="Views\User\_EventResults.cshtml" />
+    <Content Include="Views\User\EventSearchIndex.cshtml" />
+    <Content Include="Views\Event\JoinEvent.cshtml" />
+    <Content Include="Views\Event\Index.cshtml" />
+    <Content Include="Views\Event\ProposeEvent.cshtml" />
+    <Content Include="Views\Event\VenueBooking.cshtml" />
+    <Content Include="Views\Event\EventSuccess.cshtml" />
+    <Content Include="Views\Event\_Venue.cshtml" />
+    <Content Include="Views\Event\_A.cshtml" />
+    <Content Include="Views\Event\_B.cshtml" />
+    <Content Include="Views\Event\_C.cshtml" />
     <Content Include="Views\Home\Events.cshtml" />
     <Content Include="Views\User\RegOrganiser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
+    <Content Include="Views\Admin\DisplayUser.cshtml" />
+    <Content Include="Views\Admin\InsertUser.cshtml" />
+    <Content Include="Views\Admin\EditUser.cshtml" />
+    <Content Include="Views\Admin\DisplayEvent.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

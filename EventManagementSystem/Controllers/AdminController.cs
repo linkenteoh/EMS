@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using PagedList;
 
 namespace EventManagementSystem.Controllers
 {
@@ -18,7 +19,7 @@ namespace EventManagementSystem.Controllers
         //-- helper func
         private string ValidatePhoto(HttpPostedFileBase f)
         {
-            var reType = new Regex(@"^image\/(jpeg|png)$", RegexOptions.IgnoreCase); ;
+            var reType = new Regex(@"^image\/(jpeg|png)$", RegexOptions.IgnoreCase);
             var reName = new Regex(@"^.+\.(jpg|jpeg|png)$", RegexOptions.IgnoreCase);
 
             if (f == null)
@@ -39,7 +40,8 @@ namespace EventManagementSystem.Controllers
         private void DeletePhoto(string name)
         {
             name = System.IO.Path.GetFileName(name);
-            string path = Server.MapPath($"~/Photo/{name}");
+            string path = Server.MapPath($"~/Images/{name}");
+
             System.IO.File.Delete(path);
         }
         private string SavePhoto(HttpPostedFileBase f)
@@ -63,30 +65,44 @@ namespace EventManagementSystem.Controllers
             img.Resize(201, 201).Crop(1, 1).Save(path, "jpeg");
             return name;
         }
+        [Authorize(Roles = "Admin")]
         //--------------------------------------------------
         public ActionResult Index()
         {
-            var model = db.Events;
+
+            return View();
+
+        }
+        public ActionResult DisplayEvent(int page = 1)
+        {
+            Func<Event, object> fn = e => e.Id;
+
+
+            var events = db.Events.OrderBy(fn);
+            var model = events.ToPagedList(page, 10);
+
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
         public ActionResult InsertEvent()
         {
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult InsertEvent(EventInsertVM model)
-        {   
+        {
 
-          string error = ValidatePhoto(model.Photo);
-            if(error != null)
+            string error = ValidatePhoto(model.Photo);
+            if (error != null)
             {
                 ModelState.AddModelError("Photo", error);
             }
             if (ModelState.IsValid)
             {
-                int duration =  ((int)model.endTime.TotalMinutes - (int)model.startTime.TotalMinutes) /60;
+                int duration = ((int)model.endTime.TotalMinutes - (int)model.startTime.TotalMinutes) / 60;
                 var e = new Event
-                {                   
+                {
                     name = model.name,
                     des = model.des,
                     price = model.price,
@@ -98,7 +114,7 @@ namespace EventManagementSystem.Controllers
                     endTime = model.endTime,
                     duration = duration.ToString(),
                     organized_by = model.organized_by,
-                    approvalStat = false,
+                    approvalStat = model.approvalStat,
                     status = true,
                     venueId = null,
                     photoURL = SavePhoto(model.Photo)
@@ -108,7 +124,7 @@ namespace EventManagementSystem.Controllers
                 db.SaveChanges();
                 TempData["info"] = "Event record inserted successfully";
                 return RedirectToAction("Index", "Admin");
-           
+
             }
             else
             {
@@ -116,16 +132,17 @@ namespace EventManagementSystem.Controllers
             }
             return View(model);
         }
-        
+        [Authorize(Roles = "Admin")]
         public ActionResult EditEvent(int id)
         {
-             var e = db.Events.Find(id);
-            if(e == null)
+            var e = db.Events.Find(id);
+            if (e == null)
             {
-                return RedirectToAction("Index","Admin");
+                return RedirectToAction("Index", "Admin");
             }
-/*            int duration = ((int)e.endTime.TotalMinutes - (int)e.startTime.TotalMinutes) / 60;
-*/            var model = new EventEditVM
+            /*            int duration = ((int)e.endTime.TotalMinutes - (int)e.startTime.TotalMinutes) / 60;
+            */
+            var model = new EventEditVM
             {
                 Id = id,
                 name = e.name,
@@ -144,15 +161,15 @@ namespace EventManagementSystem.Controllers
             };
             return View(model);
         }
-        
-        
+
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult EditEvent(EventEditVM model)
         {
-            var e = db.Events.Find(model.Id);  
+            var e = db.Events.Find(model.Id);
             if (model == null)
             {
-                return RedirectToAction("Index","Admin");
+                return RedirectToAction("Index", "Admin");
             }
             int duration = ((int)model.endTime.TotalMinutes - (int)model.startTime.TotalMinutes) / 60;
             if (ModelState.IsValid)
@@ -170,32 +187,167 @@ namespace EventManagementSystem.Controllers
                 e.organized_by = model.organized_by;
                 e.approvalStat = model.approvalStat;
                 if (model.Photo != null)
-                {       
+                {
                     DeletePhoto(e.photoURL);
                     e.photoURL = SavePhoto(model.Photo);
-  
                 }
                 db.SaveChanges();
                 TempData["info"] = "Event record updated successfully";
-                return RedirectToAction("Index","Admin");
+                return RedirectToAction("Index", "Admin");
             }
             return View(model);
         }
-
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteEvent(int id)
         {
             var e = db.Events.Find(id);
-            if(e != null)
+            if (e != null)
             {
-                db.Events.Remove(e);
+                e.status = false;
                 db.SaveChanges();
+                TempData["info"] = "Event record deleleted successfully";
             }
 
             var url = Request.UrlReferrer?.AbsolutePath ?? "/";
             return Redirect(url);
         }
+        [Authorize(Roles = "Admin")]
+        public ActionResult DisplayUser(int page = 1)
+        {
+            Func<User, object> fn = e => e.Id;
 
 
+            var users = db.Users.OrderBy(fn);
+            var model = users.ToPagedList(page, 10);
+
+            return View(model);
+
+        }
+        [Authorize(Roles = "Admin")]
+        public ActionResult InsertUser()
+        {
+            return View();
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult InsertUser(UserInsertVM model)
+        {
+            int id = db.Users.Count() +1;
+
+            string error = ValidatePhoto(model.Photo);
+            if (error != null)
+            {
+                ModelState.AddModelError("Photo", error);
+            }
+            if (ModelState.IsValid)
+            {
+                var u = new User
+                {
+                    Id = id,
+                    name = model.name,
+                    contact_no = model.contact_no,
+                    email = model.email,
+                    username = model.username,
+                    password = model.password,
+                    role = model.role.ToString(),
+                    organizer = null,
+                    status = true,
+                    recoveryCode = "ABCDEF",
+                    activationCode = "ABCDEF",
+                    photo = SavePhoto(model.Photo),
+                    activated = true
+                };
+                // TempData["Info"] = "Event record added successfully!";
+                db.Users.Add(u);
+                db.SaveChanges();
+                TempData["info"] = "User record inserted successfully";
+                return RedirectToAction("DisplayUser", "Admin");
+            }
+            else
+            {
+                TempData["Error"] = "Error";
+            }
+            return View(model);
+        }
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditUser(int id)
+        {
+            var u = db.Users.Find(id);
+
+            if (u == null)
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            /*            int duration = ((int)e.endTime.TotalMinutes - (int)e.startTime.TotalMinutes) / 60;
+            */
+            var model = new UserEditVM
+            {
+                Id = id,
+                name = u.name,
+                contact_no = u.contact_no,
+                email = u.email,
+                username = u.username,
+                password = u.password,
+                confirmPassword = u.password,
+                role = (Role)Enum.Parse(typeof(Role), u.role),
+                photoURL = u.photo,
+            };
+            return View(model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult EditUser(UserEditVM model)
+        {
+            var u = db.Users.Find(model.Id);
+          
+            if (model == null)
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            if (ModelState.IsValid)
+            {
+                u.name = model.name;
+                u.contact_no = model.contact_no;
+                u.email = model.email;
+                u.password = model.password;
+                u.role = model.role.ToString();
+                if (model.Photo != null)
+                {
+                    DeletePhoto(u.photo);
+                    u.photo = SavePhoto(model.Photo);
+
+                }
+                db.SaveChanges();
+            
+                TempData["info"] = "User record updated successfully";
+                return RedirectToAction("DisplayUser", "Admin");
+            }
+            return View(model);
+        }
+   
+      /*  public ActionResult DeleteUser()
+        { 
+            db.Users.RemoveRange(db.Users);
+            db.SaveChanges();
+            db.Database.ExecuteSqlCommand(@"DBCC CHECKIDENT([User],RESEED,0);");
+                                            
+            return View();
+        }*/
+
+        public ActionResult DeleteUser(int id)
+        {
+            var u = db.Users.Find(id);
+            if (u != null)
+            {
+                u.status = false;
+                db.SaveChanges();
+                TempData["info"] = "User record deleleted successfully";
+            }
+
+            var url = Request.UrlReferrer?.AbsolutePath ?? "/";
+            return Redirect(url);
+        }
 
     }
 

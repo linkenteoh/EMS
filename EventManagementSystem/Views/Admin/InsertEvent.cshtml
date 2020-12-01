@@ -52,25 +52,11 @@
             border: solid 1px #BA68C8
         }
 
-        .upload {
-            display: block;
-        }
-
-            .upload img {
-                display: block;
-                border: solid 1px #333;
-                width: 200px;
-                height: 200px;
-                object-fit: cover;
-            }
-
-        textarea {
-            resize: none;
-        }
     </style>
     }
-<form class="form" method="post" enctype="multipart/form-data">
 
+<form class="form" method="post" enctype="multipart/form-data">
+    @Html.ValidationSummary(true)
     <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
             <div class="col-md-3 border-right">
@@ -83,8 +69,9 @@
                             accept = "image/jpeg, image/png",
                        hidden = ""
                         })
-                    </label>           
-                </div>  
+                        @Html.ValidationMessageFor(e => e.Photo)
+                    </label>
+                </div>
             </div>
 
             <div class="col-md-5 border-right">
@@ -93,28 +80,64 @@
                         <h4 class="text-right">Add Event</h4>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-md-6">@Html.LabelFor(e => e.name,"Name")@Html.TextBoxFor(e => e.name, new { maxlength = 20, autofocus = "", @class = "form-control", placeholder = "Name" })</div>
-                        <div class="col-md-6">@Html.LabelFor(e => e.price,"Price")@Html.TextBoxFor(e => e.price, new { type = "number", @class = "form-control", placeholder = "price", min = "0" })</div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(e => e.name, "Name")@Html.TextBoxFor(e => e.name, new { maxlength = 20, autofocus = "", @class = "form-control", placeholder = "Name" }) @Html.ValidationMessageFor(e => e.name)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(e => e.price, "Price")@Html.TextBoxFor(e => e.price, new { type = "number", @class = "form-control", placeholder = "price", min = "0" }) @Html.ValidationMessageFor(e => e.price)
+                        </div>
                     </div>
                     <div class="row mt-2">
                         <div class="col-md-12">
-                            @Html.LabelFor(e => e.des,"Description")@Html.TextAreaFor(e => e.des, new
-  {
- style = "width: 400px; height: 200px; resize: none",
-      @class = "form-control",
-      autofocus = "",
-      placeholder = "Description"
-  })
+                            @Html.LabelFor(e => e.des, "Description")@Html.TextAreaFor(e => e.des, new
+{
+style = "width: 400px; height: 200px; resize: none",
+@class = "form-control",
+autofocus = "",
+placeholder = "Description"
+})
+                            @Html.ValidationMessageFor(e => e.des)
+
                         </div>
                     </div>
                     <div class="row mt-4">
-                        <div class="col-md-6">@Html.LabelFor(e => e.availability,"Availability")@Html.TextBoxFor(e => e.availability, new { type = "number", @class = "form-control", placeholder = "Availability", min = "0" })</div>
-                        <div class="col-md-6">@Html.LabelFor(e => e.participants,"Participants")@Html.TextBoxFor(e => e.participants, new { type = "number", @class = "form-control", placeholder = "participants", min = "0" })</div>
-                        <div class="col-md-6">@Html.LabelFor(e => e.startDate,"Start Date")@Html.TextBoxFor(e => e.startDate, "{0: dd-MM-yyyy}", new { type = "date", @class = "form-control", placeholder = "" }) @*<small>(@min to @max )</small>*@</div>                  
-                        <div class="col-md-6">@Html.LabelFor(e => e.endDate, "End Date")@Html.TextBoxFor(e => e.endDate, "{0: dd-MM-yyyy}", new { type = "date", @class = "form-control", placeholder = "" })</div>
-                        <div class="col-md-6">@Html.LabelFor(e => e.startTime, "Start Time")@Html.TextBoxFor(e => e.startTime, new { type = "time", @class = "form-control", placeholder = "" })</div>
-                        <div class="col-md-6">@Html.LabelFor(e => e.endTime,"End Time")@Html.TextBoxFor(e => e.endTime, new { type = "time", @class = "form-control", placeholder = "" })</div>
-                        <div class="col-md-12">@Html.LabelFor(e => e.organized_by,"Organized By")@Html.TextBoxFor(e => e.organized_by, new { maxlength = 20, autofocus = "", @class = "form-control", placeholder = "Organizer Name" })</div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(e => e.availability, "Availability")@Html.TextBoxFor(e => e.availability, new { type = "number", @class = "form-control", placeholder = "Availability", min = "0" })
+                            @Html.ValidationMessageFor(e => e.availability)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(e => e.participants, "Participants")@Html.TextBoxFor(e => e.participants, new { type = "number", @class = "form-control", placeholder = "participants", min = "0" })
+                            @Html.ValidationMessageFor(e => e.participants)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(e => e.startDate, "Start Date")@Html.TextBoxFor(e => e.startDate, "{0: dd-MM-yyyy}", new { type = "date", @class = "form-control", placeholder = "" })
+                            @*<small>(@min to @max )</small>*@
+                            @Html.ValidationMessageFor(e => e.startDate)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(e => e.endDate, "End Date")@Html.TextBoxFor(e => e.endDate, "{0: dd-MM-yyyy}", new { type = "date", @class = "form-control", placeholder = "" })
+                            @Html.ValidationMessageFor(e => e.endDate)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(e => e.startTime, "Start Time")@Html.TextBoxFor(e => e.startTime, new { type = "time", @class = "form-control", placeholder = "" })
+                            @Html.ValidationMessageFor(e => e.startTime)
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(e => e.endTime, "End Time")@Html.TextBoxFor(e => e.endTime, new { type = "time", @class = "form-control", placeholder = "" })
+                            @Html.ValidationMessageFor(e => e.endTime)
+                        </div>
+                        <div class="col-md-12">
+                            @Html.LabelFor(e => e.organized_by, "Organized By")@Html.TextBoxFor(e => e.organized_by, new { maxlength = 20, autofocus = "", @class = "form-control", placeholder = "Organizer Name" })
+                            @Html.ValidationMessageFor(e => e.organized_by)
+                        </div>
+
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12">
+                            @Html.LabelFor(e => e.approvalStat, "Approval") @Html.CheckBoxFor(e => e.approvalStat)
+                            @Html.ValidationMessageFor(e => e.approvalStat)
+                        </div>
+
                     </div>
                     <div class="mt-5 text-center"><section><button class="btn btn-primary profile-button">Add Event</button></section></div>
                 </div>

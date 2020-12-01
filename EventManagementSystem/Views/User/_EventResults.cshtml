@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Event>
+
+@{ 
+    var ao = new AjaxOptions
+    {
+        Url = "/User/EventDetail",
+        HttpMethod = "get",
+    };
+}
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Start Date</th>
+            <th> End  Date</th>
+            <th>Start Time</th>
+            <th> End  Time</th>
+            <th>Duration</th>
+            <th>Organised by</th>
+            <th>Venue</th>
+            <th>View Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Event s in Model)
+        {
+            <tr>
+                <td>@s.name</td>
+                <td>@s.des</td>
+                <td>@s.price</td>
+                <td>@s.startDate.ToString("dd-MM-yyyy")</td>
+                <td>@s.endDate.ToString("dd-MM-yyyy")</td>
+                <td>@s.startTime</td>
+                <td>@s.endTime</td>
+                <td>@s.duration</td>
+                <td>@s.organized_by</td>
+                <td>@s.Venue.name</td>
+                <td>
+                    @Ajax.ActionLink("Detail", "EventDetail", new { Id = s.Id }, ao, new { @class = "btn btn-default " })
+                    @*<button class="btn btn-default" data-get="/User/EventDetail=@s.Id">Edit</button>*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    @*$('[data-get]').click(e => {
+        e.preventDefault();
+        let url = $(e.target).data('get');
+        location = url || location;
+    });*@
+</script>
