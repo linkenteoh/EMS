@@ -27,6 +27,7 @@ namespace EventManagementSystem.Models
     
         public virtual DbSet<Advertisement> Advertisements { get; set; }
         public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<Organiser> Organisers { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<Registration> Registrations { get; set; }
         public virtual DbSet<User> Users { get; set; }
