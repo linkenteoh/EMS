@@ -299,6 +299,11 @@
     <Content Include="Views\Event\_A.cshtml" />
     <Content Include="Views\Event\_B.cshtml" />
     <Content Include="Views\Event\_C.cshtml" />
+    <Content Include="Views\Home\Events.cshtml" />
+    <Content Include="Views\Admin\DisplayUser.cshtml" />
+    <Content Include="Views\Admin\InsertUser.cshtml" />
+    <Content Include="Views\Admin\EditUser.cshtml" />
+    <Content Include="Views\Admin\DisplayEvent.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />

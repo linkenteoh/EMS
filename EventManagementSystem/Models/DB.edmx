@@ -74,10 +74,10 @@
           <Property Name="role" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="organizer" Type="bit" />
           <Property Name="status" Type="bit" Nullable="false" />
-          <Property Name="activated" Type="bit" Nullable="false" />
           <Property Name="recoveryCode" Type="varchar" MaxLength="50" />
           <Property Name="activationCode" Type="varchar" MaxLength="50" />
           <Property Name="photo" Type="varchar(max)" />
+          <Property Name="activated" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Venue">
           <Key>
@@ -285,10 +285,10 @@
           <Property Name="role" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="organizer" Type="Boolean" />
           <Property Name="status" Type="Boolean" Nullable="false" />
-          <Property Name="activated" Type="Boolean" Nullable="false" />
           <Property Name="recoveryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="activationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="activated" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Advertisements" Relationship="DBModel.FK_Table_User" FromRole="User" ToRole="Advertisement" />
           <NavigationProperty Name="Registrations" Relationship="DBModel.FK_Registration_User" FromRole="User" ToRole="Registration" />
         </EntityType>
@@ -432,10 +432,10 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="DBModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="activated" ColumnName="activated" />
                 <ScalarProperty Name="photo" ColumnName="photo" />
                 <ScalarProperty Name="activationCode" ColumnName="activationCode" />
                 <ScalarProperty Name="recoveryCode" ColumnName="recoveryCode" />
-                <ScalarProperty Name="activated" ColumnName="activated" />
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="organizer" ColumnName="organizer" />
                 <ScalarProperty Name="role" ColumnName="role" />
