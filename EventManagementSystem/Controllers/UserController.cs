@@ -7,6 +7,7 @@ using System.IO;
 using EventManagementSystem.Models;
 using System.Text.RegularExpressions;
 using System.Web.Helpers;
+using PagedList;
 
 namespace EventManagementSystem.Controllers
 {
@@ -116,7 +117,7 @@ namespace EventManagementSystem.Controllers
                 contact_no = u.contact_no,
                 email = u.email,
                 password = u.password,
-               // PhotoUrl = u.photo
+                PhotoUrl = u.photo
             };
             return View(Model);
         }
@@ -140,12 +141,12 @@ namespace EventManagementSystem.Controllers
                 u.contact_no = model.contact_no;
                 u.password = model.password;
 
-                //if (model.Photo != null)
-                //{
-                //    DeletePhoto(u.photo);
-                //    u.photo = SavePhoto(model.Photo);
-                //}
-               
+                if (model.Photo != null)
+                {
+                    DeletePhoto(u.photo);
+                    u.photo = SavePhoto(model.Photo);
+                }
+
                 db.SaveChanges();
                 TempData["Info"] = "Profile edited successfully!";
                 return RedirectToAction("Index", "Home");
@@ -155,12 +156,12 @@ namespace EventManagementSystem.Controllers
         }
 
         public ActionResult EventSearchIndex(string name ="", string startDate ="", string endDate="", 
-            string startTime = "", string endTime = "")
+            string startTime = "", string endTime = "", int page = 1)
         {
-            ViewBag.StatusList = new SelectList(db.Events, "status");
+            //var model = db.Events.ToPagedList(page, 10).AsQueryable();
             var model = db.Events.AsQueryable();
             // Name
-            if(!string.IsNullOrEmpty(name))
+            if (!string.IsNullOrEmpty(name))
             {
                 model = db.Events.Where(m => m.name.Contains(name));
             }
@@ -197,6 +198,19 @@ namespace EventManagementSystem.Controllers
                 var timeTo = TimeSpan.Parse(endTime);
                 model = db.Events.Where(x => x.endTime <= timeTo);
             }
+
+            //StaticPagedList
+            //PagedList<Event> paged = new PagedList<Event>();
+            //model = db.Events.OrderBy(s => s.Id).Cast<Event>();
+            //model = model as PagedList<Event>();
+            //if (page < 1)
+            //{
+            //    return RedirectToAction(null, new { page = 1 });
+            //}
+            //if (page > model.PageCount)
+            //{
+            //    return RedirectToAction(null, new { page = model.PageCount });
+            //}
 
             if (Request.IsAjaxRequest())
                 return PartialView("_EventResults", model);
