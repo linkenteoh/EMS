@@ -34,7 +34,7 @@ namespace EventManagementSystem.Models
         public string organized_by { get; set; }
         public bool approvalStat { get; set; }
         public bool status { get; set; }
-        public int venueId { get; set; }
+        public Nullable<int> venueId { get; set; }
         public string photoURL { get; set; }
     
         public virtual Venue Venue { get; set; }
