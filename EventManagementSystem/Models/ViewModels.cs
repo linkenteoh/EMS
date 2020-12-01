@@ -209,4 +209,12 @@ namespace EventManagementSystem.Models
 
         public bool RememberMe { get; set; }
     }
+
+    public class RegOrgVM
+    {
+        [Required]
+        public string represent { get; set; }
+        [Required]
+        public string position { get; set; }
+    }
 }

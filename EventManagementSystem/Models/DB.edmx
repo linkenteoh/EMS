@@ -40,6 +40,15 @@
           <Property Name="venueId" Type="int" />
           <Property Name="photoURL" Type="varchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="Organiser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="represent" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="position" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="status" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Payment">
           <Key>
             <PropertyRef Name="Id" />
@@ -65,7 +74,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="contact_no" Type="char" MaxLength="12" Nullable="false" />
           <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
@@ -98,6 +107,18 @@
             </Principal>
             <Dependent Role="Event">
               <PropertyRef Name="venueId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Organiser_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Organiser" Type="Self.Organiser" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Organiser">
+              <PropertyRef Name="Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -152,6 +173,7 @@
         <EntityContainer Name="DBModelStoreContainer">
           <EntitySet Name="Advertisement" EntityType="Self.Advertisement" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Organiser" EntityType="Self.Organiser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Registration" EntityType="Self.Registration" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
@@ -159,6 +181,10 @@
           <AssociationSet Name="FK_Event_Venue" Association="Self.FK_Event_Venue">
             <End Role="Venue" EntitySet="Venue" />
             <End Role="Event" EntitySet="Event" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Organiser_User" Association="Self.FK_Organiser_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Organiser" EntitySet="Organiser" />
           </AssociationSet>
           <AssociationSet Name="FK_Payment_Registration" Association="Self.FK_Payment_Registration">
             <End Role="Registration" EntitySet="Registration" />
@@ -184,6 +210,7 @@
         <EntityContainer Name="DBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Advertisements" EntityType="DBModel.Advertisement" />
           <EntitySet Name="Events" EntityType="DBModel.Event" />
+          <EntitySet Name="Organisers" EntityType="DBModel.Organiser" />
           <EntitySet Name="Payments" EntityType="DBModel.Payment" />
           <EntitySet Name="Registrations" EntityType="DBModel.Registration" />
           <EntitySet Name="Users" EntityType="DBModel.User" />
@@ -199,6 +226,10 @@
           <AssociationSet Name="FK_Registration_Event" Association="DBModel.FK_Registration_Event">
             <End Role="Event" EntitySet="Events" />
             <End Role="Registration" EntitySet="Registrations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Organiser_User" Association="DBModel.FK_Organiser_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Organiser" EntitySet="Organisers" />
           </AssociationSet>
           <AssociationSet Name="FK_Payment_Registration" Association="DBModel.FK_Payment_Registration">
             <End Role="Registration" EntitySet="Registrations" />
@@ -247,6 +278,16 @@
           <NavigationProperty Name="Venue" Relationship="DBModel.FK_Event_Venue" FromRole="Event" ToRole="Venue" />
           <NavigationProperty Name="Registrations" Relationship="DBModel.FK_Registration_Event" FromRole="Event" ToRole="Registration" />
         </EntityType>
+        <EntityType Name="Organiser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="represent" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="position" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="DBModel.FK_Organiser_User" FromRole="Organiser" ToRole="User" />
+        </EntityType>
         <EntityType Name="Payment">
           <Key>
             <PropertyRef Name="Id" />
@@ -276,7 +317,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="contact_no" Type="String" Nullable="false" MaxLength="12" FixedLength="true" Unicode="false" />
           <Property Name="email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -290,6 +331,7 @@
           <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="activated" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Advertisements" Relationship="DBModel.FK_Table_User" FromRole="User" ToRole="Advertisement" />
+          <NavigationProperty Name="Organiser" Relationship="DBModel.FK_Organiser_User" FromRole="User" ToRole="Organiser" />
           <NavigationProperty Name="Registrations" Relationship="DBModel.FK_Registration_User" FromRole="User" ToRole="Registration" />
         </EntityType>
         <EntityType Name="Venue">
@@ -336,6 +378,18 @@
             </Principal>
             <Dependent Role="Registration">
               <PropertyRef Name="eventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Organiser_User">
+          <End Type="DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="DBModel.Organiser" Role="Organiser" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Organiser">
+              <PropertyRef Name="Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -402,6 +456,16 @@
                 <ScalarProperty Name="price" ColumnName="price" />
                 <ScalarProperty Name="des" ColumnName="des" />
                 <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Organisers">
+            <EntityTypeMapping TypeName="DBModel.Organiser">
+              <MappingFragment StoreEntitySet="Organiser">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="position" ColumnName="position" />
+                <ScalarProperty Name="represent" ColumnName="represent" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

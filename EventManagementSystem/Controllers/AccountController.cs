@@ -143,8 +143,11 @@ namespace EventManagementSystem.Controllers
 
             if (ModelState.IsValid)
             {
+                int count = db.Users.Count() + 1;
+
                 var user = new User
                 {
+                    Id = count,
                     name = model.name,
                     contact_no = model.contact_no,
                     email = model.email,
@@ -174,10 +177,7 @@ namespace EventManagementSystem.Controllers
                     }
                 }
 
-                var u = db.Users.FirstOrDefault(r => r.username == user.username);
-
-
-                string link = "https://localhost:44302/Account/Activation?activationCode=" + user.activationCode + "&userid=" + u.Id;
+                string link = "https://localhost:44302/Account/Activation?activationCode=" + user.activationCode + "&userid=" + user.Id;
                 string mail = @"";
 
                 MailMessage m = new MailMessage();

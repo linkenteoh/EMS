@@ -1,0 +1,24 @@
+﻿@model RegOrgVM 
+@using EventManagementSystem.reCAPTCHA
+@{
+    ViewBag.Title = "Register organiser";
+}
+
+<h2>Register as an organiser</h2>
+<hr />
+<form method="post">
+    @Html.AntiForgeryToken()
+
+    @Html.LabelFor(m => m.represent, "Society/Organisation")
+    @Html.ValidationMessageFor(m => m.represent, "", new { @class = "text-danger" })
+    @Html.TextBoxFor(m => m.represent, new { @class = "form-control", placeholder = "Society or organisation name" })
+    <br />
+    @Html.LabelFor(m => m.position, "Position held")
+    @Html.ValidationMessageFor(m => m.position, "", new { @class = "text-danger" })
+    @Html.TextBoxFor(m => m.position, new { @class = "form-control", placeholder = "Position" })
+    <br />
+    @Html.GoogleCaptcha()
+    @Html.InvalidGoogleCaptchaLabel("Captcha is not valid")
+    <button class="btn btn-primary">Submit</button>
+</form>
+

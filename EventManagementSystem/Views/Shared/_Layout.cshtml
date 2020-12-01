@@ -32,14 +32,20 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Announcements", "Announcements", "Home")</li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown">Event<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Browse Events", "Index", "Event")</li>
-                            <li>@Html.ActionLink("Join Events", "JoinEvent", "Event")</li>
-                            <li>@Html.ActionLink("Book Events", "BookEvent", "Event")</li>
-                        </ul>
-                    </li>
+                    <li>@Html.ActionLink("Events", "Events", "Home")</li>
+                    @{
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            DBEntities db = new DBEntities();
+                            var org = db.Organisers.FirstOrDefault(or => or.Id == (db.Users.FirstOrDefault(o => o.username == User.Identity.Name).Id));
+                            if (org != null)
+                            {
+                                <li>@Html.ActionLink("Propose event", "ProposeEvent", "User")</li>
+
+                            }
+                        }
+                    }
+
                 </ul>
                 <ul class="nav navbar-nav navbar-right right-aligned-items">
                     @if (!User.Identity.IsAuthenticated)
@@ -69,9 +75,9 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
+@*        <footer>
             <p>Developed by TARUC &copy; @DateTime.Now.Year </p>
-        </footer>
+        </footer>*@
     </div>
     <script src="~/Scripts/jquery-3.5.1.js"></script>
     <script src="~/Scripts/jquery.validate.js"></script>
