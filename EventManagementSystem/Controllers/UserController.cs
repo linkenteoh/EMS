@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Web.Helpers;
 using PagedList;
 
+
 namespace EventManagementSystem.Controllers
 {
     public class UserController : Controller
@@ -103,7 +104,6 @@ namespace EventManagementSystem.Controllers
                 Id = u.Id,
                 username = u.username,
                 name = u.name,
-                status = u.status,
                 contact_no = u.contact_no,
                 email = u.email,
                 password = u.password,

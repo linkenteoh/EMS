@@ -323,11 +323,11 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
 
-        /*  public ActionResult DeleteUser()
+         /* public ActionResult DeleteAdvert()
           { 
-              db.Users.RemoveRange(db.Users);
+              db.Advertisements.RemoveRange(db.Advertisements);
               db.SaveChanges();
-              db.Database.ExecuteSqlCommand(@"DBCC CHECKIDENT([User],RESEED,0);");
+              db.Database.ExecuteSqlCommand(@"DBCC CHECKIDENT([Advertisement],RESEED,0);");
 
               return View();
           }*/
@@ -459,8 +459,8 @@ namespace EventManagementSystem.Controllers
             }
             return View(model);
         }
-        [Authorize(Roles = "Admin")]
-        public ActionResult DeleteAdvert(int id)
+         [Authorize(Roles = "Admin")]
+       public ActionResult DeleteAdvert(int id)
         {
             var a = db.Advertisements.Find(id);
             if (a != null)

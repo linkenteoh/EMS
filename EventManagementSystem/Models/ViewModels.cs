@@ -40,7 +40,7 @@ namespace EventManagementSystem.Models
         public int? venueId { get; set; }
         public HttpPostedFileBase Photo { get; set; }
 
-    } 
+    }
 
     public class EventEditVM
     {
@@ -73,7 +73,7 @@ namespace EventManagementSystem.Models
         public HttpPostedFileBase Photo { get; set; }
         public string photoURL { get; set; }
     }
-   public class UserInsertVM
+    public class UserInsertVM
     {
 
         public int Id { get; set; }
@@ -103,7 +103,7 @@ namespace EventManagementSystem.Models
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
 
-        }
+    }
     public enum Role
     {
         Student,
@@ -222,7 +222,7 @@ namespace EventManagementSystem.Models
         [StringLength(100)]
         public string des { get; set; }
         [Required]
-        public decimal charge { get; set; }       
+        public decimal charge { get; set; }
         [Required]
         public DateTime startDate { get; set; }
         [Required]
@@ -237,6 +237,7 @@ namespace EventManagementSystem.Models
         public HttpPostedFileBase Photo { get; set; }
         public string photoURL { get; set; }
       
+    }
     public class RegOrgVM
     {
         [Required]
