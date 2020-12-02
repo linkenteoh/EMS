@@ -35,13 +35,15 @@ namespace EventManagementSystem.Controllers
             return View();
         }
 
+        [HttpPost]
         public ActionResult ProposeEvent(int step)
         {
             return View();
         }
 
-        public ActionResult VenueBooking()
+        public ActionResult VenueBooking(string btn = "")
         {
+            
             if (Request.IsAjaxRequest())
                 return PartialView("_Venue");
             return View();

@@ -7,7 +7,7 @@
         HttpMethod = "get",
     };
 }
-<table class="table table-bordered table-hover">
+<table class="table table-bordered table-hover resultsTable">
     <thead>
         <tr>
             <th>Name</th>
@@ -39,16 +39,12 @@
                 <td>@s.Venue.name</td>
                 <td>
                     @Ajax.ActionLink("Detail", "EventDetail", new { Id = s.Id }, ao, new { @class = "btn btn-default " })
-                    @*<button class="btn btn-default" data-get="/User/EventDetail=@s.Id">Edit</button>*@
                 </td>
             </tr>
         }
     </tbody>
 </table>
 <script>
-    @*$('[data-get]').click(e => {
-        e.preventDefault();
-        let url = $(e.target).data('get');
-        location = url || location;
-    });*@
+    
+   
 </script>

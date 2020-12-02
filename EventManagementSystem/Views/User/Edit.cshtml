@@ -1,5 +1,4 @@
 ﻿@model EventManagementSystem.Models.EditProfileVM
-@*@model EditProfileVM*@
 @{
     ViewBag.Title = "Edit User Settings";
 
@@ -95,9 +94,14 @@
                     </div>
 
                     <div id="optDiv" style="text-align:center;display: block">
-                        <img id="blah" src="~/Images/@Model.PhotoUrl" alt="your image" style="width:250px; height: 250px; border-radius:50%;" />
+                        <img id="blah" src="~/Photo/@Model.PhotoUrl" alt="your image" style="width:250px; height: 250px; border-radius:50%;" />
                         <label class="custom-file-upload">
-                            <input type="file" id="imgInp" />
+                            @Html.TextBoxFor(m => m.Photo, new
+                               {
+                                   type = "file",
+                                   accept = "image/jpeg,image/png",
+                                   id = "imgInp"
+                               })
                             <i class="fa fa-upload" style="font-size:48px;color:darkcyan"></i>
                         </label>
                         <i class="fa fa-camera" style="font-size:48px;color:darkslateblue;cursor:pointer" aria-hidden="true" onclick="toggleCamera()"></i>
@@ -112,7 +116,8 @@
                     </div>
                     <div class="form-group col-md-6">
                         @Html.LabelFor(m => m.username, "Username")
-                        @Html.TextBoxFor(m => m.username, new { @class = "form-control", placeholder = "Username" })
+                        @Html.TextBoxFor(m => m.username, new { @class = "form-control", placeholder = "Username", disabled="" })
+                        @Html.HiddenFor(m => m.username)
                         @Html.ValidationMessageFor(m => m.username)
                     </div>
 

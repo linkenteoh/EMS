@@ -125,7 +125,7 @@ namespace EventManagementSystem.Controllers
                 Id = u.Id,
                 username = u.username,
                 name = u.name,
-                contact_no = u.contact_no,
+                contact_no = u.contact_no.Trim(),
                 email = u.email,
                 password = u.password,
                 PhotoUrl = u.photo
@@ -169,8 +169,13 @@ namespace EventManagementSystem.Controllers
         public ActionResult EventSearchIndex(string name ="", string startDate ="", string endDate="", 
             string startTime = "", string endTime = "", int page = 1)
         {
-            //var model = db.Events.ToPagedList(page, 10).AsQueryable();
-            var model = db.Events.AsQueryable();
+            var username = User.Identity.Name;
+            var u = db.Users.Where(x => x.username == username).FirstOrDefault();
+            // Get userID in registration
+            var reg = db.Registrations.Where(r => u.Id.Equals(r.userId)).Select(r => r.eventId).ToArray();
+            // Get EventID in registration that contains the userID
+            var model = db.Events.Where(m => reg.Contains(m.Id)).AsQueryable();
+
             // Name
             if (!string.IsNullOrEmpty(name))
             {
@@ -209,19 +214,6 @@ namespace EventManagementSystem.Controllers
                 var timeTo = TimeSpan.Parse(endTime);
                 model = db.Events.Where(x => x.endTime <= timeTo);
             }
-
-            //StaticPagedList
-            //PagedList<Event> paged = new PagedList<Event>();
-            //model = db.Events.OrderBy(s => s.Id).Cast<Event>();
-            //model = model as PagedList<Event>();
-            //if (page < 1)
-            //{
-            //    return RedirectToAction(null, new { page = 1 });
-            //}
-            //if (page > model.PageCount)
-            //{
-            //    return RedirectToAction(null, new { page = model.PageCount });
-            //}
 
             if (Request.IsAjaxRequest())
                 return PartialView("_EventResults", model);

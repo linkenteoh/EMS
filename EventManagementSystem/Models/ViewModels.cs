@@ -180,7 +180,6 @@ namespace EventManagementSystem.Models
         [EmailAddress(ErrorMessage = "Invalid format")]
         public string email { get; set; }
         [Required]
-        [Remote("IsUserNameAvailable", "Account", ErrorMessage = "Username already exists")]
         [MinLength(5, ErrorMessage = "5 minimum length")]
         [MaxLength(15, ErrorMessage = "15 maximum length")]
         public string username { get; set; }
@@ -193,7 +192,7 @@ namespace EventManagementSystem.Models
         public string PhotoUrl { get; set; }
         public string role { get; set; }
         public Nullable<bool> organizer { get; set; }
-        public int status { get; set; }
+        public Nullable<bool> status { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
     }
