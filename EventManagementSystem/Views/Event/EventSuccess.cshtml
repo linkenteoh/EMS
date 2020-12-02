@@ -28,16 +28,16 @@
         <div class="bg-info dot">1</div>
         <div class="bg-info dot">2</div>
         <div class="bg-primary dot">3</div>
-    </div>
-    <div class="container-fluid">
-        <button class="btn-primary">Confirm Venue</button>
-    </div>
+        <div id="targetContent">
 
+        </div>
+        <button class="btn btn-primary">Confirm Venue</button>
+    </div>
 </div>
 @section foot{
     <script>
         function bckFunc() {
-            location.href = '@Url.Action("BookEvent", "Event")';
+            location.href = '@Url.Action("VenueBooking", "Event")';
         }
     </script>
 }

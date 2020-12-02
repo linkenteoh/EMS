@@ -3,6 +3,7 @@
     ViewBag.Title = "Book Your Venue";
 }
 
+
 <style>
     .dot {
         font-size: 20pt;
@@ -29,17 +30,17 @@
         <div class="bg-primary dot">2</div>
         <div class="bg-info dot">3</div>
     
-        <div class="container">
-            @Html.Partial("_Venue")
+        <div id="targetContent">
+            @*@Html.Partial("_Venue")*@
+            @Html.Partial("_A")
         </div>
         <button class="btn btn-primary" data-get="/Event/EventSuccess">Confirm Venue</button>
     </div>
-
 </div>
 @section foot{
     <script>
         function bckFunc() {
-            location.href = '@Url.Action("BookEvent", "Event")';
+            location.href = '@Url.Action("ProposeEvent", "Event")';
         }
         $('[data-get]').click(e => {
             let url = $(e.target).data('get');

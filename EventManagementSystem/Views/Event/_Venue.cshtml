@@ -1,1 +1,124 @@
-﻿<h1>Venue</h1>
+﻿
+@{
+    var venueNext = new AjaxOptions
+    {
+        UpdateTargetId = "targetContent",
+        HttpMethod = "get",
+        LoadingElementId = "loader",
+    };
+}
+<style>
+    .box {
+        border: 1px solid black;
+        width: 800px;
+        height: 400px;
+        border-radius: 5px;
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .venueType1 {
+        border: 1px solid black;
+        width: 100px;
+        height: 100px;
+        border-radius: 5px;
+        padding: 10px;
+        display: inline-block;
+    }
+
+    .venueType2 {
+        border: 1px solid black;
+        width: 127px;
+        height: 100px;
+        border-radius: 5px;
+        padding: 10px;
+        display: inline-block;
+    }
+
+    .venueType3 {
+        border: 1px solid black;
+        width: 200px;
+        height: 100px;
+        border-radius: 5px;
+        padding: 10px;
+        display: inline-block;
+    }
+
+    .spaceOut1 {
+        border-right: 1px solid black;
+        border-left: 1px solid black;
+        width: 720px;
+        height: 100px;
+        border-radius: 5px;
+        margin: 0px;
+    }
+
+    .spaceOut2 {
+        width: 100px;
+        height: 100px;
+        margin: 0px;
+        padding: 10px;
+        display: inline-block;
+    }
+
+    .placename {
+        margin: 10px;
+        padding: 5px;
+    }
+</style>
+@* TODO: AJAX form *@
+@*@using (Ajax.BeginForm(venueNext))
+    {
+        @Html.Hidden("venue")
+    }*@
+
+<div class="box">
+    <div class="row">
+        <div class="container venueType1">
+            A005
+        </div>
+        <div class="container venueType1">
+            A003
+        </div>
+        <div class="container venueType1">
+            A001
+        </div>
+        <div class="container spaceOut2">
+            Entrance
+        </div>
+        <div class="container venueType1">
+            A006
+        </div>
+        <div class="container venueType1">
+            A008
+        </div>
+        <div class="container venueType1">
+            A010
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="container spaceOut1"> </div>
+    </div>
+
+    <div class="row">
+        <div class="container venueType2">
+            A004
+        </div>
+        <div class="container venueType2">
+            A002
+        </div>
+        <div class="container venueType3">
+            DKD
+        </div>
+        <div class="container venueType2">
+            A007
+        </div>
+        <div class="container venueType2">
+            A009
+        </div>
+    </div>
+
+
+</div>
+
