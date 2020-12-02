@@ -40,7 +40,7 @@
                             var org = db.Organisers.FirstOrDefault(or => or.Id == (db.Users.FirstOrDefault(o => o.username == User.Identity.Name).Id));
                             if (org != null)
                             {
-                                <li>@Html.ActionLink("Propose event", "ProposeEvent", "User")</li>
+                                <li>@Html.ActionLink("Propose event", "ProposeEvent", "Event")</li>
 
                             }
                         }
