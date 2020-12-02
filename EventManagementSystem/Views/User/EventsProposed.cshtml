@@ -1,0 +1,44 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<Event>
+@{
+    ViewBag.Title = "EventsProposed";
+}
+
+<h2>Events Proposed</h2>
+<hr />
+<p>@Model.Count() of @Model.TotalItemCount record(s) | Page @Model.PageNumber of @Model.PageCount</p>
+@foreach (var e in Model)
+{
+    <div class="panel" style="width: 25rem; border:1px #c3c3c3 solid; overflow:auto; display:inline-block; margin-right:20px;">
+        <div class="panel-body" style="padding-bottom:0px">
+            @{ 
+                if(e.approvalStat == null)
+                {
+                    <div class="text-warning"><b>Pending</b></div>
+                }else if(e.approvalStat == true)
+                {
+                    <div class="text-success"><b>Accepted</b></div>
+                }
+                else if(e.approvalStat == false)
+                {
+                    <div class="text-danger"><b>Denied</b></div>
+                }
+            }
+        </div>
+        <img class="panel-heading text-center" src="~/Photo/@e.photoURL" alt="Card image cap" style="object-fit:cover; width:245px; height:245px;" />
+        <hr style="margin:0px;padding:0px;"/>
+        <div class="panel-body" style="">
+            <h5 class="panel-title">@e.name</h5>
+            <p class="card-text">@e.des</p>
+            <a href="#" class="btn btn-primary">View event</a>
+        </div>
+    </div>
+}
+
+@Html.PagedListPager(
+    Model,
+    p => "?page=" + p,
+    PagedListRenderOptions.Classic
+    )
+

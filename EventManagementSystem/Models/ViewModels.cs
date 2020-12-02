@@ -133,7 +133,7 @@ namespace EventManagementSystem.Models
         public string photoURL { get; set; }
         public Role role { get; set; }
         public Nullable<bool> organizer { get; set; }
-        public int status { get; set; }
+        public bool status { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
 
@@ -163,7 +163,6 @@ namespace EventManagementSystem.Models
         public HttpPostedFileBase Photo { get; set; }
         public string role { get; set; }
         public Nullable<bool> organizer { get; set; }
-        public int status { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
     }

@@ -38,7 +38,7 @@ namespace EventManagementSystem.Controllers
 
 
             var events = db.Events.OrderBy(fn);
-            var model = events.ToPagedList(page, 1);
+            var model = events.ToPagedList(page, 10);
 
             return View(model);
         }
