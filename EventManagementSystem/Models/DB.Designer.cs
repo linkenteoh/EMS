@@ -1,8 +1,4 @@
-
-// T4 code generation is enabled for model 'C:\Users\User\Desktop\EMS\EventManagementSystem\Models\DB.edmx'. 
-
-// T4 code generation is enabled for model 'C:\Users\linke\Desktop\Enterprsie Web System\EventManagementSystem - Copy\EventManagementSystem\Models\DB.edmx'. 
-
+﻿// T4 code generation is enabled for model 'C:\Users\Junli\OneDrive\Desktop\New EMS\EventManagementSystem\Models\DB.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
