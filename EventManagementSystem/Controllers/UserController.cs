@@ -125,7 +125,7 @@ namespace EventManagementSystem.Controllers
         {
             var name = User.Identity.Name;
             var u = db.Users.Where(x => x.username == name).FirstOrDefault();
-            if(u == null)
+            if (u == null)
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -167,7 +167,6 @@ namespace EventManagementSystem.Controllers
                     DeletePhoto(u.photo);
                     u.photo = SavePhoto(model.Photo);
                 }
-                 model.PhotoUrl = u.photo;
                 db.SaveChanges();
                 TempData["Info"] = "Profile edited successfully!";
                 return RedirectToAction("Index", "Home");
@@ -176,14 +175,15 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
 
-        public ActionResult EventSearchIndex(string name ="", string startDate ="", string endDate="", 
-            string startTime = "", string endTime = "", int page = 1)
+        public ActionResult EventSearchIndex(string name = "", string startDate = "", string endDate = "",
+            string startTime = "", string endTime = "")
         {
-            //var model = db.Events.ToPagedList(page, 10).AsQueryable();
             var username = User.Identity.Name;
             var u = db.Users.Where(x => x.username == username).FirstOrDefault();
+
             // Get userID in registration
             var reg = db.Registrations.Where(r => u.Id.Equals(r.userId)).Select(r => r.eventId).ToArray();
+
             // Get EventID in registration that contains the userID
             var model = db.Events.Where(m => reg.Contains(m.Id)).AsQueryable();
 
@@ -198,7 +198,8 @@ namespace EventManagementSystem.Controllers
                 var dtFrom = DateTime.Parse(startDate);
                 var dtTo = DateTime.Parse(endDate);
                 model = db.Events.Where(x => x.startDate >= dtFrom && x.endDate <= dtTo);
-            }else if (!string.IsNullOrEmpty(startDate))
+            }
+            else if (!string.IsNullOrEmpty(startDate))
             {
                 var dtFrom = DateTime.Parse(startDate);
                 model = db.Events.Where(x => x.startDate >= dtFrom);
@@ -226,19 +227,6 @@ namespace EventManagementSystem.Controllers
                 model = db.Events.Where(x => x.endTime <= timeTo);
             }
 
-            //StaticPagedList
-            //PagedList<Event> paged = new PagedList<Event>();
-            //model = db.Events.OrderBy(s => s.Id).Cast<Event>();
-            //model = model as PagedList<Event>();
-            //if (page < 1)
-            //{
-            //    return RedirectToAction(null, new { page = 1 });
-            //}
-            //if (page > model.PageCount)
-            //{
-            //    return RedirectToAction(null, new { page = model.PageCount });
-            //}
-
             if (Request.IsAjaxRequest())
                 return PartialView("_EventResults", model);
             return View(model);
@@ -247,7 +235,7 @@ namespace EventManagementSystem.Controllers
         public ActionResult EventDetail(int id)
         {
             var model = db.Events.Find(id);
-          
+
             if (model == null)
             {
                 return RedirectToAction("EventSearchIndex");
