@@ -10,6 +10,12 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("head", false)
+    <style>
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            margin-top: 0;
+        }
+    </style>
 </head>
 <body>
     <div class="info">@TempData["Info"]</div>
@@ -40,8 +46,15 @@
                             var org = db.Organisers.FirstOrDefault(or => or.Id == (db.Users.FirstOrDefault(o => o.username == User.Identity.Name).Id));
                             if (org != null)
                             {
-                                <li>@Html.ActionLink("Propose event", "ProposeEvent", "User")</li>
 
+                                <li class="dropdown">
+
+                                    <a class="dropdown-toggle" data-toggle="dropdown">Proposals</a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Propose event", "ProposeEvent", "User")</li>
+                                        <li>@Html.ActionLink("Event(s) proposed", "EventsProposed", "User")</li>
+                                    </ul>
+                                </li>
                             }
                         }
                     }

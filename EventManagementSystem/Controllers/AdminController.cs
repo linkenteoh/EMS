@@ -156,7 +156,6 @@ namespace EventManagementSystem.Controllers
                 endTime = e.endTime,
                 duration = e.duration,
                 organized_by = e.organized_by,
-                approvalStat = e.approvalStat,
                 photoURL = e.photoURL,
             };
             return View(model);

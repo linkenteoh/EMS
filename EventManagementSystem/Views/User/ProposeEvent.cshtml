@@ -1,60 +1,21 @@
 ﻿@model EventInsertVM
-
-
 @{
-    ViewBag.Title = "Insert";
-    Layout = "~/Views/Shared/_Dashboard.cshtml";
+    ViewBag.Title = "Propose Event";
     string min = DateTime.Today.ToString("dd-MM-yyyy");
     string max = DateTime.Today.AddMonths(+12).ToString("dd-MM-yyyy");
     string endDateMax = DateTime.Today.AddDays(+24).ToString("dd-MM-yyyy");
 }
 
+
 @section head{
-    <style>
-        .form-control:focus {
-            box-shadow: none;
-            border-color: #BA68C8
-        }
-
-        .profile-button {
-            background: rgb(99, 39, 120);
-            box-shadow: none;
-            border: none
-        }
-
-        .profile-button:hover {
-            background: #682773
-        }
-
-        .profile-button:focus {
-            background: #682773;
-            box-shadow: none
-        }
-
-        .profile-button:active {
-            background: #682773;
-            box-shadow: none
-        }
-
-        .back:hover {
-            color: #682773;
-            cursor: pointer
-        }
-
-        .labels {
-            font-size: 11px
-        }
-
-        .add-experience:hover {
-            background: #BA68C8;
-            color: #fff;
-            cursor: pointer;
-            border: solid 1px #BA68C8
-        }
-
-    </style>
+<style>
+    input[type="file"] {
+        display: none;
     }
+</style>    
+}
 
+<h2>Propose Event</h2>
 <form class="form" method="post" enctype="multipart/form-data">
     @Html.ValidationSummary(true)
     <div class="container rounded bg-white mt-5 mb-5">
@@ -64,21 +25,19 @@
                     <label class="upload">
                         <img class="img-thumbnail" src="~/Images/no-image-icon-23499.png">
                         @Html.TextBoxFor(e => e.Photo, new
-                        {
+                   {
                        type = "file",
-                            accept = "image/jpeg, image/png",
+                       accept = "image/jpeg, image/png",
                        hidden = ""
-                        })
+
+                   })
                         @Html.ValidationMessageFor(e => e.Photo)
                     </label>
                 </div>
             </div>
 
-            <div class="col-md-5 border-right">
-                <div class="p-3 py-5">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="text-right">Add Event</h4>
-                    </div>
+            <div class="col-md-7 border-right">
+                <div>
                     <div class="row mt-2">
                         <div class="col-md-6">
                             @Html.LabelFor(e => e.name, "Name")@Html.TextBoxFor(e => e.name, new { maxlength = 20, autofocus = "", @class = "form-control", placeholder = "Name" }) @Html.ValidationMessageFor(e => e.name)
@@ -87,7 +46,7 @@
                             @Html.LabelFor(e => e.price, "Price")@Html.TextBoxFor(e => e.price, new { type = "number", @class = "form-control", placeholder = "price", min = "0" }) @Html.ValidationMessageFor(e => e.price)
                         </div>
                     </div>
-                    <div class="row mt-2">
+                    <div class="row mt-6">
                         <div class="col-md-12">
                             @Html.LabelFor(e => e.des, "Description")@Html.TextAreaFor(e => e.des, new
 {
@@ -132,25 +91,16 @@ placeholder = "Description"
                         </div>
 
                     </div>
-                    <div class="row mt-2">
-                        <div class="col-md-12">
-                            @Html.LabelFor(e => e.approvalStat, "Approval") @Html.CheckBoxFor(e => e.approvalStat)
-                            @Html.ValidationMessageFor(e => e.approvalStat)
-                        </div>
-
-                    </div>
-                    <div class="mt-5 text-center"><section><button class="btn btn-primary profile-button">Add Event</button></section></div>
+                    <div class="mt-12" style="margin-top:15px"><section><button class="btn btn-primary profile-button">Propose Event</button></section></div>
                 </div>
             </div>
         </div>
     </div>
 </form>
 
-
-
 @section foot{
 
-<script>
+    <script>
 
     function validatePhoto(f) {
         let retype = /^image\/(jpeg|png)$/i;
@@ -179,6 +129,8 @@ placeholder = "Description"
 
     });
 
-</script>
+    </script>
 }
+
+
 

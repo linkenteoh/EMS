@@ -8,15 +8,59 @@
 
 }
 
+@section head{
+<style>
+    .searchCont {
+        display: none;
+    }
+
+</style>    
+}
+
 
 <h2>Events</h2>
-
+<hr />
 <p>@Model.Count() of @Model.TotalItemCount record(s) | Page @Model.PageNumber of @Model.PageCount</p>
+<div style="margin-bottom:20px">
+    <span class="btn btn-primary searchButton">Search</span>
+
+    <div class="parent">
+        <div class="searchCont">
+            <div class="form-group row">
+                @Html.Label("name", "Event Name", new { @class = "control-label col-sm-2" })
+                @Html.TextBox("name", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.Label("startDate", "Date From", new { @class = "control-label col-sm-2" })
+                @Html.TextBox("startDate", "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-4" })
+                @Html.Label("endDate", "To", new { @class = "control-label col-sm-1" })
+                @Html.TextBox("endDate", "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-4" })
+            </div>
+            <div class="form-group">
+                @Html.Label("startTime", "Time From", new { @class = "control-label col-sm-2" })
+                @Html.TextBox("startTime", "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-4" })
+                @Html.Label("endTime", "To", new { @class = "control-label col-sm-1" })
+                @Html.TextBox("endTime", "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-4" })
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-1">
+                    <input type="submit" class="btn btn-primary searchBtn" name="Search" value="search" />
+                </div>
+                <div class="col-sm-1">
+                    <input type="reset" class="btn btn-primary " name="Reset" value="reset" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 @foreach (var e in Model)
 {
-    <div class="panel" style="width: 18rem;">
-        <img class="panel-heading" src="~/Images/@e.photoURL" alt="Card image cap">
-        <div class="panel-body">
+    <div class="panel" style="width: 25rem; border:1px #c3c3c3 solid; overflow:auto; display:inline-block; margin-right:20px;">
+        <img class="panel-heading text-center" src="~/Photo/@e.photoURL" alt="Card image cap" style="object-fit:cover; width:245px; height:245px;" />
+        <hr style="margin:0px;padding:0px;" />
+        <div class="panel-body" style="">
             <h5 class="panel-title">@e.name</h5>
             <p class="card-text">@e.des</p>
             <a href="#" class="btn btn-primary">View event</a>
@@ -24,17 +68,23 @@
     </div>
 }
 
-@{
-    var options = PagedListRenderOptions.ClassicPlusFirstAndLast;
-    options.LinkToFirstPageFormat = "First";
-    options.LinkToLastPageFormat = "Last";
-    options.LinkToNextPageFormat = "Next";
-    options.LinkToPreviousPageFormat = "Previous";
-}
-
 
 @Html.PagedListPager(
     Model,
     p => "?page=" + p,
-    options
+    PagedListRenderOptions.Classic
     )
+
+@section foot{
+
+<script>
+    //when search button click
+    jQuery(document).on('click', '.searchButton', function () {
+        if (jQuery('.parent').hasClass('menuActive')) {
+            jQuery('.parent').removeClass('menuActive');
+            jQuery('.parent .menu').slideUp(0);
+        }
+        jQuery('.parent').toggleClass('searchActive').children('.searchCont').slideToggle(200);
+    })
+</script>    
+}
