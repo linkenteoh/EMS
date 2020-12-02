@@ -228,8 +228,6 @@ namespace EventManagementSystem.Controllers
         [ValidateGoogleCaptcha]
         public ActionResult Login(LoginVM model, string returnUrl = "")
         {
-
-
             if (ModelState.IsValid)
             {
                 //Get user record based on username
@@ -253,7 +251,7 @@ namespace EventManagementSystem.Controllers
                         if( user.role =="Student")
                         return RedirectToAction("Index", "Home");
                         else if(user.role == "Admin")
-                            return RedirectToAction("Index", "Admin");
+                        return RedirectToAction("Index", "Admin");
                     }
                 }
                 else

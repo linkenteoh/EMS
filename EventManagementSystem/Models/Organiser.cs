@@ -14,11 +14,19 @@ namespace EventManagementSystem.Models
     
     public partial class Organiser
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Organiser()
+        {
+            this.Events = new HashSet<Event>();
+        }
+    
         public int Id { get; set; }
         public string represent { get; set; }
         public string position { get; set; }
         public bool status { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Event> Events { get; set; }
         public virtual User User { get; set; }
     }
 }

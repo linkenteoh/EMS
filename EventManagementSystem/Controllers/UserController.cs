@@ -40,7 +40,7 @@ namespace EventManagementSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                var id = db.Users.First(u => u.username == User.Identity.Name).Id;
+                var id = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
 
                 var oragniser = new Organiser
                 {
@@ -55,6 +55,27 @@ namespace EventManagementSystem.Controllers
                 TempData["Info"] = "You've registered successfully. Please wait until it is accepted by an admin.";
             }
             return View(model);
+        }
+
+        private string ValidatePhoto(HttpPostedFileBase f)
+        {
+            var reType = new Regex(@"^image\/(jpeg|png)$", RegexOptions.IgnoreCase);
+            var reName = new Regex(@"^.+\.(jpg|jpeg|png)$", RegexOptions.IgnoreCase);
+
+            if (f == null)
+            {
+                return "No photo selected.";
+            }
+            else if (!reType.IsMatch(f.ContentType) ||
+               !reName.IsMatch(f.FileName))
+            {
+                return "Only JPG or PNG photo is allowed.";
+            }
+            else if (f.ContentLength > 1 * 1024 * 1024)
+            {
+                return "Photo size cannot more than 1 MB";
+            }
+            return null;
         }
 
         private string SavePhoto(HttpPostedFileBase f)
@@ -207,6 +228,71 @@ namespace EventManagementSystem.Controllers
             {
                 return RedirectToAction("EventSearchIndex");
             }
+            return View(model);
+        }
+
+        // GET: User/ProposeEvent
+        public ActionResult ProposeEvent()
+        {
+            return View();
+        }
+
+        // POST: User/ProposeEvent
+        [HttpPost]
+        public ActionResult ProposeEvent(EventInsertVM model)
+        {
+            string error = ValidatePhoto(model.Photo);
+            if (error != null)
+            {
+                ModelState.AddModelError("Photo", error);
+            }
+            if (ModelState.IsValid)
+            {
+                int duration = ((int)model.endTime.TotalMinutes - (int)model.startTime.TotalMinutes) / 60;
+                var e = new Event
+                {
+                    name = model.name,
+                    des = model.des,
+                    price = model.price,
+                    availability = model.availability,
+                    participants = model.participants,
+                    startDate = model.startDate,
+                    endDate = model.endDate,
+                    startTime = model.startTime,
+                    endTime = model.endTime,
+                    duration = duration.ToString(),
+                    organized_by = model.organized_by,
+                    approvalStat = null,
+                    status = false,
+                    venueId = null,
+                    photoURL = SavePhoto(model.Photo),
+                    orgId = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id
+                };
+                try { 
+                db.Events.Add(e);
+                db.SaveChanges();
+                }catch(Exception ex)
+                {
+                    TempData["Info"] = ex;
+                }
+                TempData["info"] = "Event record inserted successfully";
+
+            }
+            else
+            {
+                TempData["Error"] = "Error";
+            }
+            return View(model);
+        }
+
+        public ActionResult EventsProposed(int page = 1)
+        {
+            Func<Event, object> fn = s => s.Id;
+
+
+            var events = db.Events.OrderBy(fn).Where(u => u.orgId == db.Users.FirstOrDefault(org => org.username == User.Identity.Name).Id);
+            var model = events.ToPagedList(page, 5);
+
             return View(model);
         }
 
