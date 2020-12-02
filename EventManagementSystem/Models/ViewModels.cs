@@ -38,10 +38,9 @@ namespace EventManagementSystem.Models
         public bool approvalStat { get; set; }
         public bool status { get; set; }
         public int? venueId { get; set; }
-        [Required]
         public HttpPostedFileBase Photo { get; set; }
 
-    } 
+    }
 
     public class EventEditVM
     {
@@ -74,7 +73,7 @@ namespace EventManagementSystem.Models
         public HttpPostedFileBase Photo { get; set; }
         public string photoURL { get; set; }
     }
-   public class UserInsertVM
+    public class UserInsertVM
     {
 
         public int Id { get; set; }
@@ -104,7 +103,7 @@ namespace EventManagementSystem.Models
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
 
-        }
+    }
     public enum Role
     {
         Student,
@@ -210,6 +209,34 @@ namespace EventManagementSystem.Models
         public bool RememberMe { get; set; }
     }
 
+
+    public class AdvertManageVM
+    {
+        public int Id { get; set; }
+        [Required]
+        [StringLength(100)]
+        [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only")]
+        public string name { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string des { get; set; }
+        [Required]
+        public decimal charge { get; set; }
+        [Required]
+        public DateTime startDate { get; set; }
+        [Required]
+        public DateTime endDate { get; set; }
+        [Required]
+        public TimeSpan startTime { get; set; }
+        [Required]
+        public TimeSpan endTime { get; set; }
+        public string duration { get; set; }
+        public bool status { get; set; }
+        public int? userId { get; set; }
+        public HttpPostedFileBase Photo { get; set; }
+        public string photoURL { get; set; }
+      
+    }
     public class RegOrgVM
     {
         [Required]

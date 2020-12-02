@@ -307,6 +307,9 @@
     <Content Include="Views\Admin\InsertUser.cshtml" />
     <Content Include="Views\Admin\EditUser.cshtml" />
     <Content Include="Views\Admin\DisplayEvent.cshtml" />
+    <Content Include="Views\Admin\DisplayAdvert.cshtml" />
+    <Content Include="Views\Admin\InsertAdvert.cshtml" />
+    <Content Include="Views\Admin\EditAdvert.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

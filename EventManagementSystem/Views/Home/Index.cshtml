@@ -1,4 +1,5 @@
-﻿
+﻿@model IEnumerable<Advertisement>
+
 @{
     ViewBag.Title = "Index";
 }
@@ -14,17 +15,33 @@
 
         <!-- Wrapper for slides -->
         <div class="carousel-inner">
-            <div class="item active">
-                <a href="FFF"><img src="~/1.jpg" alt="Los Angeles"></a>
-            </div>
+            @foreach (var a in Model)
+            {
+                if (a.Id == 1)
+                {
+                    <div class="item active">
+                        <a href="FFF"><img src="~/Images/@a.photoURL" alt="Los Angeles"></a>
+                    </div>
+                }
+                else
+                {
+                    <div class="item">
+                        <a href="FFF"><img src="~/Images/@a.photoURL" alt="Los Angeles"></a>
+                    </div>
+                }
 
-            <div class="item">
-                <img src="chicago.jpg" alt="Chicago">
-            </div>
+            }
+            @*<div class="item active">
+            <a href="FFF"><img src="~/1.jpg" alt="Los Angeles"></a>
+        </div>
 
-            <div class="item">
-                <img src="ny.jpg" alt="New York">
-            </div>
+        <div class="item " >
+            <img src="~/Images/WeChat Image_20201202023139.jpg" alt="Chicago">
+        </div>
+
+        <div class="item">
+            <img src="ny.jpg" alt="New York">
+        </div>*@
         </div>
 
         <!-- Left and right controls -->

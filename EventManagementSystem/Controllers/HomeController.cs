@@ -14,8 +14,8 @@ namespace EventManagementSystem.Controllers
 
         public ActionResult Index()
         {
-
-            return View();
+            var model = db.Advertisements;
+            return View(model);
         }
 
         public ActionResult About()

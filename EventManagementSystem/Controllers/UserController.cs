@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Web.Helpers;
 using PagedList;
 
+
 namespace EventManagementSystem.Controllers
 {
     public class UserController : Controller

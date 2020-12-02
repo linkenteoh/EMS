@@ -14,8 +14,11 @@
           <Property Name="des" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="startDate" Type="date" Nullable="false" />
           <Property Name="endDate" Type="date" Nullable="false" />
-          <Property Name="duration" Type="int" Nullable="false" />
+          <Property Name="startTime" Type="time" Precision="7" Nullable="false" />
+          <Property Name="endTime" Type="time" Precision="7" Nullable="false" />
+          <Property Name="duration" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="charge" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="photoURL" Type="varchar" MaxLength="100" />
           <Property Name="status" Type="bit" Nullable="false" />
           <Property Name="userId" Type="int" Nullable="false" />
         </EntityType>
@@ -23,7 +26,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="des" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
@@ -270,8 +273,11 @@
           <Property Name="des" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="startDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="endDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="duration" Type="Int32" Nullable="false" />
+          <Property Name="startTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="endTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="duration" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="charge" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="photoURL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="status" Type="Boolean" Nullable="false" />
           <Property Name="userId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="User" Relationship="DBModel.FK_Table_User" FromRole="Advertisement" ToRole="User" />
@@ -280,7 +286,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="des" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
@@ -464,8 +470,11 @@
               <MappingFragment StoreEntitySet="Advertisement">
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="photoURL" ColumnName="photoURL" />
                 <ScalarProperty Name="charge" ColumnName="charge" />
                 <ScalarProperty Name="duration" ColumnName="duration" />
+                <ScalarProperty Name="endTime" ColumnName="endTime" />
+                <ScalarProperty Name="startTime" ColumnName="startTime" />
                 <ScalarProperty Name="endDate" ColumnName="endDate" />
                 <ScalarProperty Name="startDate" ColumnName="startDate" />
                 <ScalarProperty Name="des" ColumnName="des" />
