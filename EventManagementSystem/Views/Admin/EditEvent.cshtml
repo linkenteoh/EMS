@@ -2,13 +2,12 @@
 
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "EditEvent";
     Layout = "~/Views/Shared/_Dashboard.cshtml";
     string min = DateTime.Today.ToString("dd-MM-yyyy");
     string max = DateTime.Today.AddMonths(+12).ToString("dd-MM-yyyy");
     string endDateMax = DateTime.Today.AddDays(+24).ToString("dd-MM-yyyy");
     string photoURL = Model.photoURL;
-
 }
 
 
@@ -19,7 +18,7 @@
             <div class="col-md-3 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                     <label class="upload">
-                        <img class="img-thumbnail" src="~/Images/@photoURL">
+                        <img class="img-thumbnail" src="~/Photo/@photoURL">
                         @Html.TextBoxFor(e => e.Photo, new
                         {
                        type = "file",
@@ -84,17 +83,13 @@ placeholder = "Description"
                             @Html.LabelFor(e => e.endTime, "End Time")@Html.TextBoxFor(e => e.endTime, new { type = "time", @class = "form-control" })
                             @Html.ValidationMessageFor(e => e.endTime)
                         </div>
-                        <div class="col-md-12">
-                            @Html.LabelFor(e => e.organized_by, "Organized By")@Html.TextBoxFor(e => e.organized_by, new { maxlength = 20, autofocus = "", @class = "form-control", placeholder = "Organizer Name" })
-                            @Html.ValidationMessageFor(e => e.organized_by)
-                        </div>
                     </div>
-                    <div class="row mt-2">
-                        <div class="col-md-12">
-                            @Html.LabelFor(e => e.approvalStat, "Approval") @Html.CheckBoxFor(e => e.approvalStat)
-                            @Html.ValidationMessageFor(e => e.approvalStat)
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            @Html.LabelFor(e => e.OrgId, "Organized By")
+                            @Html.DropDownListFor(e => e.OrgId, ViewBag.OrganizerList as SelectList, "- Select One -", new { @class = "btn btn-secondary dropdown-toggle" })
+                            @Html.ValidationMessageFor(e => e.OrgId)
                         </div>
-
                     </div>
                     <div class="mt-5 text-center"><section><button class="btn btn-primary profile-button">Edit Event</button></section></div>
                 </div>

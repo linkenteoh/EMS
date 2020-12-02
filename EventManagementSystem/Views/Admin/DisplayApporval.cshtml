@@ -4,7 +4,7 @@
 @model IPagedList<Event>
 
 @{
-    ViewBag.Title = "Event List";
+    ViewBag.Title = "Approval List";
     Layout = "~/Views/Shared/_Dashboard.cshtml";
 }
 @section head{
@@ -13,12 +13,11 @@
             display: none;
         }
     </style>
-    
+
 }
 
-<h1>Events List</h1>
+<h1>Approval List</h1>
 <div style="margin-bottom:20px">
-    <input class="btn btn-primary" data-get="/Admin/InsertEvent" type="button" value="Add Event">
     <span class="btn btn-primary searchButton">Search</span>
 
     <div class="parent">
@@ -49,8 +48,10 @@
             </div>
         </div>
     </div>
+
 </div>
-<p>@Model.Where(e => e.status == true && e.approvalStat == true).Count() record(s) in event list</p>
+
+<p>@Model.Where(e => e.status == true && e.approvalStat == null).Count() record(s) in approval list</p>
 <table class="table table-hover">
     <thead class="thead-dark">
         <tr>
@@ -72,7 +73,7 @@
     <tbody>
         @foreach (var s in Model)
         {
-            if (s.status == true && s.approvalStat == true)
+            if (s.approvalStat == null && s.status == true)
             {
 
                 <tr>
@@ -83,14 +84,14 @@
                     <td scope="row">@s.availability</td>
                     <td scope="row">@s.participants</td>
                     <td scope="row">@s.startDate.ToString("dd/MM/yyyy") @s.startTime</td>
-                    <td scope="row">@s.endDate.ToString("dd/MM/yyyy") @s.endTime</td> 
+                    <td scope="row">@s.endDate.ToString("dd/MM/yyyy") @s.endTime</td>
                     <td scope="row">@s.duration hour(s)</td>
                     <td scope="row">@s.Organiser.represent </td>
                     <td>
-                        <input class="btn btn-primary" data-get="/Admin/EditEvent?id=@s.Id" type="button" value="Edit">
+                        <input class="btn btn-primary" data-get="/Admin/Approve?id=@s.Id" type="button" value="Approve">
                     </td>
                     <td>
-                        <input class="btn btn-primary" data-get="/Admin/DeleteEvent?id=@s.Id" type="button" value="Delete">
+                        <input class="btn btn-danger" data-get="/Admin/Decline?id=@s.Id" type="button" value="Decline">
                     </td>
                 </tr>
             }

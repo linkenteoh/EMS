@@ -9,6 +9,7 @@ namespace EventManagementSystem.Models
 {
     public class EventInsertVM
     {
+        public string Id { get; set; }
         [Required]
         [StringLength(100)]
         [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only")]
@@ -33,9 +34,9 @@ namespace EventManagementSystem.Models
         [Required]
         public TimeSpan endTime { get; set; }
         public string duration { get; set; }
-        [Required]
-        public string organized_by { get; set; }
         public bool approvalStat { get; set; }
+        [Required]
+        public int OrgId { get; set; }
         public bool status { get; set; }
         public int? venueId { get; set; }
         public HttpPostedFileBase Photo { get; set; }
@@ -67,15 +68,14 @@ namespace EventManagementSystem.Models
         [Required]
         public TimeSpan endTime { get; set; }
         public string duration { get; set; }
+        public bool? approvalStat { get; set; }
         [Required]
-        public string organized_by { get; set; }
-        public bool approvalStat { get; set; }
+        public int OrgId { get; set; }
         public HttpPostedFileBase Photo { get; set; }
         public string photoURL { get; set; }
     }
     public class UserInsertVM
     {
-
         public int Id { get; set; }
         [Required]
         [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only")]
@@ -243,4 +243,5 @@ namespace EventManagementSystem.Models
         [Required]
         public string position { get; set; }
     }
+
 }

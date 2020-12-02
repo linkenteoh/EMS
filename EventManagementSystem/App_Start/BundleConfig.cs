@@ -25,6 +25,18 @@ namespace EventManagementSystem
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/js").Include(
+                "~/Scripts/jquery-3.5.1.js",
+                "~/Scripts/jquery.validate.js",
+                "~/Scripts/jquery.validate.unobtrusive.js",
+                "~/Scripts/jquery.unobtrusive-ajax.js",
+                "~/Scripts/app.js"
+                ));
+
+            bundles.Add(new StyleBundle("~/css").Include(
+               "~/Content/PagedList.css", "~/Content/app.css"
+               ));
         }
     }
 }

@@ -301,6 +301,8 @@
     <Content Include="Views\User\RegOrganiser.cshtml" />
     <Content Include="Views\User\ProposeEvent.cshtml" />
     <Content Include="Views\User\EventsProposed.cshtml" />
+    <Content Include="Views\Admin\DisplayApporval.cshtml" />
+    <Content Include="Views\Admin\EditApproval.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\DisplayUser.cshtml" />

@@ -234,6 +234,7 @@ namespace EventManagementSystem.Controllers
         // GET: User/ProposeEvent
         public ActionResult ProposeEvent()
         {
+            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id", "represent");
             return View();
         }
 
@@ -261,12 +262,11 @@ namespace EventManagementSystem.Controllers
                     startTime = model.startTime,
                     endTime = model.endTime,
                     duration = duration.ToString(),
-                    organized_by = model.organized_by,
                     approvalStat = null,
-                    status = false,
+                    status = true,
                     venueId = null,
                     photoURL = SavePhoto(model.Photo),
-                    orgId = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id
+                    OrgId = model.OrgId
                 };
                 try { 
                 db.Events.Add(e);
@@ -275,13 +275,14 @@ namespace EventManagementSystem.Controllers
                 {
                     TempData["Info"] = ex;
                 }
-                TempData["info"] = "Event record inserted successfully";
+                TempData["info"] = "Event proposed successfully";
 
             }
             else
             {
                 TempData["Error"] = "Error";
             }
+            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id", "represent");
             return View(model);
         }
 
@@ -290,7 +291,7 @@ namespace EventManagementSystem.Controllers
             Func<Event, object> fn = s => s.Id;
 
 
-            var events = db.Events.OrderBy(fn).Where(u => u.orgId == db.Users.FirstOrDefault(org => org.username == User.Identity.Name).Id);
+            var events = db.Events.OrderBy(fn).Where(u => u.OrgId == db.Users.FirstOrDefault(org => org.username == User.Identity.Name).Id);
             var model = events.ToPagedList(page, 5);
 
             return View(model);

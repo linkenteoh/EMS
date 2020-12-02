@@ -12,9 +12,11 @@
 
     <!-- Bootstrap core CSS -->
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="~/Content/Sidebar.css" />
     <link rel="stylesheet" href="~/Content/app.css">
+
     @RenderSection("head", false)
 </head>
 
@@ -28,6 +30,7 @@
             <div class="list-group list-group-flush">
                 <a href="#" class="list-group-item list-group-item-action bg-light">Dashboard</a>
                 <a href="~/Admin/DisplayUser" class="list-group-item list-group-item-action bg-light">User</a>
+                <a href="~/Admin/DisplayApporval" class="list-group-item list-group-item-action bg-light">Approval</a>
                 <a href="~/Admin/DisplayEvent" class="list-group-item list-group-item-action bg-light">Events</a>
                 <a href="#" class="list-group-item list-group-item-action bg-light">Venue bookings</a>
                 <a href="~/Admin/DisplayAdvert" class="list-group-item list-group-item-action bg-light">Advertisement</a>
