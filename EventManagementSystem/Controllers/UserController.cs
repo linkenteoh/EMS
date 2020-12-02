@@ -40,7 +40,7 @@ namespace EventManagementSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                var id = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
+                var id = db.Users.First(u => u.username == User.Identity.Name).Id;
 
                 var oragniser = new Organiser
                 {
@@ -55,27 +55,6 @@ namespace EventManagementSystem.Controllers
                 TempData["Info"] = "You've registered successfully. Please wait until it is accepted by an admin.";
             }
             return View(model);
-        }
-
-        private string ValidatePhoto(HttpPostedFileBase f)
-        {
-            var reType = new Regex(@"^image\/(jpeg|png)$", RegexOptions.IgnoreCase);
-            var reName = new Regex(@"^.+\.(jpg|jpeg|png)$", RegexOptions.IgnoreCase);
-
-            if (f == null)
-            {
-                return "No photo selected.";
-            }
-            else if (!reType.IsMatch(f.ContentType) ||
-               !reName.IsMatch(f.FileName))
-            {
-                return "Only JPG or PNG photo is allowed.";
-            }
-            else if (f.ContentLength > 1 * 1024 * 1024)
-            {
-                return "Photo size cannot more than 1 MB";
-            }
-            return null;
         }
 
         private string SavePhoto(HttpPostedFileBase f)
@@ -165,136 +144,5 @@ namespace EventManagementSystem.Controllers
             model.PhotoUrl = u.photo;
             return View(model);
         }
-
-        public ActionResult EventSearchIndex(string name ="", string startDate ="", string endDate="", 
-            string startTime = "", string endTime = "", int page = 1)
-        {
-            var username = User.Identity.Name;
-            var u = db.Users.Where(x => x.username == username).FirstOrDefault();
-            // Get userID in registration
-            var reg = db.Registrations.Where(r => u.Id.Equals(r.userId)).Select(r => r.eventId).ToArray();
-            // Get EventID in registration that contains the userID
-            var model = db.Events.Where(m => reg.Contains(m.Id)).AsQueryable();
-
-            // Name
-            if (!string.IsNullOrEmpty(name))
-            {
-                model = db.Events.Where(m => m.name.Contains(name));
-            }
-            // Start Date && End Date
-            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
-            {
-                var dtFrom = DateTime.Parse(startDate);
-                var dtTo = DateTime.Parse(endDate);
-                model = db.Events.Where(x => x.startDate >= dtFrom && x.endDate <= dtTo);
-            }else if (!string.IsNullOrEmpty(startDate))
-            {
-                var dtFrom = DateTime.Parse(startDate);
-                model = db.Events.Where(x => x.startDate >= dtFrom);
-            }
-            else if (!string.IsNullOrEmpty(endDate))
-            {
-                var dtTo = DateTime.Parse(endDate);
-                model = db.Events.Where(x => x.endDate <= dtTo);
-            }
-            // Start Time && End Time
-            if (!string.IsNullOrEmpty(startTime) && !string.IsNullOrEmpty(endTime))
-            {
-                var timeFrom = TimeSpan.Parse(startTime);
-                var timeTo = TimeSpan.Parse(endTime);
-                model = db.Events.Where(x => x.startTime >= timeFrom && x.endTime <= timeTo);
-            }
-            else if (!string.IsNullOrEmpty(startTime))
-            {
-                var timeFrom = TimeSpan.Parse(startTime);
-                model = db.Events.Where(x => x.startTime >= timeFrom);
-            }
-            else if (!string.IsNullOrEmpty(endTime))
-            {
-                var timeTo = TimeSpan.Parse(endTime);
-                model = db.Events.Where(x => x.endTime <= timeTo);
-            }
-
-            if (Request.IsAjaxRequest())
-                return PartialView("_EventResults", model);
-            return View(model);
-        }
-
-        public ActionResult EventDetail(int id)
-        {
-            var model = db.Events.Find(id);
-          
-            if (model == null)
-            {
-                return RedirectToAction("EventSearchIndex");
-            }
-            return View(model);
-        }
-
-        // GET: User/ProposeEvent
-        public ActionResult ProposeEvent()
-        {
-            return View();
-        }
-
-        // POST: User/ProposeEvent
-        [HttpPost]
-        public ActionResult ProposeEvent(EventInsertVM model)
-        {
-            string error = ValidatePhoto(model.Photo);
-            if (error != null)
-            {
-                ModelState.AddModelError("Photo", error);
-            }
-            if (ModelState.IsValid)
-            {
-                int duration = ((int)model.endTime.TotalMinutes - (int)model.startTime.TotalMinutes) / 60;
-                var e = new Event
-                {
-                    name = model.name,
-                    des = model.des,
-                    price = model.price,
-                    availability = model.availability,
-                    participants = model.participants,
-                    startDate = model.startDate,
-                    endDate = model.endDate,
-                    startTime = model.startTime,
-                    endTime = model.endTime,
-                    duration = duration.ToString(),
-                    organized_by = model.organized_by,
-                    approvalStat = null,
-                    status = false,
-                    venueId = null,
-                    photoURL = SavePhoto(model.Photo),
-                    orgId = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id
-                };
-                try { 
-                db.Events.Add(e);
-                db.SaveChanges();
-                }catch(Exception ex)
-                {
-                    TempData["Info"] = ex;
-                }
-                TempData["info"] = "Event record inserted successfully";
-
-            }
-            else
-            {
-                TempData["Error"] = "Error";
-            }
-            return View(model);
-        }
-
-        public ActionResult EventsProposed(int page = 1)
-        {
-            Func<Event, object> fn = s => s.Id;
-
-
-            var events = db.Events.OrderBy(fn).Where(u => u.orgId == db.Users.FirstOrDefault(org => org.username == User.Identity.Name).Id);
-            var model = events.ToPagedList(page, 5);
-
-            return View(model);
-        }
-
     }
 }
