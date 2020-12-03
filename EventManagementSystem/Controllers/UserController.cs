@@ -220,17 +220,6 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
 
-        public ActionResult EventDetail(int id)
-        {
-            var model = db.Events.Find(id);
-          
-            if (model == null)
-            {
-                return RedirectToAction("EventSearchIndex");
-            }
-            return View(model);
-        }
-
         // GET: User/ProposeEvent
         public ActionResult ProposeEvent()
         {
@@ -266,7 +255,7 @@ namespace EventManagementSystem.Controllers
                     status = false,
                     venueId = null,
                     photoURL = SavePhoto(model.Photo),
-                    orgId = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id
+                    OrgId = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id
                 };
                 try { 
                 db.Events.Add(e);
@@ -290,10 +279,17 @@ namespace EventManagementSystem.Controllers
             Func<Event, object> fn = s => s.Id;
 
 
-            var events = db.Events.OrderBy(fn).Where(u => u.orgId == db.Users.FirstOrDefault(org => org.username == User.Identity.Name).Id);
+            var events = db.Events.OrderBy(fn).Where(u => u.OrgId == db.Users.FirstOrDefault(org => org.username == User.Identity.Name).Id);
             var model = events.ToPagedList(page, 5);
 
             return View(model);
+        }
+
+        public ActionResult Billing()
+        {
+            int uId = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
+            var bill = db.Payments.ToList().Where(p => p.Registration.userId == uId);
+            return View(bill);
         }
 
     }

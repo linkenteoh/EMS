@@ -16,10 +16,47 @@ namespace EventManagementSystem.Controllers
             return View();
         }
 
-        // Register Event
-        public ActionResult JoinEvent()
+        public ActionResult EventDetail(int id)
         {
-            return View();
+            var model = db.Events.Find(id);
+
+            if (model == null)
+            {
+                return RedirectToAction("EventSearchIndex");
+            }
+            return View(model);
+        }
+
+        // Register Event
+        public ActionResult RegisterEvent(string username, int eventId, DateTime d)
+        {
+            int id = db.Users.FirstOrDefault(u => u.username == username).Id;
+            int regId = db.Registrations.Count() + 1;
+
+            var register = new Registration
+            {
+                Id = regId,
+                eventId = eventId,
+                userId = id,
+                status = false,
+                date = d
+            };
+
+
+            db.Registrations.Add(register);
+            db.SaveChanges();
+
+            var bill = new Payment
+            {
+                Id = register.Id,
+                price = 10,
+                gst = 10,
+                status = false
+            };
+            db.Payments.Add(bill);
+            db.SaveChanges();
+
+            return RedirectToAction("");     
         }
 
         // Register Event

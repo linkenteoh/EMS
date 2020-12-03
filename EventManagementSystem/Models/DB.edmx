@@ -26,7 +26,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="des" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
@@ -42,7 +42,7 @@
           <Property Name="status" Type="bit" Nullable="false" />
           <Property Name="venueId" Type="int" />
           <Property Name="photoURL" Type="varchar" MaxLength="100" />
-          <Property Name="orgId" Type="int" Nullable="false" />
+          <Property Name="OrgId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Organiser">
           <Key>
@@ -57,10 +57,10 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="paymentdate" Type="date" Nullable="false" />
-          <Property Name="duedate" Type="date" Nullable="false" />
+          <Property Name="paymentdate" Type="date" />
+          <Property Name="duedate" Type="date" />
           <Property Name="gst" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="status" Type="bit" Nullable="false" />
         </EntityType>
@@ -68,7 +68,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="eventId" Type="int" Nullable="false" />
           <Property Name="userId" Type="int" Nullable="false" />
           <Property Name="status" Type="bit" Nullable="false" />
@@ -87,10 +87,10 @@
           <Property Name="role" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="organizer" Type="bit" />
           <Property Name="status" Type="bit" Nullable="false" />
-          <Property Name="activated" Type="bit" Nullable="false" />
           <Property Name="recoveryCode" Type="varchar" MaxLength="50" />
           <Property Name="activationCode" Type="varchar" MaxLength="50" />
           <Property Name="photo" Type="varchar(max)" />
+          <Property Name="activated" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Venue">
           <Key>
@@ -110,7 +110,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Event">
-              <PropertyRef Name="orgId" />
+              <PropertyRef Name="OrgId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -286,7 +286,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="des" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
@@ -302,7 +302,7 @@
           <Property Name="status" Type="Boolean" Nullable="false" />
           <Property Name="venueId" Type="Int32" />
           <Property Name="photoURL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="orgId" Type="Int32" Nullable="false" />
+          <Property Name="OrgId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Organiser" Relationship="DBModel.FK_Event_Organiser" FromRole="Event" ToRole="Organiser" />
           <NavigationProperty Name="Venue" Relationship="DBModel.FK_Event_Venue" FromRole="Event" ToRole="Venue" />
           <NavigationProperty Name="Registrations" Relationship="DBModel.FK_Registration_Event" FromRole="Event" ToRole="Registration" />
@@ -322,10 +322,10 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="paymentdate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="duedate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="paymentdate" Type="DateTime" Precision="0" />
+          <Property Name="duedate" Type="DateTime" Precision="0" />
           <Property Name="gst" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="status" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Registration" Relationship="DBModel.FK_Payment_Registration" FromRole="Payment" ToRole="Registration" />
@@ -334,7 +334,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="eventId" Type="Int32" Nullable="false" />
           <Property Name="userId" Type="Int32" Nullable="false" />
           <Property Name="status" Type="Boolean" Nullable="false" />
@@ -356,10 +356,10 @@
           <Property Name="role" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="organizer" Type="Boolean" />
           <Property Name="status" Type="Boolean" Nullable="false" />
-          <Property Name="activated" Type="Boolean" Nullable="false" />
           <Property Name="recoveryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="activationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="activated" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Advertisements" Relationship="DBModel.FK_Table_User" FromRole="User" ToRole="Advertisement" />
           <NavigationProperty Name="Organiser" Relationship="DBModel.FK_Organiser_User" FromRole="User" ToRole="Organiser" />
           <NavigationProperty Name="Registrations" Relationship="DBModel.FK_Registration_User" FromRole="User" ToRole="Registration" />
@@ -395,7 +395,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Event">
-              <PropertyRef Name="orgId" />
+              <PropertyRef Name="OrgId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -486,7 +486,7 @@
           <EntitySetMapping Name="Events">
             <EntityTypeMapping TypeName="DBModel.Event">
               <MappingFragment StoreEntitySet="Event">
-                <ScalarProperty Name="orgId" ColumnName="orgId" />
+                <ScalarProperty Name="OrgId" ColumnName="OrgId" />
                 <ScalarProperty Name="photoURL" ColumnName="photoURL" />
                 <ScalarProperty Name="venueId" ColumnName="venueId" />
                 <ScalarProperty Name="status" ColumnName="status" />
@@ -542,10 +542,10 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="DBModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="activated" ColumnName="activated" />
                 <ScalarProperty Name="photo" ColumnName="photo" />
                 <ScalarProperty Name="activationCode" ColumnName="activationCode" />
                 <ScalarProperty Name="recoveryCode" ColumnName="recoveryCode" />
-                <ScalarProperty Name="activated" ColumnName="activated" />
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="organizer" ColumnName="organizer" />
                 <ScalarProperty Name="role" ColumnName="role" />

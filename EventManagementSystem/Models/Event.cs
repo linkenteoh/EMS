@@ -36,7 +36,7 @@ namespace EventManagementSystem.Models
         public bool status { get; set; }
         public Nullable<int> venueId { get; set; }
         public string photoURL { get; set; }
-        public int orgId { get; set; }
+        public int OrgId { get; set; }
     
         public virtual Organiser Organiser { get; set; }
         public virtual Venue Venue { get; set; }

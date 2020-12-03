@@ -280,7 +280,6 @@
     <Content Include="Views\User\Register.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\User\EventList.cshtml" />
-    <Content Include="Views\User\EventDetail.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Awaitactivation.cshtml" />
     <Content Include="Views\Account\Activation.cshtml" />
@@ -301,6 +300,8 @@
     <Content Include="Views\User\RegOrganiser.cshtml" />
     <Content Include="Views\User\ProposeEvent.cshtml" />
     <Content Include="Views\User\EventsProposed.cshtml" />
+    <Content Include="Views\Event\EventDetail.cshtml" />
+    <Content Include="Views\User\Billing.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\DisplayUser.cshtml" />

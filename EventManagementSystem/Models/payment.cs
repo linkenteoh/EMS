@@ -16,8 +16,8 @@ namespace EventManagementSystem.Models
     {
         public int Id { get; set; }
         public decimal price { get; set; }
-        public System.DateTime paymentdate { get; set; }
-        public System.DateTime duedate { get; set; }
+        public Nullable<System.DateTime> paymentdate { get; set; }
+        public Nullable<System.DateTime> duedate { get; set; }
         public decimal gst { get; set; }
         public bool status { get; set; }
     
