@@ -82,7 +82,7 @@
           <Property Name="contact_no" Type="char" MaxLength="12" Nullable="false" />
           <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="username" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar(max)" Nullable="false" />
           <Property Name="role" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="organizer" Type="bit" />
           <Property Name="status" Type="bit" Nullable="false" />
@@ -350,7 +350,7 @@
           <Property Name="contact_no" Type="String" Nullable="false" MaxLength="12" FixedLength="true" Unicode="false" />
           <Property Name="email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="role" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="organizer" Type="Boolean" />
           <Property Name="status" Type="Boolean" Nullable="false" />
