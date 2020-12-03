@@ -40,7 +40,7 @@ namespace EventManagementSystem.Controllers
         private void DeletePhoto(string name)
         {
             name = System.IO.Path.GetFileName(name);
-            string path = Server.MapPath($"~/Images/{name}");
+            string path = Server.MapPath($"~/Photo/{name}");
 
             System.IO.File.Delete(path);
         }
@@ -48,7 +48,7 @@ namespace EventManagementSystem.Controllers
         {
             //generate unique id
             string name = Guid.NewGuid().ToString("n") + ".jpg";
-            string path = Server.MapPath($"~/Images/{name}");
+            string path = Server.MapPath($"~/Photo/{name}");
 
             var img = new WebImage(f.InputStream);
             if (img.Width > img.Height)
@@ -71,26 +71,35 @@ namespace EventManagementSystem.Controllers
         {
             return View();
         }
+        [Authorize(Roles = "Admin")]
+        public ActionResult DisplayApporval(int page = 1)
+        {
+            Func<Event, object> fn = e => e.Id;
+            var events = db.Events.OrderBy(fn);
+            var model = events.ToPagedList(page, 5);
+            return View(model);
+        }
+        [Authorize(Roles = "Admin")]
         public ActionResult DisplayEvent(int page = 1)
         {
             Func<Event, object> fn = e => e.Id;
-
-
             var events = db.Events.OrderBy(fn);
-            var model = events.ToPagedList(page, 10);
+            var model = events.ToPagedList(page, 5);
 
             return View(model);
         }
         [Authorize(Roles = "Admin")]
         public ActionResult InsertEvent()
         {
+            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id","represent");
             return View();
         }
+
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public ActionResult InsertEvent(EventInsertVM model)
         {
-
+      
             string error = ValidatePhoto(model.Photo);
             if (error != null)
             {
@@ -111,11 +120,11 @@ namespace EventManagementSystem.Controllers
                     startTime = model.startTime,
                     endTime = model.endTime,
                     duration = duration.ToString(),
-                    organized_by = model.organized_by,
-                    approvalStat = model.approvalStat,
+                    approvalStat = true,
                     status = true,
                     venueId = null,
-                    photoURL = SavePhoto(model.Photo)
+                    photoURL = SavePhoto(model.Photo),
+                    OrgId = model.OrgId
                 };
                 // TempData["Info"] = "Event record added successfully!";
                 db.Events.Add(e);
@@ -128,11 +137,45 @@ namespace EventManagementSystem.Controllers
             {
                 TempData["Error"] = "Error";
             }
+            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id", "represent");
             return View(model);
         }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult Approve(int id)
+        {
+            var e = db.Events.Find(id);
+            if (e != null)
+            {
+                e.status = true;
+                e.approvalStat = true;
+                db.SaveChanges();
+                TempData["info"] = "Proposal approved ";
+            }
+
+            var url = Request.UrlReferrer?.AbsolutePath ?? "/";
+            return Redirect(url);
+        }
+        [Authorize(Roles = "Admin")]
+        public ActionResult Decline(int id)
+        {
+            var e = db.Events.Find(id);
+            if (e != null)
+            {
+                e.status = false;
+                e.approvalStat = false;
+                db.SaveChanges();
+                TempData["info"] = "Proposal denied";
+            }
+
+            var url = Request.UrlReferrer?.AbsolutePath ?? "/";
+            return Redirect(url);
+        }
+
         [Authorize(Roles = "Admin")]
         public ActionResult EditEvent(int id)
         {
+            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id", "represent");
             var e = db.Events.Find(id);
             if (e == null)
             {
@@ -153,8 +196,9 @@ namespace EventManagementSystem.Controllers
                 startTime = e.startTime,
                 endTime = e.endTime,
                 duration = e.duration,
-                organized_by = e.organized_by,
+                approvalStat = true,
                 photoURL = e.photoURL,
+                OrgId = e.OrgId
             };
             return View(model);
         }
@@ -181,19 +225,21 @@ namespace EventManagementSystem.Controllers
                 e.startTime = model.startTime;
                 e.endTime = model.endTime;
                 e.duration = duration.ToString();
-                e.organized_by = model.organized_by;
-                e.approvalStat = model.approvalStat;
+                e.approvalStat = true;
                 if (model.Photo != null)
                 {
                     DeletePhoto(e.photoURL);
                     e.photoURL = SavePhoto(model.Photo);
                 }
+                e.OrgId = model.OrgId;
                 db.SaveChanges();
                 TempData["info"] = "Event record updated successfully";
                 return RedirectToAction("DisplayEvent", "Admin");
             }
             return View(model);
         }
+        
+
         [Authorize(Roles = "Admin")]
         public ActionResult DeleteEvent(int id)
         {
@@ -208,6 +254,7 @@ namespace EventManagementSystem.Controllers
             var url = Request.UrlReferrer?.AbsolutePath ?? "/";
             return Redirect(url);
         }
+
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayUser(int page = 1)
         {
@@ -472,6 +519,8 @@ namespace EventManagementSystem.Controllers
             var url = Request.UrlReferrer?.AbsolutePath ?? "/";
             return Redirect(url);
         }
+
+    
 
     }
 

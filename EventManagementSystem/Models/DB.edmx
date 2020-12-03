@@ -37,7 +37,6 @@
           <Property Name="startTime" Type="time" Precision="7" Nullable="false" />
           <Property Name="endTime" Type="time" Precision="7" Nullable="false" />
           <Property Name="duration" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="organized_by" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="approvalStat" Type="bit" />
           <Property Name="status" Type="bit" Nullable="false" />
           <Property Name="venueId" Type="int" />
@@ -297,7 +296,6 @@
           <Property Name="startTime" Type="Time" Nullable="false" Precision="7" />
           <Property Name="endTime" Type="Time" Nullable="false" Precision="7" />
           <Property Name="duration" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="organized_by" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="approvalStat" Type="Boolean" />
           <Property Name="status" Type="Boolean" Nullable="false" />
           <Property Name="venueId" Type="Int32" />
@@ -491,7 +489,6 @@
                 <ScalarProperty Name="venueId" ColumnName="venueId" />
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="approvalStat" ColumnName="approvalStat" />
-                <ScalarProperty Name="organized_by" ColumnName="organized_by" />
                 <ScalarProperty Name="duration" ColumnName="duration" />
                 <ScalarProperty Name="endTime" ColumnName="endTime" />
                 <ScalarProperty Name="startTime" ColumnName="startTime" />

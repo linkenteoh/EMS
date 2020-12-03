@@ -31,7 +31,6 @@ namespace EventManagementSystem.Models
         public System.TimeSpan startTime { get; set; }
         public System.TimeSpan endTime { get; set; }
         public string duration { get; set; }
-        public string organized_by { get; set; }
         public Nullable<bool> approvalStat { get; set; }
         public bool status { get; set; }
         public Nullable<int> venueId { get; set; }

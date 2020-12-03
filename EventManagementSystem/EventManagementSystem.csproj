@@ -302,6 +302,8 @@
     <Content Include="Views\User\EventsProposed.cshtml" />
     <Content Include="Views\Event\EventDetail.cshtml" />
     <Content Include="Views\User\Billing.cshtml" />
+    <Content Include="Views\Admin\DisplayApporval.cshtml" />
+    <Content Include="Views\Admin\EditApproval.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\DisplayUser.cshtml" />
