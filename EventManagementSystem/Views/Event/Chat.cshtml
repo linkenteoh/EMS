@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "Chat";
+}
+
+<fieldset>
+    <legend>Chat Test</legend>
+</fieldset>
+<div class="form-group col-xl-12">
+    <label id="label1">Write Your Message Here</label><br />
+    <textarea class="form-control" rows="4" cols="40" id="message" placeholder="Share what's in your mind..."></textarea>
+    <br />
+    <input type="button" class="btn btn-primary" id="sendmessage" value="Send" />
+    <br />
+    <br />
+    <label id="label2">Chats</label>
+    <div class="container chatArea">
+        <input type="hidden" id="displayname" value="@User.Identity.Name" />
+        <ul id="discussion"></ul>
+    </div>
+</div>
+@section foot {
+        <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+        <script src="~/signalr/hubs"></script>
+        <script>
+
+            $(function () {
+                var chat = $.connection.chatHub;
+                chat.client.addNewMessageToPage = function (name, message) {
+                    $('#discussion').append('<ul style="list-style-type:square"><li>' + htmlEncode(name) + 'said:'
+                          + htmlEncode(message) + '</li></ul>');
+                };
+                $('#message').focus();
+                $.connection.hub.start().done(function () {
+                    $('#sendmessage').click(function () {
+                        chat.server.send($('#displayname').val(), $('#message').val());
+                        $('#message').val('').focus();
+                    });
+                });
+            });
+            function htmlEncode(value) {
+                var encodedValue = $('<div />').text(value).html();
+                return encodedValue;
+            }
+        </script>
+    }
+
