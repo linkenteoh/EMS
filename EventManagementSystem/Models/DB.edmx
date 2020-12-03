@@ -56,10 +56,10 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="paymentdate" Type="date" Nullable="false" />
-          <Property Name="duedate" Type="date" Nullable="false" />
+          <Property Name="paymentdate" Type="date" />
+          <Property Name="duedate" Type="date" />
           <Property Name="gst" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="status" Type="bit" Nullable="false" />
         </EntityType>
@@ -67,7 +67,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="eventId" Type="int" Nullable="false" />
           <Property Name="userId" Type="int" Nullable="false" />
           <Property Name="status" Type="bit" Nullable="false" />
@@ -320,10 +320,10 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="paymentdate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="duedate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="paymentdate" Type="DateTime" Precision="0" />
+          <Property Name="duedate" Type="DateTime" Precision="0" />
           <Property Name="gst" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="status" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Registration" Relationship="DBModel.FK_Payment_Registration" FromRole="Payment" ToRole="Registration" />
@@ -332,7 +332,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="eventId" Type="Int32" Nullable="false" />
           <Property Name="userId" Type="Int32" Nullable="false" />
           <Property Name="status" Type="Boolean" Nullable="false" />

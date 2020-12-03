@@ -220,17 +220,6 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
 
-        public ActionResult EventDetail(int id)
-        {
-            var model = db.Events.Find(id);
-          
-            if (model == null)
-            {
-                return RedirectToAction("EventSearchIndex");
-            }
-            return View(model);
-        }
-
         // GET: User/ProposeEvent
         public ActionResult ProposeEvent()
         {
@@ -295,6 +284,13 @@ namespace EventManagementSystem.Controllers
             var model = events.ToPagedList(page, 5);
 
             return View(model);
+        }
+
+        public ActionResult Billing()
+        {
+            int uId = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
+            var bill = db.Payments.ToList().Where(p => p.Registration.userId == uId);
+            return View(bill);
         }
 
     }
