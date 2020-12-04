@@ -71,6 +71,8 @@ namespace EventManagementSystem.Models
         public string photoURL { get; set; }
         public virtual Organiser Organiser { get; set; }
         public virtual Venue Venue { get; set; }
+
+        public int NoOfParticipants => participants - availability;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Registration> Registrations { get; set; }
     }

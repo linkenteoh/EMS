@@ -37,7 +37,7 @@ namespace EventManagementSystem.Controllers
             Func<Event, object> fn = s => s.Id;
 
 
-            var events = db.Events.OrderBy(fn);
+            var events = db.Events.Where(e => e.approvalStat == true && e.status == true).OrderBy(fn);
             var model = events.ToPagedList(page, 10);
 
             return View(model);

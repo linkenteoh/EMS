@@ -255,6 +255,8 @@ namespace EventManagementSystem.Controllers
             }
             if (ModelState.IsValid)
             {
+                int id = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
+
                 var e = new Event
                 {
                     name = model.name,
@@ -270,7 +272,7 @@ namespace EventManagementSystem.Controllers
                     status = true,
                     venueId = null,
                     photoURL = SavePhoto(model.Photo),
-                    OrgId = model.OrgId
+                    OrgId = id
                 };
                 try { 
                     db.Events.Add(e);
@@ -324,9 +326,13 @@ namespace EventManagementSystem.Controllers
                 endDate = e.endDate,
                 startTime = e.startTime,
                 endTime = e.endTime,
+                availability = e.availability,
                 approvalStat = e.approvalStat,
                 photoURL = e.photoURL,
-                OrgId = e.OrgId
+                OrgId = e.OrgId,
+                venueId = e.venueId,
+                Organiser = e.Organiser,
+                Venue = e.Venue
             };
 
             ViewBag.Registrations = db.Registrations.Where(r => r.eventId == Id);
