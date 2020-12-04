@@ -247,7 +247,7 @@ placeholder = "Description"
         </div>
         <div id="payment" class="tab-pane fade in">
             <h3>Transactions</h3>
-            @if (ViewBag.PaymentsCount == null)
+            @if (ViewBag.PaymentsCount == 0)
             {
                 <p>No active transaction(s) yet.</p>
             }
