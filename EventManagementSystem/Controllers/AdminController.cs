@@ -71,7 +71,7 @@ namespace EventManagementSystem.Controllers
             return View();
         }
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayApporval(int page = 1)
+        public ActionResult DisplayProposalApporval(int page = 1)
         {
             Func<Event, object> fn = e => e.Id;
             var events = db.Events.OrderBy(fn);
@@ -79,7 +79,7 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
         [Authorize(Roles = "Admin")]
-        public ActionResult Approve(int id)
+        public ActionResult ApproveProposal(int id)
         {
             var e = db.Events.Find(id);
             if (e != null)
@@ -94,7 +94,7 @@ namespace EventManagementSystem.Controllers
             return Redirect(url);
         }
         [Authorize(Roles = "Admin")]
-        public ActionResult Decline(int id)
+        public ActionResult DeclineProposal(int id)
         {
             var e = db.Events.Find(id);
             if (e != null)
@@ -120,7 +120,7 @@ namespace EventManagementSystem.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult InsertEvent()
         {
-            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id","represent");
+            ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             ViewBag.VenueList = new SelectList(db.Venues, "Id", "name");
             return View();
         }
@@ -187,7 +187,7 @@ namespace EventManagementSystem.Controllers
             {
                 TempData["Error"] = "Error";
             }
-            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id", "represent");
+            ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             ViewBag.VenueList = new SelectList(db.Venues, "Id", "name");
             return View(model);
         }
@@ -196,7 +196,7 @@ namespace EventManagementSystem.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditEvent(int id)
         {
-            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id", "represent");
+            ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             ViewBag.VenueList = new SelectList(db.Venues, "Id", "name");
             var e = db.Events.Find(id);
             if (e == null)
@@ -226,7 +226,7 @@ namespace EventManagementSystem.Controllers
         public ActionResult EditEvent(EventEditVM model)
         {
             var e = db.Events.Find(model.Id);
-            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id", "represent");
+            ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             ViewBag.VenueList = new SelectList(db.Venues, "Id", "name");
             if (ModelState.IsValidField("startDate"))
             {
@@ -405,15 +405,53 @@ namespace EventManagementSystem.Controllers
             }
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
+        public ActionResult DisplayOrganizerApproval(int page = 1)
+        {
+            Func<Organiser, object> fn = e => e.Id;
 
-         /* public ActionResult DeleteAdvert()
-          { 
-              db.Advertisements.RemoveRange(db.Advertisements);
-              db.SaveChanges();
-              db.Database.ExecuteSqlCommand(@"DBCC CHECKIDENT([Advertisement],RESEED,0);");
+            var organisers = db.Organisers.OrderBy(fn);
+            var model = organisers.ToPagedList(page, 10);
 
-              return View();
-          }*/
+            return View(model);
+
+        }
+
+        public ActionResult ApproveOrganizer(int id)
+        {
+            var e = db.Organisers.Find(id);
+            if (e != null)
+            {
+                e.status = true;
+                db.SaveChanges();
+                TempData["info"] = "Request Approved!";
+            }
+
+            var url = Request.UrlReferrer?.AbsolutePath ?? "/";
+            return Redirect(url);
+        }
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeclineOrganizer(int id)
+        {
+            var e = db.Organisers.Find(id);
+            if (e != null)
+            {
+                e.status = false;
+                db.SaveChanges();
+                TempData["info"] = "Request Declined!";
+            }
+
+            var url = Request.UrlReferrer?.AbsolutePath ?? "/";
+            return Redirect(url);
+        }
+        /* public ActionResult DeleteAdvert()
+         { 
+             db.Advertisements.RemoveRange(db.Advertisements);
+             db.SaveChanges();
+             db.Database.ExecuteSqlCommand(@"DBCC CHECKIDENT([Advertisement],RESEED,0);");
+
+             return View();
+         }*/
         [Authorize(Roles = "Admin")]
         public ActionResult DeleteUser(int id)
         {

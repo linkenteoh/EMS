@@ -1,0 +1,60 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<Organiser>
+@{
+    ViewBag.Title = "Display Organizer Approval";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+<h1>Organizer Request List</h1>
+
+<p>@Model.Where(u => u.status == null).Count() record(s) in user list</p>
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col">Society/Organisation</th>
+            <th scope="col"></th>
+            <th scope="col">Position Held</th>
+            <th scope="col"></th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var o in Model)
+        {
+            if (o.status == null)
+            {
+
+        <tr>
+            <td scope="row">@o.Id</td>
+            <td scope="row"></td>
+            <td scope="row"></td>
+            <td scope="row"></td>
+            <td scope="row">@o.represent</td>
+            <td scope="row"></td>
+            <td scope="row">@o.position</td>
+            <td>
+                <input class="btn btn-primary" data-get="/Admin/ApproveOrganizer?id=@o.Id" type="button" value="Approve">
+                <input class="btn btn-danger" data-get="/Admin/DeclineOrganizer?id=@o.Id" type="button" value="Decline">
+            </td>
+
+        </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
+
+@Html.PagedListPager(
+    Model,
+    p => "?page=" + p,
+    PagedListRenderOptions.Classic
+)
+
+
+
