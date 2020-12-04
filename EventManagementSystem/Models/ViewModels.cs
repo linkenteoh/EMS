@@ -52,6 +52,7 @@ namespace EventManagementSystem.Models
         public string des { get; set; }
         [Required]
         public decimal price { get; set; }
+        public int availability { get; set; }
         public int participants { get; set; }   
         [Required]
         public DateTime startDate { get; set; }
@@ -192,8 +193,8 @@ namespace EventManagementSystem.Models
         public string password { get; set; }
         [System.ComponentModel.DataAnnotations.Compare("password", ErrorMessage = "Password not matched")]
         public string confirmPassword { get; set; }
-        [Required]
         public HttpPostedFileBase Photo { get; set; }
+        public string webPhoto { get; set; }
         public string role { get; set; }
 
         public Nullable<bool> organizer { get; set; }
