@@ -3,20 +3,67 @@
     ViewBag.Title = "Book Your Venue";
 }
 
-
 <style>
-    .dot {
-        font-size: 20pt;
-        height: 100px;
-        width: 100px;
-        margin: 30px;
-        padding-left: 40px;
-        padding-right: 40px;
-        padding-top: 30px;
-        padding-bottom: 30px;
-        border-radius: 50%;
-        display: inline-block;
+    .instruction{
+        display:inline;
     }
+
+    .dragBox {
+        padding: 10px;
+    }
+
+    .dragDefault {
+        width: 70px;
+        height: 70px;
+        padding: 10px;
+        border-radius: 50%;
+        border:1px solid #cfcfcf;
+    }
+
+    #dragEvent {
+        width: 50px;
+        height: 50px;
+    }
+
+    .venue {
+        border: 1px solid black;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 2px;
+        display: inline-block;
+        background-color: #b4b4b4;
+    }
+
+    .venue:hover {
+        background: #8a8a8a;
+        color: white;
+    }
+
+    .box {
+        border: 1px solid black;
+        width: 1000px;
+        height: 400px;
+        border-radius: 5px;
+        margin: 10px;
+        padding: 10px;
+        background-color: #dbdbdb;
+    }
+
+    @*img {
+        width: 100px;
+        height: 100px;
+        border: 1px solid #333;
+        object-fit: cover;
+        position: absolute;
+        top: 50%;
+        left: calc(100% + 10px);
+        transform: translate(0, -50%);
+        display: none;
+    }
+
+    tr:hover img {
+        display: block;
+    }*@
 </style>
 <div class="outerDiv">
     <h3>@ViewBag.Title</h3>
@@ -25,27 +72,77 @@
         <!--Back to Homepage-->
         <p onclick="bckFunc()" id="bckBtn" class="btn btn-primary" style="font-weight: bold"><</p>
     </div>
-    <div class="container-fluid" align="center">
-        <div class="bg-info dot">1</div>
-        <div class="bg-primary dot">2</div>
-        <div class="bg-info dot">3</div>
-    
-        <div id="targetContent">
-            @*@Html.Partial("_Venue")*@
-            @Html.Partial("_A")
+    <div class="container-fluid bckgrd-setting" align="center">
+        <div class="container instruction"><span>Drag and Drop the Tick icon into the venue box</span></div>
+        <div class="container dragDefault" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <img id="dragEvent" src="~/Images/greenTick.png" draggable="true" ondragstart="drag(event)" />
         </div>
-        <button class="btn btn-primary" data-get="/Event/EventSuccess">Confirm Venue</button>
+        <div id="targetContent">
+            @Html.Partial("_Venue1")
+        </div>
+        <button class="btn btn-primary" onclick="resetDrag(event)">Reset</button>
+        <button class="btn btn-primary" data-post="/Event/VenueBooking?eventID=@ViewBag.eventID&venueName=">Confirm Venue</button>
     </div>
 </div>
 @section foot{
     <script>
         function bckFunc() {
-            location.href = '@Url.Action("ProposeEvent", "Event")';
+            window.history.back();
         }
-        $('[data-get]').click(e => {
-            let url = $(e.target).data('get');
-            location = url || location;
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            $('.venue').css('background', '#b4b4b4');
+            $('.venue').css('color', 'black');
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            ev.target.appendChild(document.getElementById(data));
+            $(".dragDefault").hide();
+            $('.venue').each(function () {
+                if ($(this).find('img').length) {
+                    let targetBox = "#" + this.id;
+                    $(targetBox).css('background', '#8a8a8a');
+                    $(targetBox).css('color', 'white');
+                }
+            });
+        }
+
+        function resetDrag(e) {
+            e.preventDefault();
+            $('.venue').css('background', '#b4b4b4');
+            $('.venue').css('color', 'black');
+            $(".dragDefault").show();
+            $(".dragDefault").append($("#dragEvent").detach());
+        }
+
+        $('[data-post]').click(e => {
+            $('.venue').each(function () {
+                if ($(this).find('img').length) {
+                    if (this.id != "" && this.id != null){
+                        alert("You have booked " + this.id);
+                        e.preventDefault();
+                        let url = $(e.target).data('post') + this.id;
+                        let f = $('<form>')[0];
+                        f.method = 'post';
+                        f.action = url || location;
+                        $(document.body).append(f);
+                        f.submit();
+                    } else {
+                        alert("No Venue Booked");
+                    }
+                }
+            });
         });
+
+
+
     </script>
 }
 

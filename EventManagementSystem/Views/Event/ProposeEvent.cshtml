@@ -1,48 +1,192 @@
-﻿
+﻿@model EventInsertVM
 @{
-    ViewBag.Title = "Propose Your Event";
+    ViewBag.Title = "Propose Event";
+    string min = DateTime.Today.ToString("dd-MM-yyyy");
+    string max = DateTime.Today.AddMonths(+12).ToString("dd-MM-yyyy");
+    string endDateMax = DateTime.Today.AddDays(+24).ToString("dd-MM-yyyy");
 }
 
-<style>
-    .dot {
-        font-size: 20pt;
-        height: 100px;
-        width: 100px;
-        margin: 30px;
-        padding-left: 40px;
-        padding-right: 40px;
-        padding-top: 30px;
-        padding-bottom: 30px;
-        border-radius: 50%;
-        display: inline-block;
-    }
-</style>
-<div class="outerDiv">
-    <h3>@ViewBag.Title</h3>
-    <hr />
-    <div id="second" style="display:block;">
-        <!--Back to Homepage-->
-        <p onclick="bckFunc()" id="bckBtn" class="btn btn-primary" style="font-weight: bold"><</p>
-    </div>
-    <div align="center">
-        <div class="bg-primary dot">1</div>
-        <div class="bg-info dot">2</div>
-        <div class="bg-info dot">3</div>
-        <div id="targetContent">
-    
-        </div>
-        <button class="btn btn-primary" data-get="/Event/VenueBooking">Confirm Event</button>
-    </div>
-</div>
-@section foot{
-    <script>
-        function bckFunc() {
-            location.href = '@Url.Action("Index", "Home")';
+<link href="~/Scripts/dropzone/dropzone.min.css" rel="stylesheet" />
+@section head{
+
+    <style>
+        input[type="file"] {
+            display: none;
         }
-        $('[data-get]').click(e => {
-            let url = $(e.target).data('get');
-            location = url || location;
+    </style>
+}
+
+<h2>Propose Event</h2>
+@using (Html.BeginForm("ProposeEvent", "Event", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+    @*<form class="form dropzone" id="files" method="post" enctype="multipart/form-data">*@
+        @Html.ValidationSummary(true)
+            <div class="container rounded bg-white mt-5 mb-5">
+            <div class="row">
+                <div class="col-md-3 border-right">
+                    <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                        <label class="upload">
+                            <img class="img-thumbnail" src="~/Images/no-image-icon-23499.png">
+                            @Html.TextBoxFor(e => e.Photo, new
+                              {
+                                  type = "file",
+                                  accept = "image/jpeg, image/png",
+                                  hidden = "",
+                              })
+                            @Html.ValidationMessageFor(e => e.Photo)
+                        </label>
+                       
+                    @*<div class="dropzone">
+                        <div class="dz-message" data-dz-message><img class="img-thumbnail" src="~/Images/no-image-icon-23499.png"></div>
+                    </div>*@
+
+                    </div>
+                </div>
+
+                <div class="col-md-7 border-right">
+                    <div>
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                @Html.LabelFor(e => e.name, "Name")@Html.TextBoxFor(e => e.name, new { maxlength = 20, autofocus = "", @class = "form-control", placeholder = "Name" }) @Html.ValidationMessageFor(e => e.name)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.LabelFor(e => e.price, "Price")@Html.TextBoxFor(e => e.price, new { type = "number", @class = "form-control", placeholder = "price", min = "0" }) @Html.ValidationMessageFor(e => e.price)
+                            </div>
+                        </div>
+                        <div class="row mt-6">
+                            <div class="col-md-12">
+                                @Html.LabelFor(e => e.des, "Description")@Html.TextAreaFor(e => e.des, new
+                                {
+                                    style = "width: 400px; height: 200px; resize: none",
+                                    @class = "form-control",
+                                    autofocus = "",
+                                    placeholder = "Description"
+                                })
+                                @Html.ValidationMessageFor(e => e.des)
+
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                @Html.LabelFor(e => e.availability, "Availability")@Html.TextBoxFor(e => e.availability, new { type = "number", @class = "form-control", placeholder = "Availability", min = "0" })
+                                @Html.ValidationMessageFor(e => e.availability)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.LabelFor(e => e.participants, "Participants")@Html.TextBoxFor(e => e.participants, new { type = "number", @class = "form-control", placeholder = "participants", min = "0" })
+                                @Html.ValidationMessageFor(e => e.participants)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.LabelFor(e => e.startDate, "Start Date")@Html.TextBoxFor(e => e.startDate, "{0: dd-MM-yyyy}", new { type = "date", @class = "form-control", placeholder = "" })
+                                @Html.ValidationMessageFor(e => e.startDate)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.LabelFor(e => e.endDate, "End Date")@Html.TextBoxFor(e => e.endDate, "{0: dd-MM-yyyy}", new { type = "date", @class = "form-control", placeholder = "" })
+                                @Html.ValidationMessageFor(e => e.endDate)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.LabelFor(e => e.startTime, "Start Time")@Html.TextBoxFor(e => e.startTime, new { type = "time", @class = "form-control", placeholder = "" })
+                                @Html.ValidationMessageFor(e => e.startTime)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.LabelFor(e => e.endTime, "End Time")@Html.TextBoxFor(e => e.endTime, new { type = "time", @class = "form-control", placeholder = "" })
+                                @Html.ValidationMessageFor(e => e.endTime)
+                            </div>
+                        </div>
+                        <div class="mt-12" style="margin-top:15px"><section><button class="btn btn-primary profile-button" id="submitProposal">Propose Event</button></section></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @*</form>*@
+}
+
+@section foot{
+    <script src="~/Scripts/dropzone/dropzone.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script>
+        function validatePhoto(f) {
+            let retype = /^image\/(jpeg|png)$/i;
+            let reName = /^.+\.(png|jpg|jpeg)$/i;
+            return f &&
+                f.size <= 1 * 1024 * 1024 &&
+                retype.test(f.type) &&
+                reName.test(f.name);
+        }
+
+        @*Dropzone.autoDiscover = false;
+        Dropzone.options.dropZoneForm =
+        {
+            init: function () {
+                this.on("complete", function (data) {
+                    var res = JSON.parse(data.xhr.responseText);
+                });
+            }
+        };*@  
+
+        @*Dropzone.autoDiscover = false;
+        $("#files").dropzone({
+            url: "/Event/UploadImages",
+            paramName: "eventImgs",
+            autoProcessQueue: true,
+            addRemoveLinks: true,
+            uploadMultiple: false,
+            acceptedFiles: "image/jpeg, image/png",
+            maxFiles: 1,
+            addRemoveLinks: true,
+            success: function (data, response) {
+                console.log(data);
+                console.log(response);
+                $('#PhotoUrl').val(response);
+                console.log($('input[type="file"]'));
+              
+            },
+            error: function () {
+                alert("Error");
+            }
+        });*@
+        @*Dropzone.autoDiscover = false;*@
+        @*Dropzone.options.uploadImgs = {
+            url: 'ProposeEvent',
+            autoProcessQueue: false,
+            uploadMultiple: false,
+            parallelUploads: 5,
+            maxFiles: 1,
+            maxFilesize: 1,
+            acceptedFiles: "image/jpeg, image/png",
+            addRemoveLinks: true,
+            init: function () {
+                var myDropzone = this;
+                var submitButton = document.getElementById("submitProposal");
+
+                submitButton.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $("#StartOrCancel").hide();
+
+                    myDropzone.processQueue();
+                    myDropzone.options.autoProcessQueue = true;
+                });
+            }
+        }*@
+
+        let src = null;
+        $('.upload input').change(e => {
+            let f = e.target.files[0];
+            let img = $(e.target).siblings('img')[0];
+
+            if (!src) src = img.src;
+
+            if (validatePhoto(f)) {
+
+                img.src = URL.createObjectURL(f);
+
+            } else {
+                img.src = src;
+                e.target.value = '';
+            }
         });
+
     </script>
 }
+
+
 

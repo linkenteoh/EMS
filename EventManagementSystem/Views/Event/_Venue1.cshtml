@@ -1,0 +1,88 @@
+﻿<style>
+    .dragBoxType-1 {
+        width: 70px;
+        height: 70px;
+    }
+
+    .dragBoxType-2 {
+        width: 120px;
+        height: 70px;
+    }
+
+    .dragBoxType-3 {
+        width: 170px;
+        height: 170px;
+        padding-top:40px;
+    }
+
+    .dragBoxType-4 {
+        width: 320px;
+        height: 70px;
+    }
+
+    .venueType-1 {
+        width: 100px;
+        height: 100px;
+    }
+
+    .venueType-2 {
+        width: 150px;
+        height: 100px;
+    }
+
+    .venueType-3 {
+        width: 200px;
+        height: 200px;
+    }
+
+    .venueType-4 {
+        width: 350px;
+        height: 100px;
+    }
+
+    .spaceOut-1 {
+        width: 700px;
+        height: 30px;
+        border-radius: 5px;
+        margin: 0px;
+    }
+</style>
+
+<div class="box">
+    <div class="row">
+        <div class="col-sm-3 col-sm-offset-0">
+            <div class="container venue venueType-2" id="Block_A">
+                <span>Block A</span><div class="container dragBox dragBoxType-2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-sm-offset-0">
+            <div class="container venue venueType-4" id="Main_Foyer">
+                <span>Main Foyer</span><div class="container dragBox dragBoxType-4" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+        </div>
+        <div class="col-sm-3 col-sm-offset-0">
+            <div class="container venue venueType-2" id="Block_B">
+                <span>Block B</span><div class="container dragBox dragBoxType-2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container spaceOut-1"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="container venue venueType-1" id="DKA">
+                <span>DK A</span><div class="container dragBox dragBoxType-1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+            <div class="container spaceOut-1"></div>
+            <div class="container venue venueType-1" id="DKB">
+                <span>DK B</span><div class="container dragBox dragBoxType-1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="container venue venueType-3" id="CA">
+                <span>CA</span><div class="container dragBox dragBoxType-3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+        </div>
+    </div>
+</div>

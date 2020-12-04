@@ -47,11 +47,10 @@
                             if (org != null)
                             {
                                 <li class="dropdown">
-
                                     <a class="dropdown-toggle" data-toggle="dropdown">Proposals</a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Propose event", "ProposeEvent", "User")</li>
-                                        <li>@Html.ActionLink("Event(s) proposed", "EventsProposed", "User")</li>
+                                        <li>@Html.ActionLink("Propose event", "ProposeEvent", "Event")</li>
+                                        <li>@Html.ActionLink("Event(s) proposed", "EventsProposed", "Event")</li>
                                     </ul>
                                 </li>
                             }
@@ -71,7 +70,7 @@
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown">@User.Identity.Name<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Events Joined", "EventSearchIndex", "User")</li>
+                                <li>@Html.ActionLink("Events Joined", "EventSearchIndex", "Event")</li>
                                 <li>@Html.ActionLink("Settings", "Edit", "User")</li>
                                 <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
                             </ul>

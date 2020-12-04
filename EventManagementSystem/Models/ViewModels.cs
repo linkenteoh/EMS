@@ -33,12 +33,11 @@ namespace EventManagementSystem.Models
         [Required]
         public TimeSpan endTime { get; set; }
         public string duration { get; set; }
-        [Required]
-        public string organized_by { get; set; }
         public bool approvalStat { get; set; }
         public bool status { get; set; }
         public int? venueId { get; set; }
         public HttpPostedFileBase Photo { get; set; }
+        public string PhotoUrl { get; set; }
 
     }
 
@@ -73,6 +72,17 @@ namespace EventManagementSystem.Models
         public HttpPostedFileBase Photo { get; set; }
         public string photoURL { get; set; }
     }
+
+    public class VenueBooking
+    {
+        public int eventId { get; set; }
+        public int venueId { get; set; }
+        public string name { get; set; }
+        public string location { get; set; }
+        public string equipment { get; set; }
+        public int capacity { get; set; }
+    }
+
     public class UserInsertVM
     {
 

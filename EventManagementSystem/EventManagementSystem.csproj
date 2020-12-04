@@ -224,6 +224,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\bookVenue.jpg" />
+    <Content Include="Images\greenTick.png" />
     <Content Include="Models\DB.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DB.Context.cs</LastGenOutput>
@@ -245,6 +247,14 @@
       <DependentUpon>DB.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\dropzone\basic.css" />
+    <Content Include="Scripts\dropzone\basic.min.css" />
+    <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
+    <Content Include="Scripts\dropzone\dropzone-amd-module.min.js" />
+    <Content Include="Scripts\dropzone\dropzone.css" />
+    <Content Include="Scripts\dropzone\dropzone.js" />
+    <Content Include="Scripts\dropzone\dropzone.min.css" />
+    <Content Include="Scripts\dropzone\dropzone.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -279,28 +289,27 @@
     <Content Include="Views\Admin\InsertEvent.cshtml" />
     <Content Include="Views\User\Register.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
-    <Content Include="Views\User\EventList.cshtml" />
-    <Content Include="Views\User\EventDetail.cshtml" />
+    <Content Include="Views\Event\EventList.cshtml" />
+    <Content Include="Views\Event\EventDetail.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Awaitactivation.cshtml" />
     <Content Include="Views\Account\Activation.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Activated.cshtml" />
-    <Content Include="Views\User\_EventResults.cshtml" />
-    <Content Include="Views\User\EventSearchIndex.cshtml" />
+    <Content Include="Views\Event\_EventResults.cshtml" />
+    <Content Include="Views\Event\EventSearchIndex.cshtml" />
     <Content Include="Views\Event\JoinEvent.cshtml" />
     <Content Include="Views\Event\Index.cshtml" />
-    <Content Include="Views\Event\ProposeEvent.cshtml" />
     <Content Include="Views\Event\VenueBooking.cshtml" />
     <Content Include="Views\Event\EventSuccess.cshtml" />
-    <Content Include="Views\Event\_Venue.cshtml" />
-    <Content Include="Views\Event\_A.cshtml" />
+    <Content Include="Views\Event\_Venue2.cshtml" />
+    <Content Include="Views\Event\_Venue1.cshtml" />
     <Content Include="Views\Event\_B.cshtml" />
     <Content Include="Views\Event\_C.cshtml" />
     <Content Include="Views\Home\Events.cshtml" />
     <Content Include="Views\User\RegOrganiser.cshtml" />
-    <Content Include="Views\User\ProposeEvent.cshtml" />
-    <Content Include="Views\User\EventsProposed.cshtml" />
+    <Content Include="Views\Event\ProposeEvent.cshtml" />
+    <Content Include="Views\Event\EventsProposed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\DisplayUser.cshtml" />
@@ -311,9 +320,7 @@
     <Content Include="Views\Admin\InsertAdvert.cshtml" />
     <Content Include="Views\Admin\EditAdvert.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Images\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
