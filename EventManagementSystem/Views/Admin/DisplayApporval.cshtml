@@ -59,11 +59,8 @@
             <th scope="col">Name</th>
             <th scope="col">Description</th>
             <th scope="col">Price(RM)</th>
-            <th scope="col">Availability</th>
-            <th scope="col">Participant limit</th>
             <th scope="col">Start Date</th>
             <th scope="col">End Date</th>
-            <th scope="col">Duration</th>
             <th scope="col">Organized by</th>
             <th scope="col"></th>
             <th scope="col"></th>
@@ -81,11 +78,8 @@
                     <td scope="row">@s.name</td>
                     <td scope="row">@s.des</td>
                     <td scope="row">@s.price</td>
-                    <td scope="row">@s.availability</td>
-                    <td scope="row">@s.participants</td>
                     <td scope="row">@s.startDate.ToString("dd/MM/yyyy") @s.startTime</td>
                     <td scope="row">@s.endDate.ToString("dd/MM/yyyy") @s.endTime</td>
-                    <td scope="row">@s.duration hour(s)</td>
                     <td scope="row">@s.Organiser.represent </td>
                     <td>
                         <input class="btn btn-primary" data-get="/Admin/Approve?id=@s.Id" type="button" value="Approve">

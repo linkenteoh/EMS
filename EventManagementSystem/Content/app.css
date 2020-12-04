@@ -76,3 +76,15 @@
     display: inline-block;
     vertical-align: text-bottom;
 }
+
+.upload {
+    display: block;
+}
+
+    .upload img {
+        display: block;
+        border: 1px solid #333;
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+    }

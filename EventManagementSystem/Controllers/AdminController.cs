@@ -66,7 +66,6 @@ namespace EventManagementSystem.Controllers
             return name;
         }
         [Authorize(Roles = "Admin")]
-        //--------------------------------------------------
         public ActionResult Index()
         {
             return View();
@@ -76,71 +75,9 @@ namespace EventManagementSystem.Controllers
         {
             Func<Event, object> fn = e => e.Id;
             var events = db.Events.OrderBy(fn);
-            var model = events.ToPagedList(page, 5);
+            var model = events.ToPagedList(page, 10);
             return View(model);
         }
-        [Authorize(Roles = "Admin")]
-        public ActionResult DisplayEvent(int page = 1)
-        {
-            Func<Event, object> fn = e => e.Id;
-            var events = db.Events.OrderBy(fn);
-            var model = events.ToPagedList(page, 5);
-
-            return View(model);
-        }
-        [Authorize(Roles = "Admin")]
-        public ActionResult InsertEvent()
-        {
-            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id","represent");
-            return View();
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public ActionResult InsertEvent(EventInsertVM model)
-        {
-      
-            string error = ValidatePhoto(model.Photo);
-            if (error != null)
-            {
-                ModelState.AddModelError("Photo", error);
-            }
-            if (ModelState.IsValid)
-            {
-                int duration = ((int)model.endTime.TotalMinutes - (int)model.startTime.TotalMinutes) / 60;
-                var e = new Event
-                {
-                    name = model.name,
-                    des = model.des,
-                    price = model.price,
-                    availability = model.availability,
-                    participants = model.participants,
-                    startDate = model.startDate,
-                    endDate = model.endDate,
-                    startTime = model.startTime,
-                    endTime = model.endTime,
-                    duration = duration.ToString(),
-                    approvalStat = true,
-                    status = true,
-                    venueId = null,
-                    photoURL = SavePhoto(model.Photo),
-                    OrgId = model.OrgId
-                };
-                // TempData["Info"] = "Event record added successfully!";
-                db.Events.Add(e);
-                db.SaveChanges();
-                TempData["info"] = "Event record inserted successfully";
-                return RedirectToAction("DisplayEvent", "Admin");
-
-            }
-            else
-            {
-                TempData["Error"] = "Error";
-            }
-            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id", "represent");
-            return View(model);
-        }
-
         [Authorize(Roles = "Admin")]
         public ActionResult Approve(int id)
         {
@@ -171,34 +108,115 @@ namespace EventManagementSystem.Controllers
             var url = Request.UrlReferrer?.AbsolutePath ?? "/";
             return Redirect(url);
         }
+        [Authorize(Roles = "Admin")]
+        public ActionResult DisplayEvent(int page = 1)
+        {
+            Func<Event, object> fn = e => e.Id;
+            var events = db.Events.OrderBy(fn);
+            var model = events.ToPagedList(page, 10);
+
+            return View(model);
+        }
+        [Authorize(Roles = "Admin")]
+        public ActionResult InsertEvent()
+        {
+            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id","represent");
+            ViewBag.VenueList = new SelectList(db.Venues, "Id", "name");
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult InsertEvent(EventInsertVM model)
+        {
+
+            if (ModelState.IsValidField("startDate"))
+            {
+                if (model.startDate > model.endDate)
+                {
+                    ModelState.AddModelError("startDate", "Invalid date!");
+                }
+
+            }
+            if (ModelState.IsValidField("startTime"))
+            {
+                if (model.startTime > model.endTime)
+                {
+                    ModelState.AddModelError("startTime", "start time cannot exceed or equal end time!");
+                }
+            }
+
+            string error = ValidatePhoto(model.Photo);
+            if (error != null)
+            {
+                ModelState.AddModelError("Photo", error);
+            }
+            if (ModelState.IsValid)
+            {
+                var e = new Event
+                {
+                    name = model.name,
+                    des = model.des,
+                    price = model.price,
+                    participants = model.participants,
+                    availability = model.participants,
+                    startDate = model.startDate,
+                    endDate = model.endDate,
+                    startTime = model.startTime,
+                    endTime = model.endTime,
+                    approvalStat = true,
+                    status = true,
+                    venueId = model.venueId,
+                    photoURL = SavePhoto(model.Photo),
+                    OrgId = model.OrgId
+                };
+                try
+                {
+                    db.Events.Add(e);
+                    db.SaveChanges();
+                    TempData["info"] = "Event added successfully";
+                    return RedirectToAction("DisplayEvent", "Admin");
+                }
+                catch (Exception ex)
+                {
+                    TempData["Info"] = ex;
+                }
+
+            }
+            else
+            {
+                TempData["Error"] = "Error";
+            }
+            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id", "represent");
+            ViewBag.VenueList = new SelectList(db.Venues, "Id", "name");
+            return View(model);
+        }
+
 
         [Authorize(Roles = "Admin")]
         public ActionResult EditEvent(int id)
         {
             ViewBag.OrganizerList = new SelectList(db.Organisers, "Id", "represent");
+            ViewBag.VenueList = new SelectList(db.Venues, "Id", "name");
             var e = db.Events.Find(id);
             if (e == null)
             {
                 return RedirectToAction("Index", "Admin");
             }
-            /*            int duration = ((int)e.endTime.TotalMinutes - (int)e.startTime.TotalMinutes) / 60;
-            */
             var model = new EventEditVM
             {
                 Id = id,
                 name = e.name,
                 des = e.des,
-                price = e.price,
-                availability = e.availability,
                 participants = e.participants,
+                price = e.price,
                 startDate = e.startDate,
                 endDate = e.endDate,
                 startTime = e.startTime,
                 endTime = e.endTime,
-                duration = e.duration,
-                approvalStat = true,
                 photoURL = e.photoURL,
-                OrgId = e.OrgId
+                OrgId = e.OrgId,
+                venueId = e.venueId
             };
             return View(model);
         }
@@ -208,23 +226,39 @@ namespace EventManagementSystem.Controllers
         public ActionResult EditEvent(EventEditVM model)
         {
             var e = db.Events.Find(model.Id);
+            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id", "represent");
+            ViewBag.VenueList = new SelectList(db.Venues, "Id", "name");
+            if (ModelState.IsValidField("startDate"))
+            {
+                if (model.startDate > model.endDate)
+                {
+                    ModelState.AddModelError("startDate", "start date cannot exceed end date!");
+                }
+
+            }
+            if (ModelState.IsValidField("startTime"))
+            {
+                if (model.startTime >= model.endTime)
+                {
+                    ModelState.AddModelError("startTime", "start time cannot exceed or equal end time!");
+                }
+            }
+
             if (model == null)
             {
                 return RedirectToAction("Index", "Admin");
             }
-            int duration = ((int)model.endTime.TotalMinutes - (int)model.startTime.TotalMinutes) / 60;
             if (ModelState.IsValid)
             {
                 e.name = model.name;
                 e.des = model.des;
                 e.price = model.price;
-                e.availability = model.availability;
-                e.participants = model.participants;
+                e.participants = e.participants;
+                e.availability = e.availability;
                 e.startDate = model.startDate;
                 e.endDate = model.endDate;
                 e.startTime = model.startTime;
                 e.endTime = model.endTime;
-                e.duration = duration.ToString();
                 e.approvalStat = true;
                 if (model.Photo != null)
                 {
@@ -232,6 +266,7 @@ namespace EventManagementSystem.Controllers
                     e.photoURL = SavePhoto(model.Photo);
                 }
                 e.OrgId = model.OrgId;
+                e.venueId = model.venueId;
                 db.SaveChanges();
                 TempData["info"] = "Event record updated successfully";
                 return RedirectToAction("DisplayEvent", "Admin");
@@ -289,12 +324,12 @@ namespace EventManagementSystem.Controllers
                 {
                     Id = id,
                     name = model.name,
-                    contact_no = model.contact_no,
+                    contact_no = model.contact_no.Trim(),
                     email = model.email,
                     username = model.username,
                     password = model.password,
                     role = model.role.ToString(),
-                    organizer = null,
+                    organizer = model.organizer,
                     status = true,
                     recoveryCode = "ABCDEF",
                     activationCode = "ABCDEF",
@@ -327,10 +362,11 @@ namespace EventManagementSystem.Controllers
             {
                 Id = id,
                 name = u.name,
-                contact_no = u.contact_no,
+                contact_no = u.contact_no.Trim(),
                 email = u.email,
                 username = u.username,
                 password = u.password,
+                organizer = u.organizer,
                 confirmPassword = u.password,
                 role = (Role)Enum.Parse(typeof(Role), u.role),
                 photoURL = u.photo,
@@ -351,8 +387,9 @@ namespace EventManagementSystem.Controllers
             if (ModelState.IsValid)
             {
                 u.name = model.name;
-                u.contact_no = model.contact_no;
+                u.contact_no = model.contact_no.Trim();
                 u.email = model.email;
+                u.organizer = model.organizer;
                 u.password = model.password;
                 u.role = model.role.ToString();
                 if (model.Photo != null)
@@ -395,8 +432,6 @@ namespace EventManagementSystem.Controllers
         public ActionResult DisplayAdvert(int page = 1)
         {
             Func<Advertisement, object> fn = a => a.Id;
-
-
             var advertisement = db.Advertisements.OrderBy(fn);
             var model = advertisement.ToPagedList(page, 10);
 
@@ -413,6 +448,21 @@ namespace EventManagementSystem.Controllers
         public ActionResult InsertAdvert(AdvertManageVM model)
         {
             var id = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
+            if (ModelState.IsValidField("startDate"))
+            {
+                if (model.startDate > model.endDate)
+                {
+                    ModelState.AddModelError("startDate", "start date cannot exceed end date!");
+                }
+
+            }
+            if (ModelState.IsValidField("startTime"))
+            {
+                if (model.startTime >= model.endTime)
+                {
+                    ModelState.AddModelError("startTime", "start time cannot exceed or equal end time!");
+                }
+            }
             string error = ValidatePhoto(model.Photo);
             if (error != null)
             {
@@ -420,7 +470,6 @@ namespace EventManagementSystem.Controllers
             }
             if (ModelState.IsValid)
             {
-                int duration = ((int)model.endTime.TotalMinutes - (int)model.startTime.TotalMinutes) / 60;
                 var a = new Advertisement
                 {
                     name = model.name,
@@ -430,7 +479,6 @@ namespace EventManagementSystem.Controllers
                     endDate = model.endDate,
                     startTime = model.startTime,
                     endTime = model.endTime,
-                    duration = duration.ToString(),
                     status = true,
                     userId = id,    
                     photoURL = SavePhoto(model.Photo)
@@ -467,7 +515,6 @@ namespace EventManagementSystem.Controllers
                 endDate = a.endDate,
                 startTime = a.startTime,
                 endTime = a.endTime,
-                duration = a.duration,
                 userId = a.userId,
                 photoURL = a.photoURL,
             };
@@ -479,11 +526,25 @@ namespace EventManagementSystem.Controllers
         public ActionResult EditAdvert(AdvertManageVM model)
         {
             var a = db.Advertisements.Find(model.Id);
+            if (ModelState.IsValidField("startDate"))
+            {
+                if (model.startDate > model.endDate)
+                {
+                    ModelState.AddModelError("startDate", "start date cannot exceed end date!");
+                }
+
+            }
+            if (ModelState.IsValidField("startTime"))
+            {
+                if (model.startTime >= model.endTime)
+                {
+                    ModelState.AddModelError("startTime", "start time cannot exceed or equal end time!");
+                }
+            }
             if (model == null)
             {
                 return RedirectToAction("Index", "Admin");
             }
-            int duration = ((int)model.endTime.TotalMinutes - (int)model.startTime.TotalMinutes) / 60;
             if (ModelState.IsValid)
             {
                 a.name = model.name;
@@ -493,7 +554,6 @@ namespace EventManagementSystem.Controllers
                 a.endDate = model.endDate;
                 a.startTime = model.startTime;
                 a.endTime = model.endTime;
-                a.duration = duration.ToString();
                 if (model.Photo != null)
                 {
                     DeletePhoto(a.photoURL);
