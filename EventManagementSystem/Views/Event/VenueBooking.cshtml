@@ -151,7 +151,6 @@
                 <span style="text-align:left; font-size:16pt;">Drag and drop the icon into the box</span>
                 <div class="container dragDefault" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <i class="fa fa-map-marker fa-5x" id="dragIcon" aria-hidden="true" draggable="true" ondragstart="drag(event)"></i>
-                    @*<img id="dragEvent" src="~/Images/greenTick.png" draggable="true" ondragstart="drag(event)" />*@
                 </div>
             </div>
             <div class="col-sm-2 col-sm-offset-1">
@@ -180,11 +179,9 @@
 
         // Check availabilty
         $('.occupied').each(function () {
-            console.log(this.value);
             let x = this.value;
             $('.venue').each(function () {
                 if (this.id == x) {
-                    console.log(this.id);
                     let y = "#" + this.id;
                     $(y).css('background', '#434343');
                     $(y).css('color', 'white');
@@ -244,14 +241,14 @@
         });
 
         // Assign each venue details to venue box
-        $('.venueDetails').each(function () {
-            console.log(this.id);
-            console.log(this);
+        $('.venueDetailsGet').each(function () {
             let x = this.id;
             let insert = this;
             $('.venue').each(function () {
                 if (this.id == x) {
                     console.log(this);
+                    $(insert).removeClass("venueDetailsGet");
+                    $(insert).addClass("venueDetails");
                     $(insert).appendTo(this);
                 }
             });

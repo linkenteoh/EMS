@@ -55,14 +55,10 @@
 
             <li><a data-toggle="pill" href="#registration">Registration (@participants/@Model.participants)</a></li>
             <li><a data-toggle="pill" href="#payment">Payment</a></li>
-            @*@if (Model.venueId == null)
+            @if (Model.venueId == null)
             {
-                <li><a data-toggle="pill" href="~/Event/VenueBooking?Id=@Model.Id">Book Venue</a></li>
+            <li><a class="btn btn-primary" href="/Event/VenueBooking?Id=@Model.Id">Book Venue</a></li>
             }
-            else
-            {
-                <li><span>Venue :   @Model.Venue.name</span></li>
-            }*@
         </ul>
     </div>
 
@@ -122,15 +118,7 @@
                         </tr>
                         <tr>
                             <th>Venue</th>
-                            <td>: @if (Model.venueId == null)
-                                {
-                                    <a class="btn btn-primary" href="/Event/VenueBooking?Id=@Model.Id">Book Venue</a>
-                                }
-                                else
-                                {
-                                    @Model.price
-                                }
-                            </td>
+                            <td> : @(Model.venueId == null ? "No Venue Booked" : Model.Venue.name)</td>
                         </tr>
 
                     </table>
