@@ -229,7 +229,7 @@ namespace EventManagementSystem.Controllers
 
         // POST: User/ProposeEvent
         [HttpPost]
-        public ActionResult ProposeEvent(EventInsertVM model)
+        public ActionResult ProposeEvent(EventProposeVM model)
         {
 
             if (ModelState.IsValidField("startDate"))
@@ -318,13 +318,11 @@ namespace EventManagementSystem.Controllers
                 name = e.name,
                 des = e.des,
                 price = e.price,
-                availability = e.availability,
                 participants = e.participants,
                 startDate = e.startDate,
                 endDate = e.endDate,
                 startTime = e.startTime,
                 endTime = e.endTime,
-                duration = e.duration,
                 approvalStat = e.approvalStat,
                 photoURL = e.photoURL,
                 OrgId = e.OrgId
@@ -347,19 +345,17 @@ namespace EventManagementSystem.Controllers
             {
                 return RedirectToAction("Index", "Admin");
             }
-            int duration = ((int)model.endTime.TotalMinutes - (int)model.startTime.TotalMinutes) / 60;
             if (ModelState.IsValid)
             {
                 e.name = model.name;
                 e.des = model.des;
                 e.price = model.price;
-                e.availability = model.availability;
+                e.availability = e.availability;
                 e.participants = model.participants;
                 e.startDate = model.startDate;
                 e.endDate = model.endDate;
                 e.startTime = model.startTime;
                 e.endTime = model.endTime;
-                e.duration = duration.ToString();
                 e.approvalStat = true;
                 if (model.Photo != null)
                 {

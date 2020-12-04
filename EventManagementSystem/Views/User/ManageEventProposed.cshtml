@@ -109,10 +109,6 @@
                             <td>: @Model.endTime</td>
                         </tr>
                         <tr>
-                            <th>Duration</th>
-                            <td>: @Model.duration hour(s)</td>
-                        </tr>
-                        <tr>
                             <th>Registration fees (RM)</th>
                             <td>: @Model.price</td>
                         </tr>
@@ -171,10 +167,6 @@ placeholder = "Description"
                                     </div>
                                 </div>
                                 <div class="row mt-4">
-                                    <div class="col-md-6">
-                                        @Html.LabelFor(e => e.availability, "Availability")@Html.TextBoxFor(e => e.availability, new { type = "number", @class = "form-control", placeholder = "Availability", min = "0" })
-                                        @Html.ValidationMessageFor(e => e.availability)
-                                    </div>
                                     <div class="col-md-6" @Html.LabelFor(e => e.participants, "Participants")>
                                         @Html.TextBoxFor(e => e.participants, new { type = "number", @class = "form-control", placeholder = "participants", min = "0" })
                                         @Html.ValidationMessageFor(e => e.participants)
