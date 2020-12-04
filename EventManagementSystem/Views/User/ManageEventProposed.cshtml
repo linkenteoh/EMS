@@ -49,12 +49,20 @@
             {
                 <li class="tooltip1"><a style="cursor:not-allowed" href="#" disabled>Edit Detail</a><span class="tooltiptext">Accepted event can't be edited</span></li>
             }
-            @{ 
-                int participants = Model.participants - Model.availability;
+            @{
+                int participants = Model.participants;
             }
 
             <li><a data-toggle="pill" href="#registration">Registration (@participants/@Model.participants)</a></li>
             <li><a data-toggle="pill" href="#payment">Payment</a></li>
+            @*@if (Model.venueId == null)
+            {
+                <li><a data-toggle="pill" href="~/Event/VenueBooking?Id=@Model.Id">Book Venue</a></li>
+            }
+            else
+            {
+                <li><span>Venue :   @Model.Venue.name</span></li>
+            }*@
         </ul>
     </div>
 
@@ -111,6 +119,18 @@
                         <tr>
                             <th>Registration fees (RM)</th>
                             <td>: @Model.price</td>
+                        </tr>
+                        <tr>
+                            <th>Venue</th>
+                            <td>: @if (Model.venueId == null)
+                                {
+                                    <a class="btn btn-primary" href="/Event/VenueBooking?Id=@Model.Id">Book Venue</a>
+                                }
+                                else
+                                {
+                                    @Model.price
+                                }
+                            </td>
                         </tr>
 
                     </table>

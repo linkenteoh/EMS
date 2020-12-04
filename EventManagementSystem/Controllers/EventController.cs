@@ -66,25 +66,6 @@ namespace EventManagementSystem.Controllers
             return RedirectToAction("");     
         }
 
-        // Register Event
-        [HttpPost]
-        public ActionResult JoinEvent(Event eve)
-        {
-            return View();
-        }
-
-        public ActionResult ProposeEvent()
-        {
-            ViewBag.step = 1;
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult ProposeEvent(int step)
-        {
-            return View();
-        }
-
         // GET venue booking index
         public ActionResult VenueBooking(int Id)
         {
@@ -120,7 +101,7 @@ namespace EventManagementSystem.Controllers
                 eve.venueId = model.Id;
                 db.SaveChanges();
                 TempData["info"] = "Venue Booked Successfully";
-                return RedirectToAction("EventsProposed");
+                return RedirectToAction("ManageEventProposed", "User", new { id = eventID });
             }
             else
             {

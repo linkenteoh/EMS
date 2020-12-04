@@ -101,14 +101,18 @@
         display: none;
     }
 
-        .venueDetails img {
-            margin: 10px;
-            border: 1px solid #b4b4b4;
-            border-radius: 5px;
-        }
+    .venueDetails img {
+        margin: 10px;
+        border: 1px solid #b4b4b4;
+        border-radius: 5px;
+    }
 
     .venue:hover .venueDetails {
         display: block;
+    }
+
+    #venueData{
+        display:none;
     }
 </style>
 <div class="outerDiv">
@@ -248,7 +252,6 @@
             $('.venue').each(function () {
                 if (this.id == x) {
                     console.log(this);
-                    let y = "#" + this.id +" .dragBox";
                     $(insert).appendTo(this);
                 }
             });

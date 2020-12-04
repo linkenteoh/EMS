@@ -273,9 +273,10 @@ namespace EventManagementSystem.Controllers
                     OrgId = model.OrgId
                 };
                 try { 
-                db.Events.Add(e);
-                db.SaveChanges();
-                TempData["info"] = "Event proposed successfully";
+                    db.Events.Add(e);
+                    db.SaveChanges();
+                    TempData["info"] = "Event proposed successfully";
+                    return RedirectToAction("ManageEventProposed", "User", new { Id=e.Id });
                 }
                 catch(Exception ex)
                 {

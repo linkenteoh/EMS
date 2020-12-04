@@ -49,28 +49,7 @@
         margin: 0px;
     }
 </style>
-<div id="venueData">
-    @foreach (Venue m in Model)
-    {
-        <div class="venueDetails" id="@m.Id">
-            <table>
-                <tr>
-                    <td colspan="2">
-                        <img src="~/Images/@m.photoURL" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>Capacity</td>
-                    <td>: @m.capacity</td>
-                </tr>
-                <tr>
-                    <td>Equipment</td>
-                    <td>: @m.equipment</td>
-                </tr>
-            </table>
-        </div>
-    }
-</div>
+
 <div class="box">
     <div class="row">
         <div class="col-sm-3 col-sm-offset-0">
@@ -109,4 +88,27 @@
             </div>
         </div>
     </div>
+</div>
+
+<div id="venueData">
+    @foreach (Venue m in Model)
+    {
+        <div class="venueDetails" id="@m.Id">
+            <table>
+                <tr>
+                    <td colspan="2">
+                        <img src="~/Images/@m.photoURL" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Capacity</td>
+                    <td>: @m.capacity</td>
+                </tr>
+                <tr>
+                    <td>Equipment</td>
+                    <td>: @m.equipment</td>
+                </tr>
+            </table>
+        </div>
+    }
 </div>
