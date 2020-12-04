@@ -8,33 +8,44 @@
 <h2>Events Proposed</h2>
 <hr />
 <p>@Model.Count() of @Model.TotalItemCount record(s) | Page @Model.PageNumber of @Model.PageCount</p>
-@foreach (var e in Model)
-{
-    <div class="panel" style="width: 25rem; border:1px #c3c3c3 solid; overflow:auto; display:inline-block; margin-right:20px;">
-        <div class="panel-body" style="padding-bottom:0px">
-            @{ 
-                if(e.approvalStat == null)
-                {
-                    <div class="text-warning"><b>Pending</b></div>
-                }else if(e.approvalStat == true)
-                {
-                    <div class="text-success"><b>Accepted</b></div>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var e in Model)
+        {
+            <tr>
+                <th scope="row">@e.Id</th>
+                <td>@e.name</td>
+                <td>@e.startDate.ToString("dd-MM-yyyy")</td>
+                <td>@e.endDate.ToString("dd-MM-yyyy")</td>
+                @{
+                    if (e.approvalStat == null)
+                    {
+                        <td><b>Pending</b></td>
+                    }
+                    else if (e.approvalStat == true)
+                    {
+                        <td><b>Accepted</b></td>
+                    }
+                    else if (e.approvalStat == false)
+                    {
+                        <td><b>Denied</b></td>
+                    }
                 }
-                else if(e.approvalStat == false)
-                {
-                    <div class="text-danger"><b>Denied</b></div>
-                }
-            }
-        </div>
-        <img class="panel-heading text-center" src="~/Photo/@e.photoURL" alt="Card image cap" style="object-fit:cover; width:245px; height:245px;" />
-        <hr style="margin:0px;padding:0px;"/>
-        <div class="panel-body" style="">
-            <h5 class="panel-title">@e.name</h5>
-            <p class="card-text">@e.des</p>
-            <a href="#" class="btn btn-primary">View event</a>
-        </div>
-    </div>
-}
+                <td><a href="~/User/ManageEventProposed?id=@e.Id" class="btn btn-danger">Manage</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @Html.PagedListPager(
     Model,

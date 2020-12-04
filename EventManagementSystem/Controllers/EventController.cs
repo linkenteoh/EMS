@@ -16,15 +16,22 @@ namespace EventManagementSystem.Controllers
             return View();
         }
 
+        public ActionResult Chat()
+        {
+
+            return View();
+        }
+
         public ActionResult EventDetail(int id)
         {
             var model = db.Events.Find(id);
 
-            if (model == null)
-            {
-                return RedirectToAction("EventSearchIndex");
-            }
             return View(model);
+        }
+
+        public ActionResult EventDetails(Event eve)
+        {
+            return PartialView("~/Views/Event/_EventDetails.cshtml", eve);
         }
 
         // Register Event

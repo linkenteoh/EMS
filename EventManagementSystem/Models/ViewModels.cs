@@ -68,6 +68,10 @@ namespace EventManagementSystem.Models
         public Nullable<int> venueId { get; set; }
         public HttpPostedFileBase Photo { get; set; }
         public string photoURL { get; set; }
+        public virtual Organiser Organiser { get; set; }
+        public virtual Venue Venue { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Registration> Registrations { get; set; }
     }
     public class UserInsertVM
     {

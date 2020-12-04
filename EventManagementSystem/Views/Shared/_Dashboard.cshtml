@@ -18,13 +18,28 @@
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="~/Content/Sidebar.css" />
     <link rel="stylesheet" href="~/Content/app.css">
-
     @RenderSection("head", false)
 </head>
 
 <body>
     <div class="info">@TempData["Info"]</div>
-    <div class="d-flex" id="wrapper">
+    <!--<div class="d-flex" id="wrapper">-->
+    <!-- Sidebar -->
+    <!--<div class="bg-white border-right" id="sidebar-wrapper">
+        <div class="sidebar-heading">TARC EMS</div>
+        <div class="list-group list-group-flush">
+            <a href="#" class="list-group-item list-group-item-action bg-light">Dashboard</a>
+            <a href="~/Admin/DisplayUser" class="list-group-item list-group-item-action bg-light">User</a>
+            <a href="~/Admin/DisplayApporval" class="list-group-item list-group-item-action bg-light">Approval</a>
+            <a href="~/Admin/DisplayEvent" class="list-group-item list-group-item-action bg-light">Events</a>
+            <a href="#" class="list-group-item list-group-item-action bg-light">Venue bookings</a>
+            <a href="~/Admin/DisplayAdvert" class="list-group-item list-group-item-action bg-light">Advertisement</a>
+        </div>
+    </div>-->
+    <!-- /#sidebar-wrapper -->
+    <!-- Page Content -->
+    <!--<div id="page-content-wrapper">
+
 
         <!-- Sidebar -->
         <div class="bg-white border-right" id="sidebar-wrapper">
@@ -35,34 +50,147 @@
                 <a href="~/Admin/DisplayApporval" class="list-group-item list-group-item-action bg-light">Approval</a>
                 <a href="~/Admin/DisplayEvent" class="list-group-item list-group-item-action bg-light">Events</a>
                 <a href="~/Admin/DisplayAdvert" class="list-group-item list-group-item-action bg-light">Advertisement</a>
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
+            <button class="btn btn-danger" id="menu-toggle" type="button">
+                >
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Dropdown
+                        </a>
+                    </li>
+                </ul>
             </div>
-        </div>
-        <!-- /#sidebar-wrapper -->
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
+        </nav>
 
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
-                <button class="btn btn-danger" id="menu-toggle" type="button">
-                    >
-                </button>
+        <div class="container-fluid">-->
+            
+        <!--</div>
+    </div>-->
+    <!-- /#page-content-wrapper -->
+    <!--</div>-->
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Dropdown
+    <div class="page-wrapper chiller-theme toggled">
+        <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+            <i class="fas fa-bars"></i>
+        </a>
+        <nav id="sidebar" class="sidebar-wrapper">
+            <div class="sidebar-content">
+                <div class="sidebar-brand">
+                    <a href="#">taruc event management</a>
+                    <div id="close-sidebar">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <div class="sidebar-header">
+                    <div class="user-pic">
+                        <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
+                             alt="User picture">
+                    </div>
+                    <div class="user-info" style="margin-top:10px;">
+                        <span class="user-name">
+                            <strong>@User.Identity.Name</strong>
+                        </span>
+                        <span class="user-role">Staff</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-menu">
+                    <ul>
+                        <li class="header-menu">
+                            <span>General</span>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-book"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="far fa-gem"></i>
+                                <span>Users</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="~/Admin/DisplayUser">Manage users</a>
+                                    </li>
+                                    <li>
+                                        <a href="~/Admin/DisplayApporval">Organiser requests<span class="badge badge-pill badge-danger">3</span></a>
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="fa fa-chart-line"></i>
+                                <span>Charts</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="#">Pie chart</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="fa fa-globe"></i>
+                                <span>Event</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="~/Admin/DisplayEvent">Manage events</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Manage event venue bookings</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="#">
+                                <i class="fa fa-globe"></i>
+                                <span>Advertisement</span>
+                            </a>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="~/Admin/DisplayAdvert">Manage advertisement</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="header-menu">
+                            <span>Settings</span>
+                        </li>
+                        <li>
+                            <a href="~/Account/Logout">
+                                <i class="fa fa-book"></i>
+                                <span>Logout</span>
                             </a>
                         </li>
                     </ul>
                 </div>
-            </nav>
-
-            <div class="container-fluid">
+                <!-- sidebar-menu  -->
+            </div>
+            <!-- sidebar-content  -->
+        </nav>
+        <!-- sidebar-wrapper  -->
+        <main class="page-content">
+            <div class="container-fluid" style="padding-left:0px;">
                 @RenderBody()
             </div>
-        </div>
-        <!-- /#page-content-wrapper -->
-
+        </main>
+        <!-- page-content" -->
     </div>
     <!-- /#wrapper -->
     <!-- Bootstrap core JavaScript -->
@@ -73,6 +201,7 @@
     <script src="~/Scripts/app.js"></script>
     <!-- Menu Toggle Script -->
     <script>
+
         $("#menu-toggle").click(function (e) {
             e.preventDefault();
             $("#wrapper").toggleClass("toggled");
@@ -83,6 +212,39 @@
                 .register('/serviceworker.js')
                 .then(function () { console.log('Service Worker Registered'); });
         }*@
+
+        jQuery(function ($) {
+
+            $(".sidebar-dropdown > a").click(function () {
+                $(".sidebar-submenu").slideUp(200);
+                if (
+                    $(this)
+                        .parent()
+                        .hasClass("active")
+                ) {
+                    $(".sidebar-dropdown").removeClass("active");
+                    $(this)
+                        .parent()
+                        .removeClass("active");
+                } else {
+                    $(".sidebar-dropdown").removeClass("active");
+                    $(this)
+                        .next(".sidebar-submenu")
+                        .slideDown(200);
+                    $(this)
+                        .parent()
+                        .addClass("active");
+                }
+            });
+
+            $("#close-sidebar").click(function () {
+                $(".page-wrapper").removeClass("toggled");
+            });
+            $("#show-sidebar").click(function () {
+                $(".page-wrapper").addClass("toggled");
+            });
+        });
+
     </script>
     @RenderSection("foot", false)
 </body>
