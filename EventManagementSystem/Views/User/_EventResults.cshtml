@@ -18,7 +18,6 @@
             <th>Start Time</th>
             <th> End  Time</th>
             <th>Duration</th>
-            <th>Organised by</th>
             <th>Venue</th>
             <th>View Details</th>
         </tr>
@@ -35,7 +34,6 @@
                 <td>@s.startTime</td>
                 <td>@s.endTime</td>
                 <td>@s.duration</td>
-                <td>@s.organized_by</td>
                 <td>@s.Venue.name</td>
                 <td>
                     @Ajax.ActionLink("Detail", "EventDetail", new { Id = s.Id }, ao, new { @class = "btn btn-default " })

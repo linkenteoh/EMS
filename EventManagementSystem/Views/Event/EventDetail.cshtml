@@ -1,0 +1,125 @@
+﻿@model Event
+
+@section head{
+    <style>
+        .activelink{
+            background: #f1f1f1;
+        }
+    </style>
+    }
+
+<div class="container" style="overflow-x:hidden">
+    <h2>Event details</h2>
+    <hr />
+    <div class="col-md-3" style="border:1px blue ; padding-left:0px;">
+        <div class="panel">
+            <div class="panel-heading" style="border:1px #c3c3c3 solid; background: #007a77;">
+                <b style="color:white">Event Organiser</b>
+            </div>
+            <div class="panel-body" style="border:1px #c3c3c3 solid;">
+                <div style="float:left;">
+                    <img src="~/Photo/@Model.Organiser.User.photo" style="width:90px; height:90px; object-fit:cover;border-radius:50%;" />
+                </div>
+                <div style="float:right; margin-top:20px;">
+                    <strong>@Model.Organiser.User.name</strong><br />
+                    <span>@Model.Organiser.represent</span><br />
+                    <small>@Model.Organiser.position</small>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        <h4>Interested in this event?</h4>
+        <a class="btn btn-primary" href="~/Event/RegisterEvent?username=@User.Identity.Name&eventId=@Model.Id&d=@DateTime.Now.ToString("dd-MM-yyyy")" onclick="return confirm('Are you sure?')" style="width:100%; padding:10px; background:#148603">Register now!</a>
+
+        <hr />
+        <div class="panel-heading" style="border:1px #c3c3c3 solid; background: #007a77;">
+            <b style="color:white">Event</b>
+        </div>
+        <div class="list-group">
+
+            <button type="button" id="Details" class="list-group-item list-group-item-action activelink">
+                Details
+            </button>
+            <button type="button" id="Participants" class="list-group-item list-group-item-action">Participants (@Model.availability / @Model.participants)</button>
+            <button type="button" id="Chat" class="list-group-item list-group-item-action">Chat</button>
+        </div>
+        <hr />
+    </div>
+
+    <div class="col-md-9 partial" style="overflow-y:hidden">
+        <div class="outerDiv">
+            <div class="head" style="display:inline-block">
+                <div>
+                    <h3 style="margin:0;padding-bottom:10px;">@Model.name organised by @Model.Organiser.represent</h3>
+                </div>
+            </div>
+            <div class="images" style="border:1px red solid; overflow-x:hidden">
+                <div class="row">
+                    <div class="col-md-8" style="border:1px red solid; padding:0px; margin:0px;">
+                        <img src="~/Photo/@Model.photoURL" style="width:500px; height:500px" />
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row" style="border:1px red solid;">
+                            <p style="width:250px;height:250px">Another image</p>
+                        </div>
+                        <div class="row" style="border:1px red solid;">
+                            <p style="width:250px;height:250px">Another image</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <table class="table">
+                    <tr>
+                        <th>Name</th>
+                        <td>: @Model.name</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>: @Model.des</td>
+                    </tr>
+                    <tr>
+                        <th>Start date</th>
+                        <td>: @Model.startDate.ToString("dd-MM-yyy")</td>
+                    </tr>
+                    <tr>
+                        <th>End date</th>
+                        <td>: @Model.endDate.ToString("dd-MM-yyy")</td>
+                    </tr>
+                    <tr>
+                        <th>Start time</th>
+                        <td>: @Model.startTime</td>
+                    </tr>
+                    <tr>
+                        <th>End time</th>
+                        <td>: @Model.endTime</td>
+                    </tr>
+                    <tr>
+                        <th>Registration fees (RM)</th>
+                        <td>: @Model.price</td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section foot{
+    <script>
+        $('#Details').click(function () {
+
+        });
+        $('#Participants').click(function () {
+
+        });
+        $('#Chat').click(function () {
+
+        });
+    </script>
+    }
+
+

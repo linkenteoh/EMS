@@ -1,0 +1,119 @@
+﻿
+@using PagedList
+@using PagedList.Mvc
+@model IPagedList<Event>
+
+@{
+    ViewBag.Title = "Approval List";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+@section head{
+    <style>
+        .searchCont {
+            display: none;
+        }
+    </style>
+
+}
+
+<h1>Approval List</h1>
+<div style="margin-bottom:20px">
+    <span class="btn btn-primary searchButton">Search</span>
+
+    <div class="parent">
+        <div class="searchCont">
+            <div class="form-group row">
+                @Html.Label("name", "Event Name", new { @class = "control-label col-sm-2" })
+                @Html.TextBox("name", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.Label("startDate", "Date From", new { @class = "control-label col-sm-2" })
+                @Html.TextBox("startDate", "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-4" })
+                @Html.Label("endDate", "To", new { @class = "control-label col-sm-1" })
+                @Html.TextBox("endDate", "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-4" })
+            </div>
+            <div class="form-group">
+                @Html.Label("startTime", "Time From", new { @class = "control-label col-sm-2" })
+                @Html.TextBox("startTime", "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-4" })
+                @Html.Label("endTime", "To", new { @class = "control-label col-sm-1" })
+                @Html.TextBox("endTime", "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-4" })
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-1">
+                    <input type="submit" class="btn btn-primary searchBtn" name="Search" value="search" />
+                </div>
+                <div class="col-sm-1">
+                    <input type="reset" class="btn btn-primary " name="Reset" value="reset" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<p>@Model.Where(e => e.status == true && e.approvalStat == null).Count() record(s) in approval list</p>
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Price(RM)</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Organized by</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            if (s.approvalStat == null && s.status == true)
+            {
+
+                <tr>
+                    <td scope="row">@s.Id</td>
+                    <td scope="row">@s.name</td>
+                    <td scope="row">@s.des</td>
+                    <td scope="row">@s.price</td>
+                    <td scope="row">@s.startDate.ToString("dd/MM/yyyy") @s.startTime</td>
+                    <td scope="row">@s.endDate.ToString("dd/MM/yyyy") @s.endTime</td>
+                    <td scope="row">@s.Organiser.represent </td>
+                    <td>
+                        <input class="btn btn-primary" data-get="/Admin/ApproveProposal?id=@s.Id" type="button" value="Approve">
+                    </td>
+                    <td>
+                        <input class="btn btn-danger" data-get="/Admin/DeclineProposal?id=@s.Id" type="button" value="Decline">
+                    </td>
+                </tr>
+            }
+        }
+
+
+    </tbody>
+</table>
+
+
+
+@Html.PagedListPager(
+    Model,
+    p => "?page=" + p,
+    PagedListRenderOptions.Classic
+)
+
+
+@section foot{
+
+    <script>
+        //when search button click
+        jQuery(document).on('click', '.searchButton', function () {
+            if (jQuery('.parent').hasClass('menuActive')) {
+                jQuery('.parent').removeClass('menuActive');
+                jQuery('.parent .menu').slideUp(0);
+            }
+            jQuery('.parent').toggleClass('searchActive').children('.searchCont').slideToggle(200);
+        })
+    </script>
+}

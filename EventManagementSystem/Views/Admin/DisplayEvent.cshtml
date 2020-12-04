@@ -7,11 +7,49 @@
     ViewBag.Title = "Event List";
     Layout = "~/Views/Shared/_Dashboard.cshtml";
 }
+@section head{
+    <style>
+        .searchCont {
+            display: none;
+        }
+    </style>
+    
+}
 
 <h1>Events List</h1>
-<input class="btn btn-primary" data-get="/Admin/InsertEvent" type="button" value="Add Event">
-
-<p>@Model.Where(e => e.status == true).Count() record(s) in event list</p>
+<div style="margin-bottom:20px">
+    <input class="btn btn-primary" data-get="/Admin/InsertEvent" type="button" value="Add Event">
+    <span class="btn btn-primary searchButton">Search</span>
+    <div class="parent">
+        <div class="searchCont">
+            <div class="form-group row">
+                @Html.Label("name", "Event Name", new { @class = "control-label col-sm-2" })
+                @Html.TextBox("name", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.Label("startDate", "Date From", new { @class = "control-label col-sm-2" })
+                @Html.TextBox("startDate", "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-4" })
+                @Html.Label("endDate", "To", new { @class = "control-label col-sm-1" })
+                @Html.TextBox("endDate", "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-4" })
+            </div>
+            <div class="form-group">
+                @Html.Label("startTime", "Time From", new { @class = "control-label col-sm-2" })
+                @Html.TextBox("startTime", "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-4" })
+                @Html.Label("endTime", "To", new { @class = "control-label col-sm-1" })
+                @Html.TextBox("endTime", "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-4" })
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-1">
+                    <input type="submit" class="btn btn-primary searchBtn" name="Search" value="search" />
+                </div>
+                <div class="col-sm-1">
+                    <input type="reset" class="btn btn-primary " name="Reset" value="reset" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<p>@Model.Where(e => e.status == true && e.approvalStat == true).Count() record(s) in event list</p>
 <table class="table table-hover">
     <thead class="thead-dark">
         <tr>
@@ -23,73 +61,70 @@
             <th scope="col">Participant limit</th>
             <th scope="col">Start Date</th>
             <th scope="col">End Date</th>
-            <th scope="col">Duration</th>
+            <th scope="col">Venue</th>
             <th scope="col">Organized by</th>
-            <th scope="col">Approval</th>
             <th scope="col"></th>
             <th scope="col"></th>
             <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var s in Model)
+        @foreach (var e in Model)
         {
-            if (s.status == true)
+            if (e.status == true && e.approvalStat == true)
             {
 
-                <tr>
-                    <td scope="row">@s.Id</td>
-                    <td scope="row">@s.name</td>
-                    <td scope="row">@s.des</td>
-                    <td scope="row">@s.price</td>
-                    <td scope="row">@s.availability</td>
-                    <td scope="row">@s.participants</td>
-                    <td scope="row">@s.startDate.ToString("dd/MM/yyyy") @s.startTime</td>
-                    <td scope="row">@s.endDate.ToString("dd/MM/yyyy") @s.endTime</td>
-                    <td scope="row">@s.duration hour(s)</td>
-                    <td scope="row">@s.organized_by</td>
-                    <td scope="row">
-                        <div class="custom-control custom-switch">
-                            @if (s.approvalStat == true)
-                            {
-
-                                <input type="checkbox" class="custom-control-input" id="@s.Id"
-                                       checked disabled>
-                                <label class="custom-control-label" for="@s.Id">@s.approvalStat</label>
-
-                            }
-                            else
-                            {
-                                <input type="checkbox" class="custom-control-input" id="@s.Id" disabled>
-                                <label class="custom-control-label" for="@s.Id">@s.approvalStat</label>
-                            }
-                        </div>
-                    </td>
-                    <td>
-                        <input class="btn btn-primary" data-get="/Admin/EditEvent?id=@s.Id" type="button" value="Edit">
-                    </td>
-                    <td>
-                        <input class="btn btn-primary" data-get="/Admin/DeleteEvent?id=@s.Id" type="button" value="Delete">
-                    </td>
-                </tr>
+        <tr>
+            <td scope="row">@e.Id</td>
+            <td scope="row">@e.name</td>
+            <td scope="row">@e.des</td>
+            <td scope="row">@e.price</td>
+            <td scope="row">@e.availability</td>
+            <td scope="row">@e.participants</td>
+            <td scope="row">@e.startDate.ToString("dd/MM/yyyy") @e.startTime</td>
+            <td scope="row">@e.endDate.ToString("dd/MM/yyyy") @e.endTime</td>
+            @if (e.venueId == null)
+            {
+                <td scope="row"> </td>
+            }
+            else
+            {
+                <td scope="row">@e.Venue.name</td>
+            }
+            <td scope="row">@e.Organiser.represent </td>
+            <td>
+                <input class="btn btn-primary" data-get="/Admin/EditEvent?id=@e.Id" type="button" value="Edit">
+            </td>
+            <td>
+                <input class="btn btn-danger" data-get="/Admin/DeleteEvent?id=@e.Id" type="button" value="Delete">
+            </td>
+        </tr>
             }
         }
+
 
     </tbody>
 </table>
 
 
-@{
-    var options = PagedListRenderOptions.ClassicPlusFirstAndLast;
-    options.LinkToFirstPageFormat = "First";
-    options.LinkToLastPageFormat = "Last";
-    options.LinkToNextPageFormat = "Next";
-    options.LinkToPreviousPageFormat = "Previous";
-}
-
 
 @Html.PagedListPager(
     Model,
     p => "?page=" + p,
-    options
+    PagedListRenderOptions.Classic
 )
+
+
+@section foot{
+
+    <script>
+        //when search button click
+        jQuery(document).on('click', '.searchButton', function () {
+            if (jQuery('.parent').hasClass('menuActive')) {
+                jQuery('.parent').removeClass('menuActive');
+                jQuery('.parent .menu').slideUp(0);
+            }
+            jQuery('.parent').toggleClass('searchActive').children('.searchCont').slideToggle(200);
+        })
+    </script>
+}

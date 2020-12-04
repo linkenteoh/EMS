@@ -4,41 +4,47 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
+
     <link rel="stylesheet" href="~/Content/Site.css" />
     <link rel="stylesheet" href="~/Content/app.css">
+    <link rel="stylesheet" href="~/Content/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="manifest" crossorigin="use-credentials" href="/manifest.json">
+    <meta name="theme-color" content="#2196f3" />
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("head", false)
     <style>
-        .dropdown:hover .dropdown-menu {
+@*        .dropdown:hover .dropdown-menu {
             display: block;
             margin-top: 0;
+        }*@
+
+        body {
+            padding: 0px;
         }
     </style>
 </head>
 <body>
     <div class="info">@TempData["Info"]</div>
 
-    <div class="navbar navbar-inverse navbar-fixed-top bg-light">
-        <div class="container">
-            <div class="navbar-header">
-
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <div class="nav-items">
-                    <img src="~/Images/logo2.png" alt="Logo" id="logo" class="img-responsive" />
-                    @Html.ActionLink("TARUC Event Management", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                </div>
+    <header class="navbar navbar-expand-md navbar-dark bg-dark " style="border-radius:0px; padding-bottom:0px;">
+        <nav class="container">
+            <div class="nav-items">
+                <img src="~/Images/logo2.png" alt="Logo" id="logo" class="img-responsive" />
+                @Html.ActionLink("TARUC Event Management", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Announcements", "Announcements", "Home")</li>
-                    <li>@Html.ActionLink("Events", "Events", "Home")</li>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav">
+                    <a href="~/Home/Index" class="nav-item nav-link active">Home</a>
+                    <a href="~/Home/Announcement" class="nav-item nav-link">Announcements</a>
+                    <a href="~/Home/Events" class="nav-item nav-link">Events</a>
                     @{
                         if (User.Identity.IsAuthenticated)
                         {
@@ -46,51 +52,53 @@
                             var org = db.Organisers.FirstOrDefault(or => or.Id == (db.Users.FirstOrDefault(o => o.username == User.Identity.Name).Id));
                             if (org != null)
                             {
-                                <li class="dropdown">
-
-                                    <a class="dropdown-toggle" data-toggle="dropdown">Proposals</a>
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle nav-item nav-link" data-toggle="dropdown" style="cursor:pointer">Proposals</a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Propose event", "ProposeEvent", "User")</li>
                                         <li>@Html.ActionLink("Event(s) proposed", "EventsProposed", "User")</li>
                                     </ul>
-                                </li>
+                                </div>
                             }
                         }
                     }
-
-                </ul>
-                <ul class="nav navbar-nav navbar-right right-aligned-items">
+                </div>
+                <div class="navbar-nav navbar-right ml-auto">
                     @if (!User.Identity.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("Sign Up", "Register", "Account")</li>
-                        <li>@Html.ActionLink("Login", "Login", "Account")</li>
-
+                        <a href="~/Account/Register" class="nav-item nav-link">Sign up</a>
+                        <a href="~/Account/Login" class="nav-item nav-link">Login</a>
                     }
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown">@User.Identity.Name<span class="caret"></span></a>
+                        <div class="dropdown">
+                            <a class="dropdown-toggle nav-item nav-link" data-toggle="dropdown">@User.Identity.Name</a>
                             <ul class="dropdown-menu">
                                 <li>@Html.ActionLink("Events Joined", "EventSearchIndex", "User")</li>
                                 <li>@Html.ActionLink("Settings", "Edit", "User")</li>
+                                <li>@Html.ActionLink("Billing", "Billing", "User")</li>
                                 <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
                             </ul>
-                        </li>
+                        </div>
                     }
-
-                </ul>
-
+                </div>
             </div>
+        </nav>
+    </header>
 
-        </div>
-    </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-@*        <footer>
-            <p>Developed by TARUC &copy; @DateTime.Now.Year </p>
-        </footer>*@
+        @*        <footer>
+                <p>Developed by TARUC &copy; @DateTime.Now.Year </p>
+            </footer>*@
     </div>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker
+                .register('/serviceworker.js')
+                .then(function () { console.log('Service Worker Registered'); });
+        }
+    </script>
     <script src="~/Scripts/jquery-3.5.1.js"></script>
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
@@ -101,5 +109,6 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
     @RenderSection("foot", false)
+
 </body>
 </html>

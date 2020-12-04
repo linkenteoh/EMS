@@ -47,7 +47,7 @@ namespace EventManagementSystem.Controllers
                     Id = id,
                     represent = model.represent,
                     position = model.position,
-                    status = false
+                    status = null
                 };
 
                 db.Organisers.Add(oragniser);
@@ -220,27 +220,34 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
 
-        public ActionResult EventDetail(int id)
-        {
-            var model = db.Events.Find(id);
-          
-            if (model == null)
-            {
-                return RedirectToAction("EventSearchIndex");
-            }
-            return View(model);
-        }
-
         // GET: User/ProposeEvent
         public ActionResult ProposeEvent()
         {
+            ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             return View();
         }
 
         // POST: User/ProposeEvent
         [HttpPost]
-        public ActionResult ProposeEvent(EventInsertVM model)
+        public ActionResult ProposeEvent(EventProposeVM model)
         {
+
+            if (ModelState.IsValidField("startDate"))
+            {
+                if (model.startDate > model.endDate)
+                {
+                    ModelState.AddModelError("startDate", "Invalid date!");
+                }
+
+            }
+            if (ModelState.IsValidField("startTime"))
+            {
+                if (model.startTime > model.endTime)
+                {
+                    ModelState.AddModelError("startTime", "start time cannot exceed or equal end time!");
+                }
+            }
+     
             string error = ValidatePhoto(model.Photo);
             if (error != null)
             {
@@ -248,38 +255,40 @@ namespace EventManagementSystem.Controllers
             }
             if (ModelState.IsValid)
             {
-                int duration = ((int)model.endTime.TotalMinutes - (int)model.startTime.TotalMinutes) / 60;
                 var e = new Event
                 {
                     name = model.name,
                     des = model.des,
                     price = model.price,
-                    availability = model.availability,
                     participants = model.participants,
+                    availability = model.participants,
                     startDate = model.startDate,
                     endDate = model.endDate,
                     startTime = model.startTime,
                     endTime = model.endTime,
                     approvalStat = null,
-                    status = false,
+                    status = true,
                     venueId = null,
                     photoURL = SavePhoto(model.Photo),
-                    OrgId= db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id
+                    OrgId = model.OrgId
                 };
                 try { 
                 db.Events.Add(e);
                 db.SaveChanges();
-                }catch(Exception ex)
+                TempData["info"] = "Event proposed successfully";
+                }
+                catch(Exception ex)
                 {
                     TempData["Info"] = ex;
                 }
-                TempData["info"] = "Event record inserted successfully";
+               
 
             }
             else
             {
                 TempData["Error"] = "Error";
             }
+            ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             return View(model);
         }
 
@@ -292,6 +301,79 @@ namespace EventManagementSystem.Controllers
             var model = events.ToPagedList(page, 5);
 
             return View(model);
+        }
+
+        // GET: Event/ManageEventProposed
+        public ActionResult ManageEventProposed(int Id)
+        {
+            var e = db.Events.Find(Id);
+            if (e == null)
+            {
+                return RedirectToAction("EventsProposed", "User");
+            }
+
+            var model = new EventEditVM
+            {
+                Id = Id,
+                name = e.name,
+                des = e.des,
+                price = e.price,
+                participants = e.participants,
+                startDate = e.startDate,
+                endDate = e.endDate,
+                startTime = e.startTime,
+                endTime = e.endTime,
+                approvalStat = e.approvalStat,
+                photoURL = e.photoURL,
+                OrgId = e.OrgId
+            };
+
+            ViewBag.Registrations = db.Registrations.Where(r => r.eventId == Id);
+            ViewBag.ParticipantsCount = db.Registrations.Where(r => r.eventId == Id && r.Payment.status == true).Count();
+            ViewBag.PendingCount = db.Registrations.Where(r => r.eventId == Id && r.Payment.status == false).Count();
+            ViewBag.Payments = db.Payments.Where(p => p.Registration.eventId == Id);
+            ViewBag.PaymentsCount = db.Payments.Where(p => p.Registration.eventId == Id).Count();
+            return View(model);
+        }
+
+        // POST: Event/ManageEventProposed
+        [HttpPost]
+        public ActionResult ManageEventProposed(EventEditVM model)
+        {
+            var e = db.Events.Find(model.Id);
+            if (model == null)
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            if (ModelState.IsValid)
+            {
+                e.name = model.name;
+                e.des = model.des;
+                e.price = model.price;
+                e.availability = e.availability;
+                e.participants = model.participants;
+                e.startDate = model.startDate;
+                e.endDate = model.endDate;
+                e.startTime = model.startTime;
+                e.endTime = model.endTime;
+                e.approvalStat = true;
+                if (model.Photo != null)
+                {
+                    DeletePhoto(e.photoURL);
+                    e.photoURL = SavePhoto(model.Photo);
+                }
+                db.SaveChanges();
+                TempData["info"] = "Event record updated successfully";
+                return RedirectToAction("ManageEventProposed", "User", new { id=model.Id });
+            }
+            return View(model);
+        }
+
+        public ActionResult Billing()
+        {
+            int uId = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
+            var bill = db.Payments.ToList().Where(p => p.Registration.userId == uId);
+            return View(bill);
         }
 
     }

@@ -12,23 +12,33 @@ using System.Web.Helpers;
 using EventManagementSystem.reCAPTCHA;
 using System.Security.Claims;
 using Microsoft.Owin.Security;
+using Microsoft.AspNet.Identity;
+
 
 namespace EventManagementSystem.Controllers
 {
     public class AccountController : Controller
     {
         DBEntities db = new DBEntities();
+        PasswordHasher ph = new PasswordHasher();
 
-        // GET: User
-        public ActionResult Index()
+        private string HashPassword(string password)
         {
-            return View();
+            return ph.HashPassword(password);
         }
+
+        private bool VerifyPassword(string hash, string password)
+        {
+            return ph.VerifyHashedPassword(hash, password) == PasswordVerificationResult.Success;
+        }
+
         // Check if username aldy exists in database
         public JsonResult IsUserNameAvailable(RegisterVM model)
         {
             return Json(!db.Users.Any(u => u.username == model.username), JsonRequestBehavior.AllowGet);
         }
+
+
 
         private void SignIn(string username, string role, bool rememberMe)
         {
@@ -152,7 +162,7 @@ namespace EventManagementSystem.Controllers
                     contact_no = model.contact_no,
                     email = model.email,
                     username = model.username,
-                    password = model.password,
+                    password = HashPassword(model.password),
                     role = model.role,
                     status = true,
                     activated = false,
@@ -234,7 +244,7 @@ namespace EventManagementSystem.Controllers
                 var user = db.Users.FirstOrDefault(u => u.username == model.Username);
 
                 //Check pass
-                if(user!=null && user.password == model.Password)
+                if(user!=null && VerifyPassword(user.password, model.Password))
                 {
                     if (!user.activated)
                     {

@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Payment> 
+@{
+    ViewBag.Title = "Billing";
+}
+
+<h2>Billing</h2>
+
+<table class="table table-hover table-responsive">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Event name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Reg. Status</th>
+            <th scope="col">Date</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            if (item.status == false)
+            {
+
+                <tr>
+                    <td scope="row">@item.Id</td>
+                    <td scope="row">@item.Registration.Event.name</td>
+                    <td scope="row">@item.Registration.Event.price</td>
+                    <td scope="row">@item.Registration.status</td>
+                    <td scope="row">@item.Registration.Event.startDate</td>
+                    <td>
+                        <input class="btn btn-primary" data-get="/Admin/EditUser?id=@item.Id" type="button" value="Pay now">
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
