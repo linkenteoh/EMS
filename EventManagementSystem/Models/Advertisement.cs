@@ -21,7 +21,6 @@ namespace EventManagementSystem.Models
         public System.DateTime endDate { get; set; }
         public System.TimeSpan startTime { get; set; }
         public System.TimeSpan endTime { get; set; }
-        public string duration { get; set; }
         public decimal charge { get; set; }
         public string photoURL { get; set; }
         public bool status { get; set; }

@@ -110,8 +110,6 @@ namespace EventManagementSystem.Controllers
                     endDate = model.endDate,
                     startTime = model.startTime,
                     endTime = model.endTime,
-                    duration = duration.ToString(),
-                    organized_by = model.organized_by,
                     approvalStat = model.approvalStat,
                     status = true,
                     venueId = null,
@@ -152,8 +150,6 @@ namespace EventManagementSystem.Controllers
                 endDate = e.endDate,
                 startTime = e.startTime,
                 endTime = e.endTime,
-                duration = e.duration,
-                organized_by = e.organized_by,
                 photoURL = e.photoURL,
             };
             return View(model);
@@ -180,8 +176,6 @@ namespace EventManagementSystem.Controllers
                 e.endDate = model.endDate;
                 e.startTime = model.startTime;
                 e.endTime = model.endTime;
-                e.duration = duration.ToString();
-                e.organized_by = model.organized_by;
                 e.approvalStat = model.approvalStat;
                 if (model.Photo != null)
                 {
@@ -383,7 +377,6 @@ namespace EventManagementSystem.Controllers
                     endDate = model.endDate,
                     startTime = model.startTime,
                     endTime = model.endTime,
-                    duration = duration.ToString(),
                     status = true,
                     userId = id,    
                     photoURL = SavePhoto(model.Photo)
@@ -420,7 +413,6 @@ namespace EventManagementSystem.Controllers
                 endDate = a.endDate,
                 startTime = a.startTime,
                 endTime = a.endTime,
-                duration = a.duration,
                 userId = a.userId,
                 photoURL = a.photoURL,
             };
@@ -446,7 +438,6 @@ namespace EventManagementSystem.Controllers
                 a.endDate = model.endDate;
                 a.startTime = model.startTime;
                 a.endTime = model.endTime;
-                a.duration = duration.ToString();
                 if (model.Photo != null)
                 {
                     DeletePhoto(a.photoURL);
