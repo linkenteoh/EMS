@@ -195,7 +195,6 @@ namespace EventManagementSystem.Controllers
                     startTime = model.startTime,
                     endTime = model.endTime,
                     duration = duration.ToString(),
-                    organized_by = model.organized_by,
                     approvalStat = model.approvalStat,
                     status = true,
                     venueId = null,
@@ -221,28 +220,29 @@ namespace EventManagementSystem.Controllers
             ViewBag.eventID = Id;
             // Get current event date and time
             var eventCurrent = db.Events.Find(Id);
-
+            ViewBag.eventCurrent = eventCurrent;
             // Validate Availability
-            var eventsAvailability = db.Events.AsQueryable();
+            var eventsExisting = db.Events.Where(x => x.Id != Id).AsQueryable();
+
             // Check if the dates in each event is within range of current Event
-            eventsAvailability = db.Events.Where(x => x.startDate >= eventCurrent.startDate && x.endDate <= eventCurrent.endDate);
+            eventsExisting = db.Events.Where(x => x.startDate >= eventCurrent.startDate && x.endDate <= eventCurrent.endDate);
 
             // Check if  the time in each event is within range of current event
-            eventsAvailability = db.Events.Where(x => x.startTime >= eventCurrent.startTime && x.endTime <= eventCurrent.endTime);
+            eventsExisting = db.Events.Where(x => x.startTime >= eventCurrent.startTime && x.endTime <= eventCurrent.endTime);
 
+            // Check if venue exist
+            eventsExisting = db.Events.Where(x => x.venueId != null);
+            ViewBag.venueOccupied = eventsExisting;
 
-            //model = db.Events.Where(x => x.startDate >= dtFrom && x.endDate <= dtTo);
-
-           // string bookedVenue = "";
             var model = db.Venues;
             return View(model);
         }
 
         // Confirm Venue
         [HttpPost]
-        public ActionResult VenueBooking(int eventID, string venueName)
+        public ActionResult VenueBooking(int eventID, int venueID)
         {
-            var model = db.Venues.Where(v => v.name.Contains(venueName)).FirstOrDefault();
+            var model = db.Venues.Where(v => v.Id == venueID).FirstOrDefault();
             if (model != null)
             {
                 var eve = db.Events.Find(eventID);

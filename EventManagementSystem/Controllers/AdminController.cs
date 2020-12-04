@@ -111,7 +111,6 @@ namespace EventManagementSystem.Controllers
                     startTime = model.startTime,
                     endTime = model.endTime,
                     duration = duration.ToString(),
-                    organized_by = model.organized_by,
                     approvalStat = model.approvalStat,
                     status = true,
                     venueId = null,
@@ -153,7 +152,6 @@ namespace EventManagementSystem.Controllers
                 startTime = e.startTime,
                 endTime = e.endTime,
                 duration = e.duration,
-                organized_by = e.organized_by,
                 photoURL = e.photoURL,
             };
             return View(model);
@@ -181,7 +179,6 @@ namespace EventManagementSystem.Controllers
                 e.startTime = model.startTime;
                 e.endTime = model.endTime;
                 e.duration = duration.ToString();
-                e.organized_by = model.organized_by;
                 e.approvalStat = model.approvalStat;
                 if (model.Photo != null)
                 {

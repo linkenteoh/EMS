@@ -22,7 +22,6 @@ namespace EventManagementSystem.Models
     
         public int Id { get; set; }
         public string name { get; set; }
-        public string booking_Id { get; set; }
         public string location { get; set; }
         public string equipment { get; set; }
         public int capacity { get; set; }

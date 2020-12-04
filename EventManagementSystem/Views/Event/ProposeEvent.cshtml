@@ -34,7 +34,9 @@
                               })
                             @Html.ValidationMessageFor(e => e.Photo)
                         </label>
-                       
+                        @*<div id="insertFile">
+
+                        </div>*@
                     @*<div class="dropzone">
                         <div class="dz-message" data-dz-message><img class="img-thumbnail" src="~/Images/no-image-icon-23499.png"></div>
                     </div>*@
@@ -112,6 +114,12 @@
                 reName.test(f.name);
         }
 
+        @*$('#insertFile').on({
+            'dragover dragenter': function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            },
+        });*@
         @*Dropzone.autoDiscover = false;
         Dropzone.options.dropZoneForm =
         {
