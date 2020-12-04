@@ -16,7 +16,6 @@
           <Property Name="endDate" Type="date" Nullable="false" />
           <Property Name="startTime" Type="time" Precision="7" Nullable="false" />
           <Property Name="endTime" Type="time" Precision="7" Nullable="false" />
-          <Property Name="duration" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="charge" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="photoURL" Type="varchar" MaxLength="100" />
           <Property Name="status" Type="bit" Nullable="false" />
@@ -36,7 +35,6 @@
           <Property Name="endDate" Type="date" Nullable="false" />
           <Property Name="startTime" Type="time" Precision="7" Nullable="false" />
           <Property Name="endTime" Type="time" Precision="7" Nullable="false" />
-          <Property Name="duration" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="approvalStat" Type="bit" />
           <Property Name="status" Type="bit" Nullable="false" />
           <Property Name="venueId" Type="int" />
@@ -82,7 +80,7 @@
           <Property Name="contact_no" Type="char" MaxLength="12" Nullable="false" />
           <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="username" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar(max)" Nullable="false" />
           <Property Name="role" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="organizer" Type="bit" />
           <Property Name="status" Type="bit" Nullable="false" />
@@ -274,7 +272,6 @@
           <Property Name="endDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="startTime" Type="Time" Nullable="false" Precision="7" />
           <Property Name="endTime" Type="Time" Nullable="false" Precision="7" />
-          <Property Name="duration" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="charge" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="photoURL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="status" Type="Boolean" Nullable="false" />
@@ -295,7 +292,6 @@
           <Property Name="endDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="startTime" Type="Time" Nullable="false" Precision="7" />
           <Property Name="endTime" Type="Time" Nullable="false" Precision="7" />
-          <Property Name="duration" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="approvalStat" Type="Boolean" />
           <Property Name="status" Type="Boolean" Nullable="false" />
           <Property Name="venueId" Type="Int32" />
@@ -350,7 +346,7 @@
           <Property Name="contact_no" Type="String" Nullable="false" MaxLength="12" FixedLength="true" Unicode="false" />
           <Property Name="email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="role" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="organizer" Type="Boolean" />
           <Property Name="status" Type="Boolean" Nullable="false" />
@@ -470,7 +466,6 @@
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="photoURL" ColumnName="photoURL" />
                 <ScalarProperty Name="charge" ColumnName="charge" />
-                <ScalarProperty Name="duration" ColumnName="duration" />
                 <ScalarProperty Name="endTime" ColumnName="endTime" />
                 <ScalarProperty Name="startTime" ColumnName="startTime" />
                 <ScalarProperty Name="endDate" ColumnName="endDate" />
@@ -489,7 +484,6 @@
                 <ScalarProperty Name="venueId" ColumnName="venueId" />
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="approvalStat" ColumnName="approvalStat" />
-                <ScalarProperty Name="duration" ColumnName="duration" />
                 <ScalarProperty Name="endTime" ColumnName="endTime" />
                 <ScalarProperty Name="startTime" ColumnName="startTime" />
                 <ScalarProperty Name="endDate" ColumnName="endDate" />

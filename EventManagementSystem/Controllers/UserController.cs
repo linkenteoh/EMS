@@ -231,6 +231,23 @@ namespace EventManagementSystem.Controllers
         [HttpPost]
         public ActionResult ProposeEvent(EventInsertVM model)
         {
+
+            if (ModelState.IsValidField("startDate"))
+            {
+                if (model.startDate > model.endDate)
+                {
+                    ModelState.AddModelError("startDate", "Invalid date!");
+                }
+
+            }
+            if (ModelState.IsValidField("startTime"))
+            {
+                if (model.startTime > model.endTime)
+                {
+                    ModelState.AddModelError("startTime", "start time cannot exceed or equal end time!");
+                }
+            }
+     
             string error = ValidatePhoto(model.Photo);
             if (error != null)
             {
@@ -238,19 +255,17 @@ namespace EventManagementSystem.Controllers
             }
             if (ModelState.IsValid)
             {
-                int duration = ((int)model.endTime.TotalMinutes - (int)model.startTime.TotalMinutes) / 60;
                 var e = new Event
                 {
                     name = model.name,
                     des = model.des,
                     price = model.price,
-                    availability = model.availability,
                     participants = model.participants,
+                    availability = model.participants,
                     startDate = model.startDate,
                     endDate = model.endDate,
                     startTime = model.startTime,
                     endTime = model.endTime,
-                    duration = duration.ToString(),
                     approvalStat = null,
                     status = true,
                     venueId = null,
@@ -260,11 +275,13 @@ namespace EventManagementSystem.Controllers
                 try { 
                 db.Events.Add(e);
                 db.SaveChanges();
-                }catch(Exception ex)
+                TempData["info"] = "Event proposed successfully";
+                }
+                catch(Exception ex)
                 {
                     TempData["Info"] = ex;
                 }
-                TempData["info"] = "Event proposed successfully";
+               
 
             }
             else

@@ -2,75 +2,104 @@
 
 
 @{
-    ViewBag.Title = "EditUser";
-    Layout = "~/Views/Shared/_Dashboard.cshtml";
-    string photoURL = Model.photoURL;
+    ViewBag.Title = "Edit User";
 }
 
+@section head{
+    <style>
+        input[type="file"] {
+            display: none;
+        }
 
+        .upload {
+            display: block;
+        }
+
+            .upload img {
+                display: block;
+                border: 1px solid #333;
+                width: 200px;
+                height: 200px;
+                object-fit: cover;
+            }
+    </style>
+}
 <form class="form" method="post" enctype="multipart/form-data">
     @Html.ValidationSummary(true)
     <div class="container rounded bg-white mt-5 mb-5">
+        <h2>Edit User</h2>
+        <hr />
         <div class="row">
             <div class="col-md-3 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                     <label class="upload">
-                        <img class="img-thumbnail" src="~/Images/@photoURL">
-                        @Html.TextBoxFor(u => u.Photo, new
-                        {
+                        <img class="img-thumbnail" src="~/Photo/@Model.photoURL">
+                        @Html.TextBoxFor(e => e.Photo, new
+                   {
                        type = "file",
-                            accept = "image/jpeg, image/png",
+                       accept = "image/jpeg, image/png",
                        hidden = ""
-                        })
-                        @Html.ValidationMessageFor(u => u.Photo)
+
+                   })
+                        @Html.ValidationMessageFor(e => e.Photo)
                     </label>
                 </div>
             </div>
 
-            <div class="col-md-5 border-right">
-                <div class="p-3 py-5">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="text-right">Add User</h4>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6">
-                            @Html.LabelFor(u => u.name, "Name")@Html.TextBoxFor(u => u.name, new { maxlength = 20, autofocus = "", @class = "form-control", placeholder = "Name" }) @Html.ValidationMessageFor(u => u.name)
-                        </div>
-                        <div class="col-md-6">
-                            @Html.LabelFor(u => u.contact_no, "Contact Number")@Html.TextBoxFor(u => u.contact_no, new { @class = "form-control", placeholder = "XXX-XXXXXXX" }) @Html.ValidationMessageFor(u => u.contact_no)
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-12">
-                            @Html.LabelFor(u => u.email, "Email Address") @Html.TextBoxFor(u => u.email, new { @class = "form-control", placeholder = "jun@gmail.com" })
-                            @Html.ValidationMessageFor(u => u.email)
-                        </div>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-md-12">
-                            @Html.LabelFor(u => u.username, "Username")@Html.TextBoxFor(u => u.username, new { type = "text", @class = "form-control", @disabled ="disabled" })
-                            @Html.ValidationMessageFor(u => u.username)
-                        </div>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-md-6">
-                            @Html.LabelFor(u => u.password, "Password")@Html.TextBoxFor(u => u.password, new { type = "password", @class = "form-control" })
-                            @Html.ValidationMessageFor(u => u.password)
-                        </div>
-                        <div class="col-md-6">
-                            @Html.LabelFor(u => u.confirmPassword, "Confirm Password")@Html.TextBoxFor(u => u.confirmPassword, new { type = "password", @class = "form-control" })
-                            @Html.ValidationMessageFor(u => u.confirmPassword)
-                        </div>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-md-4">
-
-                            @Html.LabelFor(u => u.role, "Role") @Html.DropDownListFor(u => u.role, new SelectList(Enum.GetValues(typeof(Role))), "-Choose One-", new { @class = "btn btn-secondary dropdown-toggle" })
-                            @Html.ValidationMessageFor(u => u.role)
-                        </div>
-                    </div>
-                    <div class="mt-5 text-center"><section><button class="btn btn-primary profile-button">Edit User</button></section></div>
+            <div class="col-md-7 border-right">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Add User</h4>
                 </div>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        @Html.LabelFor(u => u.name, "Name")@Html.TextBoxFor(u => u.name, new { maxlength = 20, autofocus = "", @class = "form-control", placeholder = "Name" }) @Html.ValidationMessageFor(u => u.name)
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(u => u.contact_no, "Contact Number")@Html.TextBoxFor(u => u.contact_no, new { @class = "form-control", placeholder = "XXX-XXXXXXX" }) @Html.ValidationMessageFor(u => u.contact_no)
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        @Html.LabelFor(u => u.username, "Username")@Html.TextBoxFor(u => u.username, new { type = "text", @class = "form-control" })
+                        @Html.ValidationMessageFor(u => u.username)
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(u => u.email, "Email Address") @Html.TextBoxFor(u => u.email, new { @class = "form-control", placeholder = "jun@gmail.com" })
+                        @Html.ValidationMessageFor(u => u.email)
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        @Html.LabelFor(u => u.password, "New Password")@Html.TextBoxFor(u => u.password, new { type = "password", @class = "form-control" })
+                        @Html.ValidationMessageFor(u => u.password)
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(u => u.confirmPassword, "New Confirm Password")@Html.TextBoxFor(u => u.confirmPassword, new { type = "password", @class = "form-control" })
+                        @Html.ValidationMessageFor(u => u.confirmPassword)
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        @Html.LabelFor(u => u.role, "Role")
+                        <div>
+                            @Html.DropDownListFor(u => u.role, new SelectList(Enum.GetValues(typeof(Role))), "-Choose One-", new { @class = "btn btn-secondary dropdown-toggle" })
+                        </div>
+                        @Html.ValidationMessageFor(u => u.role)
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(u => u.organizer, "Organizer")
+                        <div class="form-check">
+                            @Html.RadioButtonFor(u => u.organizer, true, new { @class = "form-check-input", id = "materialChecked", name = "materialExampleRadios" })&nbsp;&nbsp;&nbsp;
+                            <label class="form-check-label" for="materialChecked">Yes</label>
+                        </div>
+                        <div class="form-check">
+                            @Html.RadioButtonFor(u => u.organizer, false, new { @class = "form-check-input", id = "materialUnchecked", name = "materialExampleRadios" })&nbsp;&nbsp;&nbsp;
+                            <label class="form-check-label" for="materialUnchecked">No</label>
+                        </div>
+                        @Html.ValidationMessageFor(u => u.role)
+                    </div>
+                </div>
+                <div class="mt-12" style="margin-top:15px"><section><button class="btn btn-primary profile-button">Edit</button></section></div>
             </div>
         </div>
     </div>
@@ -82,32 +111,32 @@
 
     <script>
 
-    function validatePhoto(f) {
-        let retype = /^image\/(jpeg|png)$/i;
-        let reName = /^.+\.(png|jpg|jpeg)$/i;
-        return f &&
-            f.size <= 1 * 1024 * 1024 &&
-            retype.test(f.type) &&
-            reName.test(f.name);
-    }
-
-    let src = null;
-    $('.upload input').change(u => {
-        let f = u.target.files[0];
-        let img = $(u.target).siblings('img')[0];
-
-        if (!src) src = img.src;
-
-        if (validatePhoto(f)) {
-
-            img.src = URL.createObjectURL(f);
-
-        } else {
-            img.src = src;
-            u.target.value = '';
+        function validatePhoto(f) {
+            let retype = /^image\/(jpeg|png)$/i;
+            let reName = /^.+\.(png|jpg|jpeg)$/i;
+            return f &&
+                f.size <= 1 * 1024 * 1024 &&
+                retype.test(f.type) &&
+                reName.test(f.name);
         }
 
-    });
+        let src = null;
+        $('.upload input').change(u => {
+            let f = u.target.files[0];
+            let img = $(u.target).siblings('img')[0];
+
+            if (!src) src = img.src;
+
+            if (validatePhoto(f)) {
+
+                img.src = URL.createObjectURL(f);
+
+            } else {
+                img.src = src;
+                u.target.value = '';
+            }
+
+        });
 
     </script>
 }

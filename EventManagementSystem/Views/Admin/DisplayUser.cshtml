@@ -19,7 +19,6 @@
             <th scope="col">Contact Number</th>
             <th scope="col">Email</th>
             <th scope="col">Username</th>
-            <th scope="col">Password</th>
             <th scope="col">Role</th>
             <th scope="col">Organizer</th>
             <th scope="col"></th>
@@ -39,14 +38,13 @@
                     <td scope="row">@u.contact_no</td>
                     <td scope="row">@u.email</td>
                     <td scope="row">@u.username</td>
-                    <td scope="row">@u.password</td>
                     <td scope="row">@u.role</td>
                     <td scope="row">@u.organizer</td>
                     <td>
                         <input class="btn btn-primary" data-get="/Admin/EditUser?id=@u.Id" type="button" value="Edit">
                     </td>
                     <td>
-                        <input class="btn btn-primary" data-get="/Admin/DeleteUser?id=@u.Id" type="button" value="Delete">
+                        <input class="btn btn-danger" data-get="/Admin/DeleteUser?id=@u.Id" type="button" value="Delete">
                     </td>
                 </tr>
             }
@@ -56,18 +54,11 @@
 </table>
 
 
-@{
-    var options = PagedListRenderOptions.ClassicPlusFirstAndLast;
-    options.LinkToFirstPageFormat = "First";
-    options.LinkToLastPageFormat = "Last";
-    options.LinkToNextPageFormat = "Next";
-    options.LinkToPreviousPageFormat = "Previous";
-}
-
-
 @Html.PagedListPager(
     Model,
     p => "?page=" + p,
-    options
+    PagedListRenderOptions.Classic
 )
+
+
 

@@ -20,7 +20,6 @@
 <div style="margin-bottom:20px">
     <input class="btn btn-primary" data-get="/Admin/InsertEvent" type="button" value="Add Event">
     <span class="btn btn-primary searchButton">Search</span>
-
     <div class="parent">
         <div class="searchCont">
             <div class="form-group row">
@@ -62,7 +61,7 @@
             <th scope="col">Participant limit</th>
             <th scope="col">Start Date</th>
             <th scope="col">End Date</th>
-            <th scope="col">Duration</th>
+            <th scope="col">Venue</th>
             <th scope="col">Organized by</th>
             <th scope="col"></th>
             <th scope="col"></th>
@@ -70,29 +69,36 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var s in Model)
+        @foreach (var e in Model)
         {
-            if (s.status == true && s.approvalStat == true)
+            if (e.status == true && e.approvalStat == true)
             {
 
-                <tr>
-                    <td scope="row">@s.Id</td>
-                    <td scope="row">@s.name</td>
-                    <td scope="row">@s.des</td>
-                    <td scope="row">@s.price</td>
-                    <td scope="row">@s.availability</td>
-                    <td scope="row">@s.participants</td>
-                    <td scope="row">@s.startDate.ToString("dd/MM/yyyy") @s.startTime</td>
-                    <td scope="row">@s.endDate.ToString("dd/MM/yyyy") @s.endTime</td> 
-                    <td scope="row">@s.duration hour(s)</td>
-                    <td scope="row">@s.Organiser.represent </td>
-                    <td>
-                        <input class="btn btn-primary" data-get="/Admin/EditEvent?id=@s.Id" type="button" value="Edit">
-                    </td>
-                    <td>
-                        <input class="btn btn-primary" data-get="/Admin/DeleteEvent?id=@s.Id" type="button" value="Delete">
-                    </td>
-                </tr>
+        <tr>
+            <td scope="row">@e.Id</td>
+            <td scope="row">@e.name</td>
+            <td scope="row">@e.des</td>
+            <td scope="row">@e.price</td>
+            <td scope="row">@e.availability</td>
+            <td scope="row">@e.participants</td>
+            <td scope="row">@e.startDate.ToString("dd/MM/yyyy") @e.startTime</td>
+            <td scope="row">@e.endDate.ToString("dd/MM/yyyy") @e.endTime</td>
+            @if (e.venueId == null)
+            {
+                <td scope="row"> </td>
+            }
+            else
+            {
+                <td scope="row">@e.Venue.name</td>
+            }
+            <td scope="row">@e.Organiser.represent </td>
+            <td>
+                <input class="btn btn-primary" data-get="/Admin/EditEvent?id=@e.Id" type="button" value="Edit">
+            </td>
+            <td>
+                <input class="btn btn-danger" data-get="/Admin/DeleteEvent?id=@e.Id" type="button" value="Delete">
+            </td>
+        </tr>
             }
         }
 

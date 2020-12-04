@@ -19,12 +19,9 @@ namespace EventManagementSystem.Models
         public string des { get; set; }
         [Required]
         public decimal price { get; set; }
-
         [Required]
-        public int availability { get; set; }
-        [Required]
-
         public int participants { get; set; }
+        public int availability { get; set; }
         [Required]
         public DateTime startDate { get; set; }
         [Required]
@@ -33,12 +30,12 @@ namespace EventManagementSystem.Models
         public TimeSpan startTime { get; set; }
         [Required]
         public TimeSpan endTime { get; set; }
-        public string duration { get; set; }
         public bool approvalStat { get; set; }
-        [Required]
+        [Required(ErrorMessage = "The organized by field is required!")]
         public int OrgId { get; set; }
         public bool status { get; set; }
-        public int? venueId { get; set; }
+        [Required(ErrorMessage = "The venue field is required!")]
+        public Nullable<int> venueId { get; set; }
         public HttpPostedFileBase Photo { get; set; }
 
     }
@@ -55,10 +52,7 @@ namespace EventManagementSystem.Models
         public string des { get; set; }
         [Required]
         public decimal price { get; set; }
-        [Required]
-        public int availability { get; set; }
-        [Required]
-        public int participants { get; set; }
+        public int participants { get; set; }   
         [Required]
         public DateTime startDate { get; set; }
         [Required]
@@ -67,10 +61,11 @@ namespace EventManagementSystem.Models
         public TimeSpan startTime { get; set; }
         [Required]
         public TimeSpan endTime { get; set; }
-        public string duration { get; set; }
         public bool? approvalStat { get; set; }
-        [Required]
+        [Required(ErrorMessage = "The organized by field is required!")]
         public int OrgId { get; set; }
+        [Required(ErrorMessage = "The venue field is required!")]
+        public Nullable<int> venueId { get; set; }
         public HttpPostedFileBase Photo { get; set; }
         public string photoURL { get; set; }
     }
@@ -98,10 +93,42 @@ namespace EventManagementSystem.Models
         [Required]
         public HttpPostedFileBase Photo { get; set; }
         public Role role { get; set; }
+        [Required(ErrorMessage = "Please choose the option!")]
         public Nullable<bool> organizer { get; set; }
         public int status { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
+
+    }
+    public class EventProposeVM
+    {
+        public string Id { get; set; }
+        [Required]
+        [StringLength(100)]
+        [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only")]
+        public string name { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string des { get; set; }
+        [Required]
+        public decimal price { get; set; }
+        [Required]
+        public int participants { get; set; }
+        public int availability { get; set; }
+        [Required]
+        public DateTime startDate { get; set; }
+        [Required]
+        public DateTime endDate { get; set; }
+        [Required]
+        public TimeSpan startTime { get; set; }
+        [Required]
+        public TimeSpan endTime { get; set; }
+        public bool approvalStat { get; set; }
+        [Required(ErrorMessage = "The organized by field is required!")]
+        public int OrgId { get; set; }
+        public bool status { get; set; }
+        public int? venueId { get; set; }
+        public HttpPostedFileBase Photo { get; set; }
 
     }
     public enum Role
@@ -111,6 +138,7 @@ namespace EventManagementSystem.Models
         Admin,
         Outsider
     }
+   
     public class UserEditVM
     {
 
@@ -132,6 +160,7 @@ namespace EventManagementSystem.Models
         public HttpPostedFileBase Photo { get; set; }
         public string photoURL { get; set; }
         public Role role { get; set; }
+        [Required(ErrorMessage = "Please choose the option!")]
         public Nullable<bool> organizer { get; set; }
         public bool status { get; set; }
         public string recoveryCode { get; set; }
@@ -162,6 +191,7 @@ namespace EventManagementSystem.Models
         [Required]
         public HttpPostedFileBase Photo { get; set; }
         public string role { get; set; }
+
         public Nullable<bool> organizer { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
@@ -229,7 +259,6 @@ namespace EventManagementSystem.Models
         public TimeSpan startTime { get; set; }
         [Required]
         public TimeSpan endTime { get; set; }
-        public string duration { get; set; }
         public bool status { get; set; }
         public int? userId { get; set; }
         public HttpPostedFileBase Photo { get; set; }
