@@ -286,6 +286,76 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
 
+        // GET: Event/ManageEventProposed
+        public ActionResult ManageEventProposed(int Id)
+        {
+            var e = db.Events.Find(Id);
+            if (e == null)
+            {
+                return RedirectToAction("EventsProposed", "User");
+            }
+
+            var model = new EventEditVM
+            {
+                Id = Id,
+                name = e.name,
+                des = e.des,
+                price = e.price,
+                availability = e.availability,
+                participants = e.participants,
+                startDate = e.startDate,
+                endDate = e.endDate,
+                startTime = e.startTime,
+                endTime = e.endTime,
+                duration = e.duration,
+                approvalStat = e.approvalStat,
+                photoURL = e.photoURL,
+                OrgId = e.OrgId
+            };
+
+            ViewBag.Registrations = db.Registrations.Where(r => r.eventId == Id);
+            ViewBag.ParticipantsCount = db.Registrations.Where(r => r.eventId == Id && r.Payment.status == true).Count();
+            ViewBag.PendingCount = db.Registrations.Where(r => r.eventId == Id && r.Payment.status == false).Count();
+            ViewBag.Payments = db.Payments.Where(p => p.Registration.eventId == Id);
+            ViewBag.PaymentsCount = db.Payments.Where(p => p.Registration.eventId == Id).Count();
+            return View(model);
+        }
+
+        // POST: Event/ManageEventProposed
+        [HttpPost]
+        public ActionResult ManageEventProposed(EventEditVM model)
+        {
+            var e = db.Events.Find(model.Id);
+            if (model == null)
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            int duration = ((int)model.endTime.TotalMinutes - (int)model.startTime.TotalMinutes) / 60;
+            if (ModelState.IsValid)
+            {
+                e.name = model.name;
+                e.des = model.des;
+                e.price = model.price;
+                e.availability = model.availability;
+                e.participants = model.participants;
+                e.startDate = model.startDate;
+                e.endDate = model.endDate;
+                e.startTime = model.startTime;
+                e.endTime = model.endTime;
+                e.duration = duration.ToString();
+                e.approvalStat = true;
+                if (model.Photo != null)
+                {
+                    DeletePhoto(e.photoURL);
+                    e.photoURL = SavePhoto(model.Photo);
+                }
+                db.SaveChanges();
+                TempData["info"] = "Event record updated successfully";
+                return RedirectToAction("ManageEventProposed", "User", new { id=model.Id });
+            }
+            return View(model);
+        }
+
         public ActionResult Billing()
         {
             int uId = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
