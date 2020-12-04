@@ -224,7 +224,6 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-
     <Content Include="Content\images\icons\icon-128x128.png" />
     <Content Include="Content\images\icons\icon-144x144.png" />
     <Content Include="Content\images\icons\icon-152x152.png" />
@@ -261,10 +260,8 @@
     <Content Include="Models\DB.edmx.diagram">
       <DependentUpon>DB.edmx</DependentUpon>
     </Content>
-
     <Content Include="manifest.json" />
     <Content Include="angular.json" />
-
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\fontawesome-webfont.woff" />
@@ -331,11 +328,11 @@
     <Content Include="Views\User\EventsProposed.cshtml" />
     <Content Include="Views\Event\EventDetail.cshtml" />
     <Content Include="Views\User\Billing.cshtml" />
-    <Content Include="Views\Admin\DisplayApporval.cshtml" />
-
-    <Content Include="Views\Admin\EditApproval.cshtml" />
+    <Content Include="Views\Admin\DisplayProposalApporval.cshtml" />
     <Content Include="Views\Event\Chat.cshtml" />
     <Content Include="Views\User\ManageEventProposed.cshtml" />
+    <Content Include="Views\Admin\DisplayOrganizerApproval.cshtml" />
+    <Content Include="Views\User\RegOrganisera.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\DisplayUser.cshtml" />

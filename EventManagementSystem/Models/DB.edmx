@@ -48,7 +48,7 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="represent" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="position" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="status" Type="bit" Nullable="false" />
+          <Property Name="status" Type="bit" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -308,7 +308,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="represent" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="position" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="status" Type="Boolean" Nullable="false" />
+          <Property Name="status" Type="Boolean" />
           <NavigationProperty Name="Events" Relationship="DBModel.FK_Event_Organiser" FromRole="Organiser" ToRole="Event" />
           <NavigationProperty Name="User" Relationship="DBModel.FK_Organiser_User" FromRole="Organiser" ToRole="User" />
         </EntityType>

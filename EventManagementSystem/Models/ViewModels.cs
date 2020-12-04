@@ -275,6 +275,7 @@ namespace EventManagementSystem.Models
         public string represent { get; set; }
         [Required]
         public string position { get; set; }
+        public Nullable<bool> status { get; set; }
     }
 
 }

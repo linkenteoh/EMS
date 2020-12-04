@@ -47,7 +47,7 @@ namespace EventManagementSystem.Controllers
                     Id = id,
                     represent = model.represent,
                     position = model.position,
-                    status = false
+                    status = null
                 };
 
                 db.Organisers.Add(oragniser);
@@ -223,7 +223,7 @@ namespace EventManagementSystem.Controllers
         // GET: User/ProposeEvent
         public ActionResult ProposeEvent()
         {
-            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id", "represent");
+            ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             return View();
         }
 
@@ -288,7 +288,7 @@ namespace EventManagementSystem.Controllers
             {
                 TempData["Error"] = "Error";
             }
-            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id", "represent");
+            ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             return View(model);
         }
 
