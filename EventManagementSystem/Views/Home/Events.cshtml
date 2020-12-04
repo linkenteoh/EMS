@@ -25,10 +25,10 @@
 
 <div class="dropdown">
     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Search by
+        Filter
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <div>
+        <div style="padding: 15px;">
             @Html.Label("name", "Event Name", new { @class = "control-label col-sm-2" })
             @Html.TextBox("name", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control" })
             @Html.Label("startDate", "Date From", new { @class = "control-label col-sm-2" })
