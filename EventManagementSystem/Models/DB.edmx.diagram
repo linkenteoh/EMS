@@ -11,7 +11,11 @@
         <EntityTypeShape EntityType="DBModel.Payment" Width="1.5" PointX="9.75" PointY="5.5" />
         <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="7.5" PointY="5.375" />
         <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="0.75" PointY="3.5" />
+<<<<<<< HEAD
         <EntityTypeShape EntityType="DBModel.Venue" Width="1.5" PointX="3" PointY="10.375" />
+=======
+        
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
         <AssociationConnector Association="DBModel.FK_Table_User" />
         <AssociationConnector Association="DBModel.FK_Event_Organiser" />
         <AssociationConnector Association="DBModel.FK_Event_Venue" />

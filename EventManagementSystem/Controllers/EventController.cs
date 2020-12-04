@@ -85,14 +85,51 @@ namespace EventManagementSystem.Controllers
             return View();
         }
 
-        public ActionResult VenueBooking(string btn = "")
+        // GET venue booking index
+        public ActionResult VenueBooking(int Id)
         {
-            
-            if (Request.IsAjaxRequest())
-                return PartialView("_Venue");
-            return View();
+            ViewBag.eventID = Id;
+            // Get current event date and time
+            var eventCurrent = db.Events.Find(Id);
+            ViewBag.eventCurrent = eventCurrent;
+            // Validate Availability
+            var eventsExisting = db.Events.Where(x => x.Id != Id).AsQueryable();
+
+            // Check if the dates in each event is within range of current Event
+            eventsExisting = db.Events.Where(x => x.startDate >= eventCurrent.startDate && x.endDate <= eventCurrent.endDate);
+
+            // Check if  the time in each event is within range of current event
+            eventsExisting = db.Events.Where(x => x.startTime >= eventCurrent.startTime && x.endTime <= eventCurrent.endTime);
+
+            // Check if venue exist
+            eventsExisting = db.Events.Where(x => x.venueId != null);
+            ViewBag.venueOccupied = eventsExisting;
+
+            var model = db.Venues;
+            return View(model);
         }
 
+        // Confirm Venue
+        [HttpPost]
+        public ActionResult VenueBooking(int eventID, int venueID)
+        {
+            var model = db.Venues.Where(v => v.Id == venueID).FirstOrDefault();
+            if (model != null)
+            {
+                var eve = db.Events.Find(eventID);
+                eve.venueId = model.Id;
+                db.SaveChanges();
+                TempData["info"] = "Venue Booked Successfully";
+                return RedirectToAction("EventsProposed");
+            }
+            else
+            {
+                TempData["info"] = "Venue Booking Error";
+                return View(model);
+            }
+        }
+
+        //[HttpPost]
         public ActionResult EventSuccess()
         {
             return View();
