@@ -294,7 +294,8 @@ namespace EventManagementSystem.Controllers
                 return RedirectToAction("EventsProposed", "User");
             }
 
-            var model = new EventEditVM
+
+            var model = new OrgEditEventVM
             {
                 Id = Id,
                 name = e.name,
@@ -324,12 +325,12 @@ namespace EventManagementSystem.Controllers
 
         // POST: Event/ManageEventProposed
         [HttpPost]
-        public ActionResult ManageEventProposed(EventEditVM model)
+        public ActionResult ManageEventProposed(OrgEditEventVM model)
         {
             var e = db.Events.Find(model.Id);
             if (model == null)
             {
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("EventsProposed", "User");
             }
             if (ModelState.IsValid)
             {
@@ -341,7 +342,6 @@ namespace EventManagementSystem.Controllers
                 e.date = model.date;
                 e.startTime = model.startTime;
                 e.endTime = model.endTime;
-                e.approvalStat = true;
                 if (model.Photo != null)
                 {
                     DeletePhoto(e.photoURL);
@@ -349,7 +349,12 @@ namespace EventManagementSystem.Controllers
                 }
                 db.SaveChanges();
                 TempData["info"] = "Event record updated successfully";
-                return RedirectToAction("ManageEventProposed", "User", new { id=model.Id });
+                return RedirectToAction("ManageEventProposed", "User", new { id = model.Id });
+            }
+            else
+            {
+                TempData["info"] = "ss";
+                return RedirectToAction("ManageEventProposed", "User", new { id = model.Id });
             }
             return View(model);
         }

@@ -43,7 +43,7 @@
                         @Html.TextBoxFor(e => e.Photo, new
                    {
                        type = "file",
-                       accept = "image/jpeg, image/png",
+                       accept = "image/jpeg, image/png, image/jpg",
                        hidden = ""
 
                    })
@@ -63,7 +63,7 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col-md-6">
-                        @Html.LabelFor(e => e.date, "Date")@Html.TextBoxFor(e => e.date, "{0: yyyy-MM-dd}", new { type = "date", min, max, @class = "form-control" })
+                        @Html.LabelFor(e => e.date, "Date")@Html.TextBoxFor(e => e.date, "{0:yyyy-MM-dd}", new { type = "date", min, max, @class = "form-control" })
                         @*<small>(@min to @max )</small>*@
                         @Html.ValidationMessageFor(e => e.date)
                     </div>
@@ -80,6 +80,26 @@
                     <div class="col-md-6">
                         @Html.LabelFor(e => e.endTime, "End Time")@Html.TextBoxFor(e => e.endTime, new { type = "time", @class = "form-control" })
                         @Html.ValidationMessageFor(e => e.endTime)
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        @Html.LabelFor(e => e.venueId, "Venue")
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                @Html.DropDownListFor(e => e.venueId, ViewBag.VenueList as SelectList, "- Select One -", new { @class = "btn btn-secondary dropdown-toggle" })
+                                @Html.ValidationMessageFor(e => e.venueId)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(e => e.OrgId, "Organized By")
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                @Html.DropDownListFor(e => e.OrgId, ViewBag.OrganizerList as SelectList, "- Select One -", new { @class = "btn btn-secondary dropdown-toggle" })
+                                @Html.ValidationMessageFor(e => e.OrgId)
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row mt-6">

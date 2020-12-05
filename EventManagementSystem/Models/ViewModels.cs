@@ -72,6 +72,42 @@ namespace EventManagementSystem.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Registration> Registrations { get; set; }
     }
+
+    public class OrgEditEventVM
+    {
+        public int Id { get; set; }
+        [Required]
+        [StringLength(100)]
+        [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only")]
+        public string name { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string des { get; set; }
+        [Required]
+        public decimal price { get; set; }
+        [Required]
+        public int availability { get; set; }
+        [Required]
+        public int participants { get; set; }
+        [Required]
+        public DateTime date { get; set; }
+        [Required]
+        public TimeSpan startTime { get; set; }
+        [Required]
+        public TimeSpan endTime { get; set; }
+        public bool? approvalStat { get; set; }
+        public int OrgId { get; set; }
+        public Nullable<int> venueId { get; set; }
+        public HttpPostedFileBase Photo { get; set; }
+        public string photoURL { get; set; }
+        public virtual Organiser Organiser { get; set; }
+        public virtual Venue Venue { get; set; }
+
+        public int NoOfParticipants => participants - availability;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Registration> Registrations { get; set; }
+    }
+
     public class UserInsertVM
     {
         public int Id { get; set; }
