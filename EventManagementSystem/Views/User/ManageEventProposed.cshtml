@@ -31,7 +31,7 @@
                 visibility: visible;
             }
     </style>
-    }
+}
 
 <div>
     <h2>Manage Event Proposed</h2>
@@ -54,7 +54,7 @@
             <li><a data-toggle="pill" href="#payment">Payment</a></li>
             @if (Model.venueId == null && Model.approvalStat == true)
             {
-            <li><a class="btn btn-primary" href="/Event/VenueBooking?Id=@Model.Id">Book Venue</a></li>
+                <li><a class="btn btn-primary" href="/Event/VenueBooking?Id=@Model.Id">Book Venue</a></li>
             }
         </ul>
     </div>
@@ -64,7 +64,12 @@
             <div class="outerDiv">
                 <div class="head" style="display:inline-block">
                     <div>
-                        <h3 style="margin:0;padding-bottom:10px; display:inline-block">@Model.name</h3> (@if (Model.approvalStat == null) { <span class="text-warning">Pending</span> } else if (Model.approvalStat == true) { <span class="text-success">Accepted</span> } else if (Model.approvalStat == false) { <span class="text-danger">Denied</span> })
+                        <h3 style="margin:0;padding-bottom:10px; display:inline-block">@Model.name</h3> (@if (Model.approvalStat == null)
+                        {<span class="text-warning">Pending</span> }
+                        else if (Model.approvalStat == true)
+                        { <span class="text-success">Accepted</span> }
+                        else if (Model.approvalStat == false)
+                        { <span class="text-danger">Denied</span>})
                     </div>
                 </div>
                 <div class="images" style="overflow-x:hidden">
@@ -94,12 +99,8 @@
                             <td>: @Model.des</td>
                         </tr>
                         <tr>
-                            <th>Start date</th>
-                            <td>: @Model.startDate.ToString("dd-MM-yyy")</td>
-                        </tr>
-                        <tr>
-                            <th>End date</th>
-                            <td>: @Model.endDate.ToString("dd-MM-yyy")</td>
+                            <th>Event date</th>
+                            <td>: @Model.date.ToString("dd-MM-yyy")</td>
                         </tr>
                         <tr>
                             <th>Start time</th>
@@ -144,59 +145,53 @@
                             </div>
                         </div>
 
-                        <div class="col-md-5 border-right">
-                            <div class="p-3 py-5">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h4 class="text-right">Edit Event</h4>
+                        <div class="col-md-7 border-right">
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                    @Html.LabelFor(e => e.name, "Name")@Html.TextBoxFor(e => e.name, new { maxlength = 20, autofocus = "", @class = "form-control", placeholder = "Name" }) @Html.ValidationMessageFor(e => e.name)
                                 </div>
-                                <div class="row mt-2">
-                                    <div class="col-md-6">
-                                        @Html.LabelFor(e => e.name, "Name")@Html.TextBoxFor(e => e.name, new { maxlength = 20, autofocus = "", @class = "form-control", placeholder = "Name" })
-                                        @Html.ValidationMessageFor(e => e.name)
-                                    </div>
-                                    <div class="col-md-6">
-                                        @Html.LabelFor(e => e.price, "Price")@Html.TextBoxFor(e => e.price, new { type = "number", @class = "form-control", placeholder = "price", min = "0" })
-                                        @Html.ValidationMessageFor(e => e.price)
-                                    </div>
+                                <div class="col-md-6">
+                                    @Html.LabelFor(e => e.price, "Price")@Html.TextBoxFor(e => e.price, new { type = "number", @class = "form-control", placeholder = "price", min = "0" }) @Html.ValidationMessageFor(e => e.price)
                                 </div>
-                                <div class="row mt-2">
-                                    <div class="col-md-12" style="margin-right:0">
-                                        @Html.LabelFor(e => e.des, "Description")@Html.TextAreaFor(e => e.des, new
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    @Html.LabelFor(e => e.date, "Date")@Html.TextBoxFor(e => e.date, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control" })
+                                    @*<small>(@min to @max )</small>*@
+                                    @Html.ValidationMessageFor(e => e.date)
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.LabelFor(e => e.participants, "Participants")@Html.TextBoxFor(e => e.participants, new { type = "number", @class = "form-control", placeholder = "20", min = "20" })
+                                    @Html.ValidationMessageFor(e => e.participants)
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    @Html.LabelFor(e => e.startTime, "Start Time")@Html.TextBoxFor(e => e.startTime, new { type = "time", @class = "form-control" })
+                                    @Html.ValidationMessageFor(e => e.startTime)
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.LabelFor(e => e.endTime, "End Time")@Html.TextBoxFor(e => e.endTime, new { type = "time", @class = "form-control" })
+                                    @Html.ValidationMessageFor(e => e.endTime)
+                                </div>
+                            </div>
+                            <div class="row mt-6">
+                                <div class="col-md-12">
+                                    @Html.LabelFor(e => e.des, "Description")@Html.TextAreaFor(e => e.des, new
 {
 style = "width: 100%; height: 200px; resize: none",
 @class = "form-control",
 autofocus = "",
 placeholder = "Description"
 })
-                                        @Html.ValidationMessageFor(e => e.des)
-                                    </div>
+                                    @Html.ValidationMessageFor(e => e.des)
+
                                 </div>
-                                <div class="row mt-4">
-                                    <div class="col-md-6" @Html.LabelFor(e => e.participants, "Participants")>
-                                        @Html.TextBoxFor(e => e.participants, new { type = "number", @class = "form-control", placeholder = "participants", min = "0" })
-                                        @Html.ValidationMessageFor(e => e.participants)
-                                    </div>
-                                    <div class="col-md-6">
-                                        @Html.LabelFor(e => e.startDate, "Start Date")@Html.TextBoxFor(e => e.startDate, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control" })
-                                        @Html.ValidationMessageFor(e => e.startDate)
-                                        @*<small>(@min to @max )</small>*@
-                                    </div>
-                                    <div class="col-md-6">
-                                        @Html.LabelFor(e => e.endDate, "End Date")@Html.TextBoxFor(e => e.endDate, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control" })
-                                        @Html.ValidationMessageFor(e => e.endDate)
-                                    </div>
-                                    <div class="col-md-6">
-                                        @Html.LabelFor(e => e.startTime, "Start Time")@Html.TextBoxFor(e => e.startTime, new { type = "time", @class = "form-control" })
-                                        @Html.ValidationMessageFor(e => e.startTime)
-                                    </div>
-                                    <div class="col-md-6">
-                                        @Html.LabelFor(e => e.endTime, "End Time")@Html.TextBoxFor(e => e.endTime, new { type = "time", @class = "form-control" })
-                                        @Html.ValidationMessageFor(e => e.endTime)
-                                    </div>
-                                </div>
-                                <div class="mt-5 text-center"><section><button class="btn btn-primary profile-button">Edit Event</button></section></div>
+
                             </div>
+                            <div class="mt-12" style="margin-top:15px"><section><button class="btn btn-primary profile-button">Propose Event</button></section></div>
                         </div>
+
                     </div>
                 </div>
             </form>
@@ -210,17 +205,22 @@ placeholder = "Description"
                 {
                     <p>No participant(s) yet.</p>
                 }
-            }
-            @foreach (var item in ViewBag.Registrations)
-            {
-                if (item.Payment.status == true)
+
+                if (ViewBag.Regisrations != null)
                 {
-                    <div>
-                        <img src="~/Photo/@item.User.photo" />
-                    </div>
-                    <p>@item.User.username</p>
+                    foreach (var item in ViewBag.Registrations)
+                    {
+                        if (item.Payment.status == true)
+                        {
+                            <div>
+                                <img src="~/Photo/@item.User.photo" />
+                            </div>
+                            <p>@item.User.username</p>
+                        }
+                    }
                 }
             }
+
 
             <h3 style="color:#c5c5c5">Pending (@ViewBag.PendingCount)</h3>
             @{
@@ -228,19 +228,24 @@ placeholder = "Description"
                 {
                     <p>No pending participant(s) yet.</p>
                 }
-            }
-            @foreach (var item in ViewBag.Registrations)
-            {
-                if (item.Payment.status == false)
+
+                if (ViewBag.Registrations != null)
                 {
-                    <div class="col-md-2">
-                        <img src="~/Photo/@item.User.photo" style="width:100px;height:100px;object-fit:cover;border-radius:50%; border:1px solid grey" />
-                        <div>
-                            <p class="text-center" style="font-weight:bold">@item.User.username</p>
-                        </div>
-                    </div>
+                    foreach (var item in ViewBag.Registrations)
+                    {
+                        if (item.Payment.status == false)
+                        {
+                            <div class="col-md-2">
+                                <img src="~/Photo/@item.User.photo" style="width:100px;height:100px;object-fit:cover;border-radius:50%; border:1px solid grey" />
+                                <div>
+                                    <p class="text-center" style="font-weight:bold">@item.User.username</p>
+                                </div>
+                            </div>
+                        }
+                    }
                 }
             }
+
         </div>
         <div id="payment" class="tab-pane fade in">
             <h3>Transactions</h3>
@@ -248,43 +253,76 @@ placeholder = "Description"
             {
                 <p>No active transaction(s) yet.</p>
             }
-            else
+            @if (ViewBag.Payments != null)
             {
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Registration fees(RM)</th>
-                        <th scope="col">Paid at</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in ViewBag.Payments)
-                    {
-                    <tr>
-                        <td>@item.Registration.User.name</td>
-                        <td>@item.Registration.User.role</td>
-                        <td>@item.Registration.Event.price</td>
-                        <td>@item.paymentdate</td>
-                        @{
-                            if (item.status == true)
-                            {
-                                <td>Paid</td>
-                            }
-                            else
-                            {
-                                <td>Unpaid</td>
-                            }
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Registration fees(RM)</th>
+                            <th scope="col">Paid at</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in ViewBag.Payments)
+                        {
+                            <tr>
+                                <td>@item.Registration.User.name</td>
+                                <td>@item.Registration.User.role</td>
+                                <td>@item.Registration.Event.price</td>
+                                <td>@item.paymentdate</td>
+                                @{
+                                    if (item.status == true)
+                                    {
+                                        <td>Paid</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Unpaid</td>
+                                    }
+                                }
+                            </tr>
                         }
-                    </tr>
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
             }
 
         </div>
     </div>
 </div>
 
+@section foot{
+
+    <script>
+
+        function validatePhoto(f) {
+            let retype = /^image\/(jpeg|png)$/i;
+            let reName = /^.+\.(png|jpg|jpeg)$/i;
+            return f &&
+                f.size <= 1 * 1024 * 1024 &&
+                retype.test(f.type) &&
+                reName.test(f.name);
+        }
+
+        let src = null;
+        $('.upload input').change(e => {
+            let f = e.target.files[0];
+            let img = $(e.target).siblings('img')[0];
+
+            if (!src) src = img.src;
+
+            if (validatePhoto(f)) {
+
+                img.src = URL.createObjectURL(f);
+
+            } else {
+                img.src = src;
+                e.target.value = '';
+            }
+
+        });
+
+    </script>
+}

@@ -130,22 +130,6 @@ namespace EventManagementSystem.Controllers
         public ActionResult InsertEvent(EventInsertVM model)
         {
 
-            if (ModelState.IsValidField("startDate"))
-            {
-                if (model.startDate > model.endDate)
-                {
-                    ModelState.AddModelError("startDate", "Invalid date!");
-                }
-
-            }
-            if (ModelState.IsValidField("startTime"))
-            {
-                if (model.startTime > model.endTime)
-                {
-                    ModelState.AddModelError("startTime", "start time cannot exceed or equal end time!");
-                }
-            }
-
             string error = ValidatePhoto(model.Photo);
             if (error != null)
             {
@@ -160,8 +144,7 @@ namespace EventManagementSystem.Controllers
                     price = model.price,
                     participants = model.participants,
                     availability = model.participants,
-                    startDate = model.startDate,
-                    endDate = model.endDate,
+                    date = model.date,
                     startTime = model.startTime,
                     endTime = model.endTime,
                     approvalStat = true,
@@ -210,8 +193,7 @@ namespace EventManagementSystem.Controllers
                 des = e.des,
                 participants = e.participants,
                 price = e.price,
-                startDate = e.startDate,
-                endDate = e.endDate,
+                date = e.date,
                 startTime = e.startTime,
                 endTime = e.endTime,
                 photoURL = e.photoURL,
@@ -228,21 +210,6 @@ namespace EventManagementSystem.Controllers
             var e = db.Events.Find(model.Id);
             ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             ViewBag.VenueList = new SelectList(db.Venues, "Id", "name");
-            if (ModelState.IsValidField("startDate"))
-            {
-                if (model.startDate > model.endDate)
-                {
-                    ModelState.AddModelError("startDate", "start date cannot exceed end date!");
-                }
-
-            }
-            if (ModelState.IsValidField("startTime"))
-            {
-                if (model.startTime >= model.endTime)
-                {
-                    ModelState.AddModelError("startTime", "start time cannot exceed or equal end time!");
-                }
-            }
 
             if (model == null)
             {
@@ -255,8 +222,7 @@ namespace EventManagementSystem.Controllers
                 e.price = model.price;
                 e.participants = e.participants;
                 e.availability = e.availability;
-                e.startDate = model.startDate;
-                e.endDate = model.endDate;
+                e.date = model.date;
                 e.startTime = model.startTime;
                 e.endTime = model.endTime;
                 e.approvalStat = true;

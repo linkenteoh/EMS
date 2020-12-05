@@ -13,8 +13,9 @@
         <tr>
             <th scope="col">Id</th>
             <th scope="col">Name</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
+            <th scope="col">Date</th>
+            <th scope="col">Start</th>
+            <th scope="col">End</th>
             <th scope="col">Status</th>
             <th scope="col">Action</th>
         </tr>
@@ -25,8 +26,9 @@
             <tr>
                 <th scope="row">@e.Id</th>
                 <td>@e.name</td>
-                <td>@e.startDate.ToString("dd-MM-yyyy")</td>
-                <td>@e.endDate.ToString("dd-MM-yyyy")</td>
+                <td>@e.date.ToString("dd-MM-yyyy")</td>
+                <td>@e.startTime</td>
+                <td>@e.endTime</td>
                 @{
                     if (e.approvalStat == null)
                     {
