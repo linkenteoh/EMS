@@ -125,7 +125,6 @@
     <div class="container-fluid bckgrd-setting" align="center">
         @foreach (var v in ViewBag.venueOccupied)
         {
-            <h3>@v.Id @v.name</h3>
             <input type="hidden" class="occupied" name="occupied[]" value="@v.venueId" />
         }
         <div class="row">
