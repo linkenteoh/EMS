@@ -8,6 +8,12 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using PagedList;
+using System.Net;
+using System.IO;
+using System.Configuration;
+using System.Text;
+using System.Web.Script.Serialization;
+using Microsoft.AspNet.Identity;
 
 namespace EventManagementSystem.Controllers
 {
@@ -17,6 +23,14 @@ namespace EventManagementSystem.Controllers
         // GET: Admin
         //update
         //-- helper func
+
+        PasswordHasher ph = new PasswordHasher();
+
+        private string HashPassword(string password)
+        {
+            return ph.HashPassword(password);
+        }
+
         private string ValidatePhoto(HttpPostedFileBase f)
         {
             var reType = new Regex(@"^image\/(jpeg|png)$", RegexOptions.IgnoreCase);
@@ -122,6 +136,7 @@ namespace EventManagementSystem.Controllers
         {
             ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             ViewBag.VenueList = new SelectList(db.Venues, "Id", "name");
+
             return View();
         }
 
@@ -327,7 +342,7 @@ namespace EventManagementSystem.Controllers
                     contact_no = model.contact_no.Trim(),
                     email = model.email,
                     username = model.username,
-                    password = model.password,
+                    password = HashPassword(model.password),
                     role = model.role.ToString(),
                     organizer = model.organizer,
                     status = true,
@@ -367,7 +382,6 @@ namespace EventManagementSystem.Controllers
                 username = u.username,
                 password = u.password,
                 organizer = u.organizer,
-                confirmPassword = u.password,
                 role = (Role)Enum.Parse(typeof(Role), u.role),
                 photoURL = u.photo,
             };
@@ -386,11 +400,20 @@ namespace EventManagementSystem.Controllers
             }
             if (ModelState.IsValid)
             {
+
                 u.name = model.name;
                 u.contact_no = model.contact_no.Trim();
                 u.email = model.email;
                 u.organizer = model.organizer;
-                u.password = model.password;
+                if(model.newPassword == null)
+                {
+                    u.password = u.password;
+                }
+                else
+                {
+                    u.password = HashPassword(model.newPassword);
+                }
+               
                 u.role = model.role.ToString();
                 if (model.Photo != null)
                 {
@@ -617,8 +640,7 @@ namespace EventManagementSystem.Controllers
             var url = Request.UrlReferrer?.AbsolutePath ?? "/";
             return Redirect(url);
         }
-
-    
+   
 
     }
 

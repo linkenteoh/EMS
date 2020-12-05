@@ -72,12 +72,12 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col-md-6">
-                        @Html.LabelFor(u => u.password, "New Password")@Html.TextBoxFor(u => u.password, new { type = "password", @class = "form-control" })
-                        @Html.ValidationMessageFor(u => u.password)
+                        @Html.LabelFor(u => u.newPassword, "New Password(Optional)")@Html.TextBoxFor(u => u.newPassword, new { type = "password", @class = "form-control" })
+                        @Html.ValidationMessageFor(u => u.newPassword)
                     </div>
                     <div class="col-md-6">
-                        @Html.LabelFor(u => u.confirmPassword, "New Confirm Password")@Html.TextBoxFor(u => u.confirmPassword, new { type = "password", @class = "form-control" })
-                        @Html.ValidationMessageFor(u => u.confirmPassword)
+                        @Html.LabelFor(u => u.newConfirmPassword, "New Confirm Password(Optional)")@Html.TextBoxFor(u => u.newConfirmPassword, new { type = "password", @class = "form-control" })
+                        @Html.ValidationMessageFor(u => u.newConfirmPassword)
                     </div>
                 </div>
                 <div class="row mt-4">
