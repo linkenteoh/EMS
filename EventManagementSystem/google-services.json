@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "22060255890",
+    "project_id": "ems-taruc",
+    "storage_bucket": "ems-taruc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:22060255890:android:f6092668e2052d68e1f44b",
+        "android_client_info": {
+          "package_name": "ems.taruc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "22060255890-tcgpb5adbcvv1l0v8ftnv3k785bele1j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSRP3pojpK0Y1i-qVWHam_jnuYs4Jv2fU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "22060255890-tcgpb5adbcvv1l0v8ftnv3k785bele1j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
