@@ -37,8 +37,18 @@ namespace EventManagementSystem.Controllers
         // Register Event
         public ActionResult RegisterEvent(string username, int eventId, DateTime d)
         {
+
             int id = db.Users.FirstOrDefault(u => u.username == username).Id;
+
+            if (db.Registrations.Any(r => r.eventId == eventId && r.userId == id))
+            {
+                TempData["Info"] = "You've registered this event already!";
+                return RedirectToAction("EventDetail", new { id = eventId });
+            }
+
             int regId = db.Registrations.Count() + 1;
+
+
 
             var register = new Registration
             {

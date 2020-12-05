@@ -71,6 +71,8 @@ namespace EventManagementSystem.Models
         public string photoURL { get; set; }
         public virtual Organiser Organiser { get; set; }
         public virtual Venue Venue { get; set; }
+
+        public int NoOfParticipants => participants - availability;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Registration> Registrations { get; set; }
     }
@@ -158,10 +160,10 @@ namespace EventManagementSystem.Models
         [EmailAddress(ErrorMessage = "Invalid format")]
         public string email { get; set; }
         public string username { get; set; }
-        [Required]
-        public string password { get; set; }
-        [System.ComponentModel.DataAnnotations.Compare("password", ErrorMessage = "Password not matched")]
-        public string confirmPassword { get; set; }
+        public string password { get; set; }        
+        public string newPassword { get;  set; }
+        [System.ComponentModel.DataAnnotations.Compare("newPassword", ErrorMessage = "Password not matched")]
+        public string newConfirmPassword { get; set; }
         public HttpPostedFileBase Photo { get; set; }
         public string photoURL { get; set; }
         public Role role { get; set; }
