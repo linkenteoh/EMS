@@ -87,6 +87,7 @@
           <Property Name="activationCode" Type="varchar" MaxLength="50" />
           <Property Name="photo" Type="varchar(max)" />
           <Property Name="activated" Type="bit" Nullable="false" />
+          <Property Name="lockoutValue" Type="int" />
         </EntityType>
         <EntityType Name="Venue">
           <Key>
@@ -353,6 +354,7 @@
           <Property Name="activationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="activated" Type="Boolean" Nullable="false" />
+          <Property Name="lockoutValue" Type="Int32" />
           <NavigationProperty Name="Advertisements" Relationship="DBModel.FK_Table_User" FromRole="User" ToRole="Advertisement" />
           <NavigationProperty Name="Organiser" Relationship="DBModel.FK_Organiser_User" FromRole="User" ToRole="Organiser" />
           <NavigationProperty Name="Registrations" Relationship="DBModel.FK_Registration_User" FromRole="User" ToRole="Registration" />
@@ -532,6 +534,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="DBModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="lockoutValue" ColumnName="lockoutValue" />
                 <ScalarProperty Name="activated" ColumnName="activated" />
                 <ScalarProperty Name="photo" ColumnName="photo" />
                 <ScalarProperty Name="activationCode" ColumnName="activationCode" />

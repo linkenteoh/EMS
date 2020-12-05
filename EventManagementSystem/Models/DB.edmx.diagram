@@ -9,13 +9,14 @@
         
         
         
-        <EntityTypeShape EntityType="DBModel.Advertisement" Width="1.5" PointX="0.24152993794601874" PointY="12.605852267055704" />
-        <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="3.1744307145357276" PointY="2.9566632821022827" />
-        <EntityTypeShape EntityType="DBModel.Organiser" Width="1.5" PointX="8.343922721382194" PointY="2.1491177539104211" />
-        <EntityTypeShape EntityType="DBModel.Payment" Width="1.5" PointX="6.9707306786304013" PointY="31.436993598675819" />
-        <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="8.743071984845713" PointY="2.1563961068896558" />
-        <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="2.0914564421826305" PointY="4.6373435876506122" />
-        <EntityTypeShape EntityType="DBModel.Venue" Width="1.5" PointX="7.5663052609033432" PointY="29.963970839029166" />
+        
+        <EntityTypeShape EntityType="DBModel.Advertisement" Width="1.5" PointX="2.03198080418258" PointY="12.612996122153939" />
+        <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="0.7177977230017063" PointY="5.8797116754016425" />
+        <EntityTypeShape EntityType="DBModel.Organiser" Width="1.5" PointX="2.0286202924459338" PointY="28.402412338369718" />
+        <EntityTypeShape EntityType="DBModel.Payment" Width="1.5" PointX="3.4089134612162191" PointY="8.86984479840372" />
+        <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="5.4644449881578074" PointY="25.991736662570265" />
+        <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="2.3239707547817243" PointY="6.9302739980305885" />
+        <EntityTypeShape EntityType="DBModel.Venue" Width="1.5" PointX="10.69884439124672" PointY="29.654501824478853" />
         <AssociationConnector Association="DBModel.FK_Table_User" />
         <AssociationConnector Association="DBModel.FK_Event_Organiser" />
         <AssociationConnector Association="DBModel.FK_Event_Venue" />
@@ -23,6 +24,19 @@
         <AssociationConnector Association="DBModel.FK_Organiser_User" />
         <AssociationConnector Association="DBModel.FK_Payment_Registration" />
         <AssociationConnector Association="DBModel.FK_Registration_User" />
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         

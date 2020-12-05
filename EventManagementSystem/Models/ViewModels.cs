@@ -249,6 +249,7 @@ namespace EventManagementSystem.Models
     public class LoginVM
     {
         [Required]
+        []
         public string Username { get; set; }
 
         [Required]
