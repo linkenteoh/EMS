@@ -166,7 +166,7 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
 
-        public ActionResult EventSearchIndex(string name ="", string startDate ="", string endDate="", 
+        public ActionResult EventSearchIndex(string name = "", string startDate = "", string endDate = "",
             string startTime = "", string endTime = "", string venue = "", int page = 1)
         {
             ViewBag.VenueList = new SelectList(db.Venues, "name", "name");
