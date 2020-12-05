@@ -327,7 +327,6 @@
     <Content Include="Views\Event\Index.cshtml" />
     <Content Include="Views\Event\ProposeEvent.cshtml" />
     <Content Include="Views\Event\VenueBooking.cshtml" />
-    <Content Include="Views\Event\EventSuccess.cshtml" />
     <Content Include="Views\Event\_Venue1.cshtml" />
     <Content Include="Views\Home\Events.cshtml" />
     <Content Include="Views\User\RegOrganiser.cshtml" />
