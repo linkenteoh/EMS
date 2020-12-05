@@ -12,7 +12,7 @@
             <th scope="col">Event name</th>
             <th scope="col">Price(RM)</th>
             <th scope="col">Additional Charge(RM)</th>
-            <th scope="col">Reg. Status</th>
+            <th scope="col">Payment Status</th>
             <th scope="col">Date</th>
             <th scope="col"></th>
         </tr>
@@ -20,21 +20,17 @@
     <tbody>
         @foreach (var item in Model)
         {
-            if (item.status == false)
-            {
-
                 <tr>
                     <td scope="row">@item.Id</td>
                     <td scope="row">@item.Registration.Event.name</td>
                     <td scope="row">@item.price</td>
                     <td scope="row">@item.addCharge</td>
-                    <td scope="row">@item.status</td>
+                    <td scope="row">@(item.status == true ? "Paid" :"Unpaid")</td>
                     <td scope="row">@item.Registration.Event.date</td>
                     <td style="text-align:center">
                         @Html.ActionLink("Make payment", "Payment", "User", new { id = item.Id } ,new { @class ="btn btn-secondary" })
                     </td>
                 </tr>
-            }
         }
 
     </tbody>

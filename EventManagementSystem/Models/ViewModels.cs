@@ -313,16 +313,18 @@ namespace EventManagementSystem.Models
 
     public class PaymentVM
     {
-        [Required]
+        [Required(ErrorMessage = "Name is required")]
         [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only")]
         public string name { get; set; }
-        [Required]
-        [RegularExpression(@"/^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$/", ErrorMessage = "Invalid Format.")]
+        [Required(ErrorMessage = "Card No is required")]
+        [RegularExpression(@"^(?:(4[0-9]{12}(?:[0-9]{3})?)|(5[1-5][0-9]{14})|↵
+(6(?:011|5[0-9]{2})[0-9]{12})|(3[47][0-9]{13})|↵
+(3(?:0[0-5]|[68][0-9])[0-9]{11})|((?:2131|1800|35[0-9]{3})[0-9]{11}))$", ErrorMessage = "Invalid Format.")]
         public string cardNum { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Required")]
         [MaxLength(3)]
         public string cvv { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Required")]
         [MaxLength(5)]
         [RegularExpression(@"^\d{2}\/\d{2}$", ErrorMessage = "Invalid Format.")]
         public string expDate { get; set; }

@@ -378,8 +378,14 @@ namespace EventManagementSystem.Controllers
 
         // POST: User/Payment
         [HttpPost]
-        public ActionResult Payment()
+        public ActionResult Payment(PaymentVM model)
         {
+            if (ModelState.IsValid)
+            {
+                var payment = db.Payments.Find(model.Id);
+                payment.status = true;
+                db.SaveChanges();
+            }
             return View();
         }
 
