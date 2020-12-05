@@ -166,7 +166,7 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
 
-        public ActionResult EventSearchIndex(string name = "", string startDate = "", string endDate = "",
+        public ActionResult EventSearchIndex(string name = "", string date = "",
             string startTime = "", string endTime = "", string venue = "", int page = 1)
         {
             ViewBag.VenueList = new SelectList(db.Venues, "name", "name");
@@ -188,22 +188,11 @@ namespace EventManagementSystem.Controllers
                 model = model.Where(x => x.Venue.name.Contains(venue));
             }
             // Start Date && End Date
-/*            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
+            if (!string.IsNullOrEmpty(date))
             {
-                var dtFrom = DateTime.Parse(startDate);
-                var dtTo = DateTime.Parse(endDate);
-                model = model.Where(x => x.startDate >= dtFrom && x.endDate <= dtTo);
+                var dateFormat = DateTime.Parse(date);
+                model = model.Where(x => x.date == dateFormat);
             }
-            else if (!string.IsNullOrEmpty(startDate))
-            {
-                var dtFrom = DateTime.Parse(startDate);
-                model = model.Where(x => x.startDate >= dtFrom);
-            }
-            else if (!string.IsNullOrEmpty(endDate))
-            {
-                var dtTo = DateTime.Parse(endDate);
-                model = model.Where(x => x.endDate <= dtTo);
-            }*/
             // Start Time && End Time
             if (!string.IsNullOrEmpty(startTime) && !string.IsNullOrEmpty(endTime))
             {
