@@ -87,8 +87,7 @@ namespace EventManagementSystem.Controllers
             var eventsExisting = db.Events.Where(x => x.Id != Id).AsQueryable();
 
             // Check if the dates in each event is within range of current Event
-/*            eventsExisting = db.Events.Where(x => x.startDate >= eventCurrent.startDate && x.endDate <= eventCurrent.endDate);
-*/
+            eventsExisting = db.Events.Where(x => x.date == eventCurrent.date);
             // Check if  the time in each event is within range of current event
             eventsExisting = db.Events.Where(x => x.startTime >= eventCurrent.startTime && x.endTime <= eventCurrent.endTime);
 
