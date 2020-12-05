@@ -85,12 +85,83 @@ namespace EventManagementSystem.Controllers
             return View();
         }
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayProposalApporval(int page = 1)
+        public ActionResult DisplayProposalApporval(string searchName = "", string name = "", string startDate = "", string endDate = "",
+            string startTime = "", string endTime = "", string venue = "", string sort = "", int page = 1)
         {
-            Func<Event, object> fn = e => e.Id;
-            var events = db.Events.OrderBy(fn);
-            var model = events.ToPagedList(page, 10);
-            return View(model);
+            ViewBag.VenueList = new SelectList(db.Venues, "name", "name");
+            ViewBag.sortList = new SelectList(
+                new List<SortItems> {
+                    new SortItems { Id = "Id", name = "Id"},
+                    new SortItems { Id = "name", name = "Name"},
+                    new SortItems { Id = "price", name = "Price"},
+                    new SortItems { Id = "date", name = "Date"},
+                    new SortItems { Id = "venue", name = "Venue"}
+                }, "Id", "name");
+            var model = db.Events.Where(u => u.OrgId == db.Users.FirstOrDefault(org => org.username == User.Identity.Name).Id);
+
+            //// Name
+            if (!string.IsNullOrEmpty(name))
+            {
+                model = model.Where(m => m.name.Contains(name));
+            }
+            // Venue
+            if (!string.IsNullOrEmpty(venue))
+            {
+                model = model.Where(x => x.Venue.name.Contains(venue));
+            }
+            // Start Date && End Date
+            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
+            {
+                var timeFrom = DateTime.Parse(startDate);
+                var timeTo = DateTime.Parse(endDate);
+                model = model.Where(x => x.date >= timeFrom && x.date <= timeTo);
+            }
+            else if (!string.IsNullOrEmpty(startDate))
+            {
+                var timeFrom = DateTime.Parse(startDate);
+                model = model.Where(x => x.date >= timeFrom);
+            }
+            else if (!string.IsNullOrEmpty(endDate))
+            {
+                var timeTo = DateTime.Parse(endDate);
+                model = model.Where(x => x.date <= timeTo);
+            }
+            // Start Time && End Time
+            if (!string.IsNullOrEmpty(startTime) && !string.IsNullOrEmpty(endTime))
+            {
+                var timeFrom = TimeSpan.Parse(startTime);
+                var timeTo = TimeSpan.Parse(endTime);
+                model = model.Where(x => x.startTime >= timeFrom && x.endTime <= timeTo);
+            }
+            else if (!string.IsNullOrEmpty(startTime))
+            {
+                var timeFrom = TimeSpan.Parse(startTime);
+                model = model.Where(x => x.startTime >= timeFrom);
+            }
+            else if (!string.IsNullOrEmpty(endTime))
+            {
+                var timeTo = TimeSpan.Parse(endTime);
+                model = model.Where(x => x.endTime <= timeTo);
+            }
+            // Search name
+            model = model.Where(x => x.name.Contains(searchName) || x.des.Contains(searchName) || x.Venue.name.Contains(searchName));
+            // Sort By
+            Func<Event, object> fn = s => s.Id;
+            switch (sort)
+            {
+                case "Id": fn = s => s.Id; break;
+                case "name": fn = s => s.name; break;
+                case "price": fn = s => s.price; break;
+                case "date": fn = s => s.date; break;
+                case "venue": fn = s => s.venueId; break;
+            }
+            // PagedList
+            var events = model.OrderBy(fn).ToPagedList(page, 10);
+
+            if (Request.IsAjaxRequest())
+                return PartialView("_EventApproveList", events);
+            return View(events);
+
         }
         [Authorize(Roles = "Admin")]
         public ActionResult ApproveProposal(int id)
@@ -123,13 +194,87 @@ namespace EventManagementSystem.Controllers
             return Redirect(url);
         }
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayEvent(int page = 1)
+        public ActionResult DisplayEvent(string searchName = "", string name = "", string startDate = "", string endDate = "",
+            string startTime = "", string endTime = "", string venue = "", string sort = "", int page = 1)
         {
-            Func<Event, object> fn = e => e.Id;
-            var events = db.Events.OrderBy(fn);
-            var model = events.ToPagedList(page, 10);
+            ViewBag.VenueList = new SelectList(db.Venues, "name", "name");
+            ViewBag.sortList = new SelectList(
+                new List<SortItems> {
+                    new SortItems { Id = "Id", name = "Id"},
+                    new SortItems { Id = "name", name = "Name"},
+                    new SortItems { Id = "price", name = "Price"},
+                    new SortItems { Id = "date", name = "Date"},
+                    new SortItems { Id = "Venue.name", name = "Venue"}
+                }, "Id", "name");
+            var username = User.Identity.Name;
+            var u = db.Users.Where(x => x.username == username).FirstOrDefault();
+            // Get userID in registration
+            var reg = db.Registrations.Where(r => u.Id.Equals(r.userId)).Select(r => r.eventId).ToArray();
+            // Get EventID in registration that contains the userID
+            var model = db.Events.Where(m => reg.Contains(m.Id));
 
-            return View(model);
+            //// Name
+            if (!string.IsNullOrEmpty(name))
+            {
+                model = model.Where(m => m.name.Contains(name));
+            }
+            // Venue
+            if (!string.IsNullOrEmpty(venue))
+            {
+                model = model.Where(x => x.Venue.name.Contains(venue));
+            }
+            // Start Date && End Date
+            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
+            {
+                var timeFrom = DateTime.Parse(startDate);
+                var timeTo = DateTime.Parse(endDate);
+                model = model.Where(x => x.date >= timeFrom && x.date <= timeTo);
+            }
+            else if (!string.IsNullOrEmpty(startDate))
+            {
+                var timeFrom = DateTime.Parse(startDate);
+                model = model.Where(x => x.date >= timeFrom);
+            }
+            else if (!string.IsNullOrEmpty(endDate))
+            {
+                var timeTo = DateTime.Parse(endDate);
+                model = model.Where(x => x.date <= timeTo);
+            }
+            // Start Time && End Time
+            if (!string.IsNullOrEmpty(startTime) && !string.IsNullOrEmpty(endTime))
+            {
+                var timeFrom = TimeSpan.Parse(startTime);
+                var timeTo = TimeSpan.Parse(endTime);
+                model = model.Where(x => x.startTime >= timeFrom && x.endTime <= timeTo);
+            }
+            else if (!string.IsNullOrEmpty(startTime))
+            {
+                var timeFrom = TimeSpan.Parse(startTime);
+                model = model.Where(x => x.startTime >= timeFrom);
+            }
+            else if (!string.IsNullOrEmpty(endTime))
+            {
+                var timeTo = TimeSpan.Parse(endTime);
+                model = model.Where(x => x.endTime <= timeTo);
+            }
+            // Search name
+            model = model.Where(x => x.name.Contains(searchName) || x.des.Contains(searchName) || x.Venue.name.Contains(searchName));
+            // Sort By
+            Func<Event, object> fn = s => s.Id;
+            switch (sort)
+            {
+                case "Id": fn = s => s.Id; break;
+                case "name": fn = s => s.name; break;
+                case "price": fn = s => s.price; break;
+                case "date": fn = s => s.date; break;
+                case "Venue.name": fn = s => s.venueId; break;
+            }
+            // PagedList
+            var events = model.OrderBy(fn).ToPagedList(page, 10);
+
+            if (Request.IsAjaxRequest())
+                return PartialView("_EventListAdmin", events);
+            return View(events);
         }
         [Authorize(Roles = "Admin")]
         public ActionResult InsertEvent()
@@ -287,14 +432,61 @@ namespace EventManagementSystem.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayUser(int page = 1)
+        public ActionResult DisplayUser(string searchName = "", string name = "", string username = "", string email = "",
+            string role = "", string sort = "", int page = 1)
         {
+            var users = db.Users.Where(m => m.name.Contains(name));
+
+            // Username
+            if (!string.IsNullOrEmpty(username))
+            {
+                users = users.Where(m => m.username.Contains(username));
+            }
+            // Email
+            if (!string.IsNullOrEmpty(email))
+            {
+                users = users.Where(m => m.email.Contains(email));
+            }
+            // Role
+            if (!string.IsNullOrEmpty(role))
+            {
+                users = users.Where(m => m.role.Contains(role));
+            }
+
+            ViewBag.RoleList = new SelectList(
+                new List<SortItems> {
+                    new SortItems { Id = "Student", name = "Admin"},
+                    new SortItems { Id = "Admin", name = "Admin"},
+                    new SortItems { Id = "Staff", name = "Staff"},
+                }, "Id", "name");
+
+            ViewBag.sortList = new SelectList(
+                new List<SortItems> {
+                    new SortItems { Id = "Id", name = "Id"},
+                    new SortItems { Id = "name", name = "Name"},
+                    new SortItems { Id = "email", name = "Email"},
+                    new SortItems { Id = "username", name = "Username"},
+                    new SortItems { Id = "role", name = "Role"},
+                }, "Id", "name");
+
+            // Search name
+            users = users.Where(x => x.name.Contains(searchName) || x.username.Contains(searchName) || x.email.Contains(searchName));
+
             Func<User, object> fn = e => e.Id;
 
+            switch (sort)
+            {
+                case "Id": fn = s => s.Id; break;
+                case "name": fn = s => s.name; break;
+                case "email": fn = s => s.email; break;
+                case "username": fn = s => s.username; break;
+                case "role": fn = s => s.role; break;
+            }
+            // PagedList
+            var model = users.OrderBy(fn).ToPagedList(page, 10);
 
-            var users = db.Users.OrderBy(fn);
-            var model = users.ToPagedList(page, 10);
-
+            if (Request.IsAjaxRequest())
+                return PartialView("_UserList", model);
             return View(model);
 
         }
@@ -410,13 +602,34 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayOrganizerApproval(int page = 1)
+        public ActionResult DisplayOrganizerApproval(string searchName = "", string rep = "", string position = "", string sort = "", int page = 1)
         {
+            //ViewBag.positionList = new SelectList(
+            //  new List<SortItems> {
+            //        new SortItems { Id = "President", name = "Id"},
+            //        new SortItems { Id = "Secretary", name = "Representative"},
+            //        new SortItems { Id = "Treasurer", name = "Position"},
+            //  }, "Id", "name");
+            ViewBag.sortList = new SelectList(
+              new List<SortItems> {
+                    new SortItems { Id = "Id", name = "Id"},
+                    new SortItems { Id = "represent", name = "Representative"},
+                    new SortItems { Id = "position", name = "Position"},
+              }, "Id", "name");
+
+            var organisers = db.Organisers.Where(x => x.represent.Contains(searchName) || x.position.Contains(searchName));
+
             Func<Organiser, object> fn = e => e.Id;
+            switch (sort)
+            {
+                case "Id": fn = s => s.Id; break;
+                case "represent": fn = s => s.represent; break;
+                case "position": fn = s => s.position; break;
+            }
+            var model = organisers.OrderBy(fn).ToPagedList(page, 10);
 
-            var organisers = db.Organisers.OrderBy(fn);
-            var model = organisers.ToPagedList(page, 10);
-
+            if (Request.IsAjaxRequest())
+                return PartialView("_OrganiserApproveList", model);
             return View(model);
 
         }
@@ -471,12 +684,64 @@ namespace EventManagementSystem.Controllers
             return Redirect(url);
         }
         [Authorize(Roles = "Admin")]
-        public ActionResult DisplayAdvert(int page = 1)
+        public ActionResult DisplayAdvert(string searchName = "", string name = "", string desc = "",
+            string startDate = "", string endDate = "", string sort = "", int page = 1)
         {
-            Func<Advertisement, object> fn = a => a.Id;
-            var advertisement = db.Advertisements.OrderBy(fn);
-            var model = advertisement.ToPagedList(page, 10);
+            ViewBag.sortList = new SelectList(
+               new List<SortItems> {
+                    new SortItems { Id = "Id", name = "Id"},
+                    new SortItems { Id = "name", name = "Name"},
+                    new SortItems { Id = "charge", name = "Charge"},
+                    new SortItems { Id = "startDate", name = "Start Date"},
+                    new SortItems { Id = "endDate", name = "End Date"}
+               }, "Id", "name");
 
+            var advertisement = db.Advertisements.Where(a => a.status == true);
+
+            // Name
+            if (!string.IsNullOrEmpty(name))
+            {
+                advertisement = advertisement.Where(m => m.name.Contains(name));
+            }
+            // Venue
+            if (!string.IsNullOrEmpty(desc))
+            {
+                advertisement = advertisement.Where(x => x.des.Contains(desc));
+            }
+            // Start Date && End Date
+            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
+            {
+                var timeFrom = DateTime.Parse(startDate);
+                var timeTo = DateTime.Parse(endDate);
+                advertisement = advertisement.Where(x => x.startDate >= timeFrom && x.endDate <= timeTo);
+            }
+            else if (!string.IsNullOrEmpty(startDate))
+            {
+                var timeFrom = DateTime.Parse(startDate);
+                advertisement = advertisement.Where(x => x.startDate >= timeFrom);
+            }
+            else if (!string.IsNullOrEmpty(endDate))
+            {
+                var timeTo = DateTime.Parse(endDate);
+                advertisement = advertisement.Where(x => x.endDate <= timeTo);
+            }
+            // Search name
+            advertisement = advertisement.Where(x => x.name.Contains(searchName) || x.des.Contains(searchName));
+            // Sort By
+            Func<Advertisement, object> fn = s => s.Id;
+            switch (sort)
+            {
+                case "Id": fn = s => s.Id; break;
+                case "name": fn = s => s.name; break;
+                case "charge": fn = s => s.charge; break;
+                case "startDate": fn = s => s.startDate; break;
+                case "endDate": fn = s => s.endDate; break;
+            }
+
+            var model = advertisement.OrderBy(fn).ToPagedList(page, 10);
+
+            if (Request.IsAjaxRequest())
+                return PartialView("_AdsList", model);
             return View(model);
         }
 

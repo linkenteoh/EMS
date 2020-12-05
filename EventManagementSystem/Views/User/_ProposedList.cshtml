@@ -1,0 +1,61 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<Event>
+
+
+@if (@Model.Count() > 0)
+{
+    <span id="countModel">@Model.Count() of @Model.TotalItemCount record(s) | Page @Model.PageNumber of @Model.PageCount</span>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Date</th>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var e in Model)
+            {
+                <tr>
+                    <th scope="row">@e.Id</th>
+                    <td>@e.name</td>
+                    <td>@e.date.ToString("dd-MM-yyyy")</td>
+                    <td>@e.startTime</td>
+                    <td>@e.endTime</td>
+                    @{
+                        if (e.approvalStat == null)
+                        {
+                            <td><b>Pending</b></td>
+                        }
+                        else if (e.approvalStat == true)
+                        {
+                            <td><b>Accepted</b></td>
+                        }
+                        else if (e.approvalStat == false)
+                        {
+                            <td><b>Denied</b></td>
+                        }
+                    }
+                    <td><a href="~/User/ManageEventProposed?id=@e.Id" class="btn btn-danger">Manage</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div id="paged">
+        @Html.PagedListPager(
+    Model,
+    p => "?page=" + p,
+    PagedListRenderOptions.Classic
+    )
+    </div>
+}
+else
+{
+    <div style=" text-align: center; margin-top:50px;"><span style="font-size: 16pt; text-align:center;">No Records Founded.</span></div>
+}

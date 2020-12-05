@@ -4,57 +4,112 @@
 @{
     ViewBag.Title = "Display Organizer Approval";
     Layout = "~/Views/Shared/_Dashboard.cshtml";
+    var results = new AjaxOptions
+    {
+        Url = "/Admin/DisplayOrganizerApporval",
+        HttpMethod = "get",
+        LoadingElementId = "loader",
+        UpdateTargetId = "eventTable",
+    };
+    var attr = new
+    {
+        @class = "form-horizontal",
+    };
+}
+
+@section head{
+    <style>
+        #loader {
+            text-align: center;
+            display: none;
+        }
+
+        #paged, #countModel {
+            margin: 10px;
+            text-align: center;
+            display: block;
+        }
+    </style>
+
 }
 
 <h1>Organizer Request List</h1>
-
-<p>@Model.Where(u => u.status == null).Count() record(s) in user list</p>
-<table class="table table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col">Society/Organisation</th>
-            <th scope="col"></th>
-            <th scope="col">Position Held</th>
-            <th scope="col"></th>
-
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var o in Model)
+<hr />
+@using (Ajax.BeginForm("DisplayOrganizerApporval", "Admin", results, attr))
+{
+    <span class="btn btn-secondary dropdown-toggle searchButton">Filter</span>
+    <span>@Html.DropDownList("sort", ViewBag.SortList as SelectList, "Sort By", new { @class = "btn btn-secondary", onChange = "sortData(this);" })</span>
+    <span>
+        @Html.TextBox("searchName", null, new
         {
-            if (o.status == null)
-            {
+            data_upper = "",
+            autofocus = "",
+            @class = "form-control",
+            style = "display:inline; width: 600px;",
+            placeholder = "Search..."
+        })
+    </span>
+    <i class="fa fa-search fa-2x"></i>
+    <div class="parent">
+        <div class="searchCont" style="display:none">
+            <div style="padding-left: 10px;">
+                <h3 style="padding-top: 10px; padding-bottom: 10px;">Filters</h3>
+                <div class="form-group row">
+                    @Html.Label("rep", "Reprentatives", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("rep", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control col-sm-2" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("position", "Position", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("position", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control col-sm-2" })
+                    <div class="col-sm-offset-1 col-sm-1">
+                        <input type="submit" class="btn btn-primary searchBtn" name="Search" value="Search" />
+                    </div>
+                    <div class="col-sm-1">
+                        <input type="reset" class="btn btn-primary " name="Reset" value="Reset" onclick="resetData();" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
-        <tr>
-            <td scope="row">@o.Id</td>
-            <td scope="row"></td>
-            <td scope="row"></td>
-            <td scope="row"></td>
-            <td scope="row">@o.represent</td>
-            <td scope="row"></td>
-            <td scope="row">@o.position</td>
-            <td>
-                <input class="btn btn-primary" data-get="/Admin/ApproveOrganizer?id=@o.Id" type="button" value="Approve">
-                <input class="btn btn-danger" data-get="/Admin/DeclineOrganizer?id=@o.Id" type="button" value="Decline">
-            </td>
+<div id="orgTable">
+    <div id="loader"><img src="~/Images/loader.gif"></div>
+    @Html.Partial("_OrganiserApproveList")
+</div>
 
-        </tr>
+@section foot{
+
+    <script>
+        //when search button click
+        jQuery(document).on('click', '.searchButton', function () {
+            if (jQuery('.parent').hasClass('menuActive')) {
+                jQuery('.parent').removeClass('menuActive');
+                jQuery('.parent .menu').slideUp(0);
             }
+            jQuery('.parent').toggleClass('searchActive').children('.searchCont').slideToggle(200);
+        });
+
+        // Search Name
+        let timer = null;
+        $('#searchName').on('input', e => {
+            // when user enter text, it will clear previous execution
+            clearTimeout(timer);
+            timer = setTimeout(() => $(e.target.form).submit(), 1000);
+        });
+
+        // Sort By
+        function sortData(e) {
+            e.form.submit();
         }
 
-    </tbody>
-</table>
+        // reset data filter
+        function resetData() {
+            $("input .form-control").val(0);
+        }
+    </script>
+}
 
-
-@Html.PagedListPager(
-    Model,
-    p => "?page=" + p,
-    PagedListRenderOptions.Classic
-)
 
 
 

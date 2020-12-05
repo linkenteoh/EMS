@@ -340,6 +340,13 @@
     <Content Include="Views\User\ManageEventProposed.cshtml" />
     <Content Include="Views\Admin\DisplayOrganizerApproval.cshtml" />
     <Content Include="Views\User\RegOrganisera.cshtml" />
+    <Content Include="Views\Home\_BrowseEvent.cshtml" />
+    <Content Include="Views\User\_ProposedList.cshtml" />
+    <Content Include="Views\Admin\_UserList.cshtml" />
+    <Content Include="Views\Admin\_AdsList.cshtml" />
+    <Content Include="Views\Admin\_EventListAdmin.cshtml" />
+    <Content Include="Views\Admin\_EventApproveList.cshtml" />
+    <Content Include="Views\Admin\_OrganiserApproveList.cshtml" />
     <Content Include="Views\User\Payment.cshtml" />
   </ItemGroup>
   <ItemGroup>

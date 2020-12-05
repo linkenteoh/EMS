@@ -311,6 +311,10 @@ namespace EventManagementSystem.Models
         public Nullable<bool> status { get; set; }
     }
 
+    public class SortItems
+    {
+        public string Id { get; set; }
+        public string name { get; set; }
     public class PaymentVM
     {
         [Required(ErrorMessage = "Name is required")]
