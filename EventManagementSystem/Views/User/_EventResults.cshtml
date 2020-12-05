@@ -17,7 +17,6 @@
             <th> End  Date</th>
             <th>Start Time</th>
             <th> End  Time</th>
-            <th>Duration</th>
             <th>Venue</th>
             <th>View Details</th>
         </tr>
@@ -33,7 +32,6 @@
                 <td>@s.endDate.ToString("dd-MM-yyyy")</td>
                 <td>@s.startTime</td>
                 <td>@s.endTime</td>
-                <td>@s.duration</td>
                 <td>@s.Venue.name</td>
                 <td>
                     @Ajax.ActionLink("Detail", "EventDetail", new { Id = s.Id }, ao, new { @class = "btn btn-default " })
