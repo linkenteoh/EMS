@@ -89,8 +89,8 @@ namespace EventManagementSystem.Controllers
             // Check if the dates in each event is within range of current Event
             eventsExisting = eventsExisting.Where(x => x.date == eventCurrent.date);
             // Check if  the time in each event is within range of current event
-            eventsExisting = eventsExisting.Where(x => x.startTime <= eventCurrent.endTime);
-            eventsExisting = eventsExisting.Where(x => x.endTime >= eventCurrent.startTime);
+            eventsExisting = eventsExisting.Where(x => x.startTime < eventCurrent.endTime);
+            eventsExisting = eventsExisting.Where(x => x.endTime > eventCurrent.startTime);
 
             ViewBag.venueOccupied = eventsExisting;
             var model = db.Venues;
