@@ -116,7 +116,16 @@
                         </tr>
                         <tr>
                             <th>Venue</th>
-                            <td> : @(Model.venueId == null ? "No Venue Booked" : Model.Venue.name)</td>
+                            <td>
+                                : @if (Model.venueId == null)
+                                {
+                                    <span>No Venue Booked</span>
+                                }
+                                else
+                                {
+                                    <span>@Model.Venue.name</span>
+                                }
+                            </td>
                         </tr>
 
                     </table>
