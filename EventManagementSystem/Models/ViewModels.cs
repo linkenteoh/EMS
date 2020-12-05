@@ -23,9 +23,7 @@ namespace EventManagementSystem.Models
         public int participants { get; set; }
         public int availability { get; set; }
         [Required]
-        public DateTime startDate { get; set; }
-        [Required]
-        public DateTime endDate { get; set; }
+        public DateTime date { get; set; }
         [Required]
         public TimeSpan startTime { get; set; }
         [Required]
@@ -55,9 +53,7 @@ namespace EventManagementSystem.Models
         public int availability { get; set; }
         public int participants { get; set; }   
         [Required]
-        public DateTime startDate { get; set; }
-        [Required]
-        public DateTime endDate { get; set; }
+        public DateTime date { get; set; }
         [Required]
         public TimeSpan startTime { get; set; }
         [Required]
@@ -123,9 +119,7 @@ namespace EventManagementSystem.Models
         public int participants { get; set; }
         public int availability { get; set; }
         [Required]
-        public DateTime startDate { get; set; }
-        [Required]
-        public DateTime endDate { get; set; }
+        public DateTime date { get; set; }
         [Required]
         public TimeSpan startTime { get; set; }
         [Required]

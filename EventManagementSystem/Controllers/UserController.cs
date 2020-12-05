@@ -188,7 +188,7 @@ namespace EventManagementSystem.Controllers
                 model = model.Where(x => x.Venue.name.Contains(venue));
             }
             // Start Date && End Date
-            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
+/*            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
             {
                 var dtFrom = DateTime.Parse(startDate);
                 var dtTo = DateTime.Parse(endDate);
@@ -203,7 +203,7 @@ namespace EventManagementSystem.Controllers
             {
                 var dtTo = DateTime.Parse(endDate);
                 model = model.Where(x => x.endDate <= dtTo);
-            }
+            }*/
             // Start Time && End Time
             if (!string.IsNullOrEmpty(startTime) && !string.IsNullOrEmpty(endTime))
             {
@@ -238,24 +238,7 @@ namespace EventManagementSystem.Controllers
         // POST: User/ProposeEvent
         [HttpPost]
         public ActionResult ProposeEvent(EventProposeVM model)
-        {
-
-            if (ModelState.IsValidField("startDate"))
-            {
-                if (model.startDate > model.endDate)
-                {
-                    ModelState.AddModelError("startDate", "Invalid date!");
-                }
-
-            }
-            if (ModelState.IsValidField("startTime"))
-            {
-                if (model.startTime > model.endTime)
-                {
-                    ModelState.AddModelError("startTime", "start time cannot exceed or equal end time!");
-                }
-            }
-     
+        {     
             string error = ValidatePhoto(model.Photo);
             if (error != null)
             {
@@ -272,8 +255,7 @@ namespace EventManagementSystem.Controllers
                     price = model.price,
                     participants = model.participants,
                     availability = model.participants,
-                    startDate = model.startDate,
-                    endDate = model.endDate,
+                    date = model.date,
                     startTime = model.startTime,
                     endTime = model.endTime,
                     approvalStat = null,
@@ -330,8 +312,7 @@ namespace EventManagementSystem.Controllers
                 des = e.des,
                 price = e.price,
                 participants = e.participants,
-                startDate = e.startDate,
-                endDate = e.endDate,
+                date = e.date,
                 startTime = e.startTime,
                 endTime = e.endTime,
                 availability = e.availability,
@@ -340,7 +321,8 @@ namespace EventManagementSystem.Controllers
                 OrgId = e.OrgId,
                 venueId = e.venueId,
                 Organiser = e.Organiser,
-                Venue = e.Venue
+                Venue = e.Venue,
+                Registrations = e.Registrations
             };
 
             ViewBag.Registrations = db.Registrations.Where(r => r.eventId == Id);
@@ -367,8 +349,7 @@ namespace EventManagementSystem.Controllers
                 e.price = model.price;
                 e.availability = e.availability;
                 e.participants = model.participants;
-                e.startDate = model.startDate;
-                e.endDate = model.endDate;
+                e.date = model.date;
                 e.startTime = model.startTime;
                 e.endTime = model.endTime;
                 e.approvalStat = true;

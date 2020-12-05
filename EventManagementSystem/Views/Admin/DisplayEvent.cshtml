@@ -59,8 +59,9 @@
             <th scope="col">Price(RM)</th>
             <th scope="col">Availability</th>
             <th scope="col">Participant limit</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
+            <th scope="col">Date</th>
+            <th scope="col">Start</th>
+            <th scope="col">End</th>
             <th scope="col">Venue</th>
             <th scope="col">Organized by</th>
             <th scope="col"></th>
@@ -81,8 +82,9 @@
             <td scope="row">@e.price</td>
             <td scope="row">@e.availability</td>
             <td scope="row">@e.participants</td>
-            <td scope="row">@e.startDate.ToString("dd/MM/yyyy") @e.startTime</td>
-            <td scope="row">@e.endDate.ToString("dd/MM/yyyy") @e.endTime</td>
+            <td scope="row">@e.date.ToString("dd/MM/yyyy")</td>
+            <td scope="row">@e.startTime</td>
+            <td scope="row">@e.endTime</td>
             @if (e.venueId == null)
             {
                 <td scope="row"> </td>
