@@ -64,7 +64,7 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col-md-6">
-                        @Html.LabelFor(e => e.date, "Date")@Html.TextBoxFor(e => e.date, "{0: yyyy-MM-dd}", new { type = "date", min, max, @class = "form-control" })
+                        @Html.LabelFor(e => e.date, "Date")@Html.TextBoxFor(e => e.date, "{0:yyyy-MM-dd}", new { type = "date", min, max, @class = "form-control" })
                         @*<small>(@min to @max )</small>*@
                         @Html.ValidationMessageFor(e => e.date)
                     </div>

@@ -168,6 +168,24 @@ namespace EventManagementSystem.Models
         public HttpPostedFileBase Photo { get; set; }
 
     }
+
+    public class QRCodeModel
+    {
+        [Display(Name = "Event Name")]
+        public string name { get; set; }
+        [Display(Name = "Description")]
+        public string des { get; set; }
+        [Display(Name = "Date")]
+        public DateTime date { get; set; }
+        [Display(Name = "From")]
+        public TimeSpan startTime { get; set; }
+        [Display(Name = "TO")]
+        public TimeSpan endTime { get; set; }
+        [Display(Name = "Paid")]
+        public decimal price { get; set; }
+        [Display(Name = "QRCode Image")]
+        public string QRCodeImagePath { get; set; }
+    }
     public enum Role
     {
         Student,
@@ -267,6 +285,7 @@ namespace EventManagementSystem.Models
     public class LoginVM
     {
         [Required]
+        []
         public string Username { get; set; }
 
         [Required]

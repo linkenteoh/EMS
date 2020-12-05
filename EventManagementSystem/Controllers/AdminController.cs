@@ -14,6 +14,12 @@ using System.Configuration;
 using System.Text;
 using System.Web.Script.Serialization;
 using Microsoft.AspNet.Identity;
+using ZXing;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Net.Mail;
+using QRCoder;
+using System.Security.Cryptography;
 
 namespace EventManagementSystem.Controllers
 {
@@ -82,7 +88,10 @@ namespace EventManagementSystem.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
-            return View();
+
+            var url = Request.UrlReferrer?.AbsolutePath ?? "/";
+           
+            return View(url);
         }
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayProposalApporval(string searchName = "", string name = "", string startDate = "", string endDate = "",
@@ -886,8 +895,184 @@ namespace EventManagementSystem.Controllers
             var url = Request.UrlReferrer?.AbsolutePath ?? "/";
             return Redirect(url);
         }
-   
+            
+        public ActionResult Generate()
+        {
+    /*        string link = "https://localhost:44302/Account/Activation?activationCode=" + user.activationCode + "&userid=" + user.Id;
+            string mail = @"";
 
+            MailMessage m = new MailMessage();
+            m.To.Add(model.email);
+            m.Subject = "Activate your TARUC EMS account";
+            m.Body = link;
+            m.IsBodyHtml = true; //Can send HTML FORMATTED Mail
+            new SmtpClient().Send(m);
+
+            TempData["Info"] = "Registered successfully!";
+            return RedirectToAction("Awaitactivation", "Account", new { email = model.email });*/
+            return View();
+        }
+        private string ConvertUrlsToLinks(string msg)
+        {
+            string regex = @"((www\.|(http|https|ftp|news|file)+\:\/\/)[&#95;.a-z0-9-]+\.[a-z0-9\/&#95;:@=.+?,##%&~-]*[^.|\'|\# |!|\(|?|,| |>|<|;|\)])";
+            Regex r = new Regex(regex, RegexOptions.IgnoreCase);
+            return r.Replace(msg, "<a href=\"$1\" title=\"Click to open in a new window or tab\" target=\"&#95;blank\">$1</a>").Replace("href=\"www", "href=\"http://www");
+        }
+        [HttpPost]
+        public ActionResult Generate(QRCodeModel qrcode)
+        {
+            var q = db.Events.Find(1);
+
+
+            qrcode.name = q.name;
+            qrcode.des = q.des;
+            qrcode.price = q.price;
+            qrcode.startTime = q.startTime;
+            qrcode.endTime = q.endTime;
+            qrcode.date = q.date;
+            //https://ibb.co/4S7L73k
+
+            try
+            {
+                qrcode.QRCodeImagePath = GenerateQRCode(
+        /*            "Event Name  :" + qrcode.name + '\n' +
+                    "Description :" + qrcode.des + '\n' +
+                    "Price       :" + qrcode.price + '\n' +
+                    "Start Time  :" + qrcode.startTime + '\n' +
+                    "End TIme    :" + qrcode.endTime + '\n' +
+                    "Date        :" + qrcode.date.ToString("yyyy-MM-dd") +*/
+                    ConvertUrlsToLinks("www.localhost:44302/Admin/DisplayEvent")
+                    );
+                ViewBag.Message = "QR Code Created successfully";
+            }
+            catch (Exception ex)
+            {
+                ;//catch exception if there is any
+            }
+            return View(qrcode);
+        }
+
+        private string GenerateQRCode(string qrcodeText)
+        {
+            string folderPath = "~/Photo";
+            string imagePath = "~/Photo/QRCode.png";
+            // If the directory doesn't exist then create it.
+            if (!Directory.Exists(Server.MapPath(folderPath)))
+            {
+                Directory.CreateDirectory(Server.MapPath(folderPath));
+            }
+
+            var barcodeWriter = new BarcodeWriter();
+            barcodeWriter.Format = BarcodeFormat.QR_CODE;
+            //print details
+            var result = barcodeWriter.Write(ConvertUrlsToLinks(qrcodeText));
+
+            string barcodePath = Server.MapPath(imagePath);
+            var barcodeBitmap = new Bitmap(result);
+            using (MemoryStream memory = new MemoryStream())
+            {
+                using (FileStream fs = new FileStream(barcodePath, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    barcodeBitmap.Save(memory, ImageFormat.Jpeg);
+                    byte[] bytes = memory.ToArray();
+                    fs.Write(bytes, 0, bytes.Length);
+                }
+            }
+            return imagePath;
+        }
+
+        public ActionResult Read()
+        {
+            return View(ReadQRCode());
+        }
+
+        private QRCodeModel ReadQRCode()
+        {
+            QRCodeModel barcodeModel = new QRCodeModel();
+            string barcodeText = "";
+            string imagePath = "~/Photo/QRCode.png";
+            string barcodePath = Server.MapPath(imagePath);
+            var barcodeReader = new BarcodeReader();
+
+            var result = barcodeReader.Decode(new Bitmap(barcodePath));
+            if (result != null)
+            {
+                barcodeText = result.Text;
+            }
+            return new QRCodeModel() { name = barcodeText, QRCodeImagePath = imagePath };
+        }
+
+        public ActionResult DisplayQR()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult DisplayQR(string txtQRCode)
+        {
+            ViewBag.txtQRCode = txtQRCode;
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(txtQRCode, QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            //System.Web.UI.WebControls.Image imgBarCode = new System.Web.UI.WebControls.Image();
+            //imgBarCode.Height = 150;
+            //imgBarCode.Width = 150;
+            using (Bitmap bitMap = qrCode.GetGraphic(20))
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    bitMap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    ViewBag.imageBytes = ms.ToArray();
+                    //imgBarCode.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(byteImage);
+                }
+            }
+            return View();
+        }
+
+
+        public static string Encrypt(string clearText)
+        {
+            string EncryptionKey = "hyddhrii%2moi43Hd5%%";
+            byte[] clearBytes = Encoding.Unicode.GetBytes(clearText);
+            using (Aes encryptor = Aes.Create())
+            {
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(clearBytes, 0, clearBytes.Length);
+                        cs.Close();
+                    }
+                    clearText = Convert.ToBase64String(ms.ToArray());
+                }
+            }
+            return clearText;
+        }
+        public static string Decrypt(string cipherText)
+        {
+            string EncryptionKey = "hyddhrii%2moi43Hd5%%";
+            cipherText = cipherText.Replace(" ", "+");
+            byte[] cipherBytes = Convert.FromBase64String(cipherText);
+            using (Aes encryptor = Aes.Create())
+            {
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(cipherBytes, 0, cipherBytes.Length);
+                        cs.Close();
+                    }
+                    cipherText = Encoding.Unicode.GetString(ms.ToArray());
+                }
+            }
+            return cipherText;
+        }
     }
 
 }

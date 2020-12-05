@@ -32,10 +32,19 @@
         @Html.GoogleCaptcha()
         @Html.InvalidGoogleCaptchaLabel("Captcha is not valid")
     </div>
+    @if (@Request.Cookies["block"] != null)
+    {
+        <section>
+            <button class="btn btn-secondary" disabled>Login</button>
+        </section>
+    }
+    else
+    {
+        <section>
+            <button class="btn btn-primary" >Login</button>
+        </section>
+    }
 
-    <section>
-        <button class="btn btn-primary">Login</button>
-    </section>
 </form>
 
 <p>
