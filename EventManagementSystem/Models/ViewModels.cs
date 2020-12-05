@@ -311,4 +311,30 @@ namespace EventManagementSystem.Models
         public Nullable<bool> status { get; set; }
     }
 
+    public class PaymentVM
+    {
+        [Required]
+        [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only")]
+        public string name { get; set; }
+        [Required]
+        [RegularExpression(@"/^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$/", ErrorMessage = "Invalid Format.")]
+        public string cardNum { get; set; }
+        [Required]
+        [MaxLength(3)]
+        public string cvv { get; set; }
+        [Required]
+        [MaxLength(5)]
+        [RegularExpression(@"^\d{2}\/\d{2}$", ErrorMessage = "Invalid Format.")]
+        public string expDate { get; set; }
+        public int Id { get; set; }
+        public decimal price { get; set; }
+        public Nullable<System.DateTime> paymentdate { get; set; }
+        public decimal addCharge { get; set; }
+        public decimal commision { get; set; }
+        public bool status { get; set; }
+
+        public virtual Registration Registration { get; set; }
+
+    }
+
 }

@@ -1,0 +1,63 @@
+﻿@model PaymentVM
+@{
+    ViewBag.Title = "Payment";
+}
+
+
+@section head{
+    <style>
+
+        .editor-label {
+            float: left;
+        }
+
+        .editor-field {
+            margin-left: 80px;
+        }
+    </style>
+    }
+
+
+<form class="form " method="post">
+    @Html.ValidationSummary(true)
+    <div>
+        <div>
+            @Html.LabelFor(m => m.name, "Name")
+        </div>
+        <div>
+            @Html.TextBoxFor(m => m.name, new { @class = "form-control", placeholder = "Your name" })
+            @Html.ValidationMessageFor(m => m.name,"", new { @class = "text-danger" })
+        </div>
+
+
+        <div>
+            @Html.LabelFor(m => m.cardNum, "Card Number")
+        </div>
+        <div>
+            @Html.TextBoxFor(m => m.cardNum, new { @class = "form-control", placeholder = "51xx-xxxx-xxxx-xxxx" })
+            @Html.ValidationMessageFor(m => m.cardNum, "", new { @class = "text-danger" })
+        </div>
+
+
+        <div>
+            <div class="editor-label">
+                @Html.LabelFor(m => m.cvv, "CVV")
+                @Html.TextBoxFor(m => m.cvv, new { @class = "form-control", placeholder = "CVV", style = "width:60px" })
+                @Html.ValidationMessageFor(m => m.cvv, "", new { @class = "text-danger" })
+            </div>
+            <div class="editor-field">
+                @Html.LabelFor(m => m.expDate, "Expiry Date")
+                @Html.TextBoxFor(m => m.expDate, new { @class = "form-control", placeholder = "MM/YY", style = "width:80px" })
+                @Html.ValidationMessageFor(m => m.expDate, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+
+        <br />
+        <div>
+            <button class="btn btn-primary">Confirm</button>
+        </div>
+    </div>
+
+</form>

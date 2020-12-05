@@ -25,7 +25,6 @@ namespace EventManagementSystem.Controllers
         public ActionResult EventDetail(int id)
         {
             var model = db.Events.Find(id);
-
             return View(model);
         }
 
@@ -35,27 +34,42 @@ namespace EventManagementSystem.Controllers
         }
 
         // Register Event
-        public ActionResult RegisterEvent(string username, int eventId, DateTime d)
+        public ActionResult RegisterEvent(int eventId, DateTime d)
         {
 
-            int id = db.Users.FirstOrDefault(u => u.username == username).Id;
+            var user = db.Users.FirstOrDefault(u => u.username == User.Identity.Name);
 
-            if (db.Registrations.Any(r => r.eventId == eventId && r.userId == id))
+            if (db.Registrations.Any(r => r.eventId == eventId && r.userId == user.Id))
             {
                 TempData["Info"] = "You've registered this event already!";
                 return RedirectToAction("EventDetail", new { id = eventId });
             }
 
+            var e = db.Events.Find(eventId);
+            double price = 0;
+            double comission = 0;
+            double addCharge = 0;
+            double temp = 0;
+
+            if(user.role == "Student")
+            {
+                addCharge = 0;
+                price = (double)e.price;
+                comission = price * 0.1;
+            }else if(user.role == "Outsider")
+            {
+                addCharge = (double)e.price * 0.1;    //Additional charge
+                price = (double)e.price + addCharge; 
+                comission = price * 0.1;              //Every transaction 10% are contributed as comission
+            }
+
             int regId = db.Registrations.Count() + 1;
-
-
-
             var register = new Registration
             {
                 Id = regId,
                 eventId = eventId,
-                userId = id,
-                status = false,
+                userId = user.Id,
+                status = true,
                 date = d
             };
 
@@ -66,8 +80,9 @@ namespace EventManagementSystem.Controllers
             var bill = new Payment
             {
                 Id = register.Id,
-                price = 10,
-                gst = 10,
+                price = (decimal)price,
+                addCharge = (decimal)addCharge,
+                commision = (decimal)comission,
                 status = false
             };
             db.Payments.Add(bill);
@@ -89,8 +104,8 @@ namespace EventManagementSystem.Controllers
             // Check if the dates in each event is within range of current Event
             eventsExisting = db.Events.Where(x => x.date == eventCurrent.date);
             // Check if  the time in each event is within range of current event
-            eventsExisting = db.Events.Where(x => x.startTime >= eventCurrent.startTime && x.endTime <= eventCurrent.endTime);
-
+            eventsExisting = eventsExisting.Where(x => x.startTime <= eventCurrent.endTime);
+            eventsExisting = eventsExisting.Where(x => x.endTime >= eventCurrent.startTime);
             // Check if venue exist
             eventsExisting = db.Events.Where(x => x.venueId != null);
             ViewBag.venueOccupied = eventsExisting;
