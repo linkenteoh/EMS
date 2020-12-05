@@ -32,15 +32,82 @@ namespace EventManagementSystem.Controllers
             return View();
         }
 
-        public ActionResult Events(int page = 1)
+        public ActionResult Events(string searchName = "", string name = "", string startDate = "", string endDate = "",
+            string startTime = "", string endTime = "", string venue = "", string sort = "", int page = 1)
         {
+            ViewBag.VenueList = new SelectList(db.Venues, "name", "name");
+            ViewBag.sortList = new SelectList(
+                new List<SortItems> {
+                    new SortItems { Id = "Id", name = "Id"},
+                    new SortItems { Id = "name", name = "Name"},
+                    new SortItems { Id = "price", name = "Price"},
+                    new SortItems { Id = "date", name = "Date"},
+                    new SortItems { Id = "Venue.name", name = "Venue"}
+                }, "Id", "name");
+            var model = db.Events.Where(e => e.approvalStat == true && e.status == true);
+
+            //// Name
+            if (!string.IsNullOrEmpty(name))
+            {
+                model = model.Where(m => m.name.Contains(name));
+            }
+            // Venue
+            if (!string.IsNullOrEmpty(venue))
+            {
+                model = model.Where(x => x.Venue.name.Contains(venue));
+            }
+            // Start Date && End Date
+            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
+            {
+                var timeFrom = DateTime.Parse(startDate);
+                var timeTo = DateTime.Parse(endDate);
+                model = model.Where(x => x.date >= timeFrom && x.date <= timeTo);
+            }
+            else if (!string.IsNullOrEmpty(startDate))
+            {
+                var timeFrom = DateTime.Parse(startDate);
+                model = model.Where(x => x.date >= timeFrom);
+            }
+            else if (!string.IsNullOrEmpty(endDate))
+            {
+                var timeTo = DateTime.Parse(endDate);
+                model = model.Where(x => x.date <= timeTo);
+            }
+            // Start Time && End Time
+            if (!string.IsNullOrEmpty(startTime) && !string.IsNullOrEmpty(endTime))
+            {
+                var timeFrom = TimeSpan.Parse(startTime);
+                var timeTo = TimeSpan.Parse(endTime);
+                model = model.Where(x => x.startTime >= timeFrom && x.endTime <= timeTo);
+            }
+            else if (!string.IsNullOrEmpty(startTime))
+            {
+                var timeFrom = TimeSpan.Parse(startTime);
+                model = model.Where(x => x.startTime >= timeFrom);
+            }
+            else if (!string.IsNullOrEmpty(endTime))
+            {
+                var timeTo = TimeSpan.Parse(endTime);
+                model = model.Where(x => x.endTime <= timeTo);
+            }
+            // Search name
+            model = model.Where(x => x.name.Contains(searchName) || x.des.Contains(searchName) || x.Venue.name.Contains(searchName));
+            // Sort By
             Func<Event, object> fn = s => s.Id;
+            switch (sort)
+            {
+                case "Id": fn = s => s.Id; break;
+                case "name": fn = s => s.name; break;
+                case "price": fn = s => s.price; break;
+                case "date": fn = s => s.date; break;
+                case "Venue.name": fn = s => s.venueId; break;
+            }
+            // PagedList
+            var events = model.OrderBy(fn).ToPagedList(page, 10);
 
-
-            var events = db.Events.Where(e => e.approvalStat == true && e.status == true).OrderBy(fn);
-            var model = events.ToPagedList(page, 10);
-
-            return View(model);
+            if (Request.IsAjaxRequest())
+                return PartialView("_BrowseEvent", events);
+            return View(events);
         }
     }
 }

@@ -4,19 +4,15 @@
 
     var results = new AjaxOptions
     {
+        Url = "/User/SearchEventIndex",
         HttpMethod = "get",
         LoadingElementId = "loader",
         UpdateTargetId = "eventTable",
-        OnSuccess = "highlight"
     };
     var attr = new
     {
         @class = "form-horizontal"
     };
-
-    string[] fields = { "Id", "name" };
-    string sort = Request.Params["sort"];
-    string sortdir = Request.Params["sortdir"];
 }
 
 @section head{
@@ -28,82 +24,22 @@
             display: none;
         }
 
-        #paged {
+        #paged, #countModel {
+            margin:10px;
             text-align: center;
             display: block;
         }
 
-        #role {
-            cursor: pointer;
-        }
-
-        .radio input {
-            display: none;
-        }
-
-        .radio {
-            border-radius: 10px;
-            width: 49%;
-            padding-top: 13vh;
-            padding-bottom: 13vh;
-            cursor: pointer;
-            box-shadow: 1px 3px 6px 1px rgba(148,129,148,1);
-        }
-
-            .radio:hover {
-                box-shadow: 2px 10px 21px 1px rgba(148,129,148,1);
-                animation: pop 0.4s forwards;
-            }
-
-        @@keyframes pop {
-            from {
-                bottom: 0px
-            }
-
-            to {
-                bottom: 1em
-            }
-        }
-
-        #stud {
-            float: left;
-        }
-
-        #outs {
-            float: right;
-            margin-top: 10px;
-        }
-
-        .roleText {
-            font-size: 3em;
-            font-weight: 300;
-        }
-
-        .outerDiv {
-            padding: 5px 50px;
-            margin-top: 30px;
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        .custom-file-upload {
-            display: inline-block;
-            padding: 6px 12px;
-            cursor: pointer;
-        }
-
         #eventTable {
             margin: 10px 10px 10px 10px;
+            margin-top: 50px;
         }
     </style>
 }
 
-<div class="outerDiv">
     <h3>@ViewBag.Title</h3>
     <hr />
-    @using (Ajax.BeginForm(null, null, results, attr))
+    @using (Ajax.BeginForm("EventSearchIndex", "User", results, attr))
     {
         <span class="btn btn-secondary dropdown-toggle searchButton">Filter</span>
         <span>@Html.DropDownList("sort", ViewBag.SortList as SelectList, "Sort By", new { @class = "btn btn-secondary", onChange = "sortData(this);" })</span>
@@ -115,32 +51,30 @@
             <div class="searchCont" style="display:none">
                 <div style="padding-left: 10px;">
                     <h3>Filters</h3>
-
                     <div class="form-group row">
                         @Html.Label("name", "Event Name", new { @class = "control-label col-sm-2" })
                         @Html.TextBox("name", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control" })
                     </div>
                     <div class="form-group">
-                        @Html.Label("date", "Date From", new { @class = "control-label col-sm-2" })
-                        @Html.TextBox("date", "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-3" })
-
+                        @Html.Label("startDate", "Date From", new { @class = "control-label col-sm-2" })
+                        @Html.TextBox("startDate", null, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-2" })
+                        @Html.Label("endDate", "To", new { @class = "control-label col-sm-1" })
+                        @Html.TextBox("endDate", null, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-2" })
                     </div>
                     <div class="form-group">
                         @Html.Label("startTime", "Time From", new { @class = "control-label col-sm-2" })
-                        @Html.TextBox("startTime", "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
+                        @Html.TextBox("startTime", null, "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
                         @Html.Label("endTime", "To", new { @class = "control-label col-sm-1" })
-                        @Html.TextBox("endTime", "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
+                        @Html.TextBox("endTime", null, "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
                     </div>
                     <div class="form-group">
                         @Html.Label("venue", "Venue", new { @class = "control-label col-sm-2" })
                         @Html.DropDownList("venue", ViewBag.VenueList as SelectList, "- Select One -", new { @class = "control-label col-sm-2 btn btn-secondary form-control" })
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-1">
+                        <div class="col-sm-offset-1 col-sm-1">
                             <input type="submit" class="btn btn-primary searchBtn" name="Search" value="Search" />
                         </div>
                         <div class="col-sm-1">
-                            <input type="reset" class="btn btn-primary " name="Reset" value="Reset" />
+                            <input type="reset" class="btn btn-primary " name="Reset" value="Reset" onclick="resetData();"/>
                         </div>
                     </div>
                 </div>
@@ -151,7 +85,7 @@
         <div id="loader"><img src="~/Images/loader.gif"></div>
         @Html.Partial("_EventResults")
     </div>
-</div>
+
 @section foot{
 
     <script>
@@ -172,27 +106,15 @@
             timer = setTimeout(() => $(e.target.form).submit(), 1000);
         });
 
-        function escapeRegExp(string) {
-            return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&');
-        }
-
-        function highlight() {
-            let name = $('#searchName').val().trim();
-
-            //if (!name) return;
-            let re = new RegExp(escapeRegExp(name), 'gi');
-
-            $('td:nth-child(2)').each((i, el) => {
-                let html = $(el).html().replace(re, '<mark>$&</mark>');
-                $(el).html(html);
-            });
-        }
-
         // Sort By
         function sortData(e) {
             e.form.submit();
         }
-        
+
+        // reset data filter
+        function resetData() {
+            $("input .form-control").val(0);
+        }
     </script>
 }
 
