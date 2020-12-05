@@ -74,18 +74,24 @@ namespace EventManagementSystem.Controllers
             var eventCurrent = db.Events.Find(Id);
             ViewBag.eventCurrent = eventCurrent;
             // Validate Availability
-            var eventsExisting = db.Events.Where(x => x.Id != Id).AsQueryable();
+            // Check if other events'venueID exists 
+            var eventsExisting = db.Events.Where(x => x.Id != Id && x.venueId != null);
+            //foreach (var e in eventsExisting)
+            //{
+            eventsExisting = eventsExisting.Where(x => x.startDate >= eventCurrent.startDate && x.endDate <= eventCurrent.endDate);
+            //eventsExisting = eventsExisting.Where(x => x.endDate <= eventCurrent.endDate);
+            //}
+            //eventsExisting = eventsExisting.Where(x => x.startTime < eventCurrent.startTime);
+            //eventsExisting = eventsExisting.Where(x => x.startTime >= eventCurrent.startTime);
 
             // Check if the dates in each event is within range of current Event
-            eventsExisting = db.Events.Where(x => x.startDate >= eventCurrent.startDate && x.endDate <= eventCurrent.endDate);
-
+            // if exists only proceed to check time within that date
+            //eventsExisting = eventsExisting.Where(x => x.startDate >= eventCurrent.startDate && x.endDate <= eventCurrent.endDate && x.startTime >= eventCurrent.startTime && x.endTime <= eventCurrent.endTime);
+            //eventsExisting = eventsExisting.Where(x => x.startDate >= eventCurrent.startDate && x.endDate <= eventCurrent.endDate);
             // Check if  the time in each event is within range of current event
-            eventsExisting = db.Events.Where(x => x.startTime >= eventCurrent.startTime && x.endTime <= eventCurrent.endTime);
+            //eventsExisting = eventsExisting.Where(x => x.startTime >= eventCurrent.startTime && x.endTime <= eventCurrent.endTime);
 
-            // Check if venue exist
-            eventsExisting = db.Events.Where(x => x.venueId != null);
             ViewBag.venueOccupied = eventsExisting;
-
             var model = db.Venues;
             return View(model);
         }

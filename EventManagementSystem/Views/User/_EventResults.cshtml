@@ -1,5 +1,6 @@
-﻿@model IEnumerable<Event>
-
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<Event>
 @{
     var ao = new AjaxOptions
     {
@@ -19,7 +20,6 @@
                 <th> End  Date</th>
                 <th>Start Time</th>
                 <th> End  Time</th>
-                <th>Duration</th>
                 <th>Venue</th>
                 <th>View Details</th>
             </tr>
@@ -35,20 +35,29 @@
                     <td>@s.endDate.ToString("dd-MM-yyyy")</td>
                     <td>@s.startTime</td>
                     <td>@s.endTime</td>
-                    <td>@s.Venue.name</td>
+                    <td>@(s.venueId == null ? "No Venue Booked" : s.Venue.name)</td>
                     <td>
                         @Ajax.ActionLink("Detail", "EventDetail", new { Id = s.Id }, ao, new { @class = "btn btn-default " })
-                        
+
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+    <div id="paged">
+        @Html.PagedListPager(
+    Model,
+    p => "?page=" + p,
+    PagedListRenderOptions.Classic
+    )
+    </div>
+    
 }
 else
 {
-    <span style="font-size: 16pt; text-align:center;">No Records Founded.</span>
+    <div style=" text-align: center; margin-top:50px;"><span style="font-size: 16pt; text-align:center;">No Records Founded.</span></div>
 }
+
 
 <script>
 

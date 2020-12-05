@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Events Joined";
 
     var results = new AjaxOptions
@@ -7,7 +8,8 @@
         LoadingElementId = "loader",
         UpdateTargetId = "eventTable",
     };
-    var attr = new { 
+    var attr = new
+    {
         @class = "form-horizontal"
     };
 }
@@ -16,6 +18,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <style>
+        #loader {
+            text-align: center;
+            display: none;
+        }
+
+        #paged {
+            text-align: center;
+            display: block;
+        }
+
         #role {
             cursor: pointer;
         }
@@ -110,17 +122,20 @@
             @Html.TextBox("endTime", "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-4" })
         </div>
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-1">
+            @Html.Label("venue", "Venue", new { @class = "control-label col-sm-2" })
+            @Html.DropDownList("venue", ViewBag.VenueList as SelectList, "- Select One -", new { @class = "control-label col-sm-2 btn btn-secondary dropdown-toggle form-control" })
+        </div>
+        <div class="form-group" style="margin-top:30px; align-content: center">
+            <div class="col-sm-offset-5 col-sm-2">
                 <input type="submit" class="btn btn-primary searchBtn" name="Search" value="search" />
             </div>
-            <div class="col-sm-1">
+            <div class="col-sm-1 col-sm-pull-1">
                 <input type="reset" class="btn btn-primary " name="Reset" value="reset" />
             </div>
         </div>
-        <img src="~/Images/loader.gif" id="loader" style="display: none;">
     }
-
     <div id="eventTable">
+        <div id="loader"><img src="~/Images/loader.gif"></div>
         @Html.Partial("_EventResults")
     </div>
 </div>

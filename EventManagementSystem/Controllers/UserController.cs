@@ -167,57 +167,65 @@ namespace EventManagementSystem.Controllers
         }
 
         public ActionResult EventSearchIndex(string name ="", string startDate ="", string endDate="", 
-            string startTime = "", string endTime = "", int page = 1)
+            string startTime = "", string endTime = "", string venue = "", int page = 1)
         {
+            ViewBag.VenueList = new SelectList(db.Venues, "name", "name");
             var username = User.Identity.Name;
             var u = db.Users.Where(x => x.username == username).FirstOrDefault();
             // Get userID in registration
             var reg = db.Registrations.Where(r => u.Id.Equals(r.userId)).Select(r => r.eventId).ToArray();
             // Get EventID in registration that contains the userID
-            var model = db.Events.Where(m => reg.Contains(m.Id)).AsQueryable();
+            var model = db.Events.Where(m => reg.Contains(m.Id));
 
-            // Name
+            //// Name
             if (!string.IsNullOrEmpty(name))
             {
-                model = db.Events.Where(m => m.name.Contains(name));
+                model = model.Where(m => m.name.Contains(name));
+            }
+            // Venue
+            if (!string.IsNullOrEmpty(venue))
+            {
+                model = model.Where(x => x.Venue.name.Contains(venue));
             }
             // Start Date && End Date
             if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
             {
                 var dtFrom = DateTime.Parse(startDate);
                 var dtTo = DateTime.Parse(endDate);
-                model = db.Events.Where(x => x.startDate >= dtFrom && x.endDate <= dtTo);
-            }else if (!string.IsNullOrEmpty(startDate))
+                model = model.Where(x => x.startDate >= dtFrom && x.endDate <= dtTo);
+            }
+            else if (!string.IsNullOrEmpty(startDate))
             {
                 var dtFrom = DateTime.Parse(startDate);
-                model = db.Events.Where(x => x.startDate >= dtFrom);
+                model = model.Where(x => x.startDate >= dtFrom);
             }
             else if (!string.IsNullOrEmpty(endDate))
             {
                 var dtTo = DateTime.Parse(endDate);
-                model = db.Events.Where(x => x.endDate <= dtTo);
+                model = model.Where(x => x.endDate <= dtTo);
             }
             // Start Time && End Time
             if (!string.IsNullOrEmpty(startTime) && !string.IsNullOrEmpty(endTime))
             {
                 var timeFrom = TimeSpan.Parse(startTime);
                 var timeTo = TimeSpan.Parse(endTime);
-                model = db.Events.Where(x => x.startTime >= timeFrom && x.endTime <= timeTo);
+                model = model.Where(x => x.startTime >= timeFrom && x.endTime <= timeTo);
             }
             else if (!string.IsNullOrEmpty(startTime))
             {
                 var timeFrom = TimeSpan.Parse(startTime);
-                model = db.Events.Where(x => x.startTime >= timeFrom);
+                model = model.Where(x => x.startTime >= timeFrom);
             }
             else if (!string.IsNullOrEmpty(endTime))
             {
                 var timeTo = TimeSpan.Parse(endTime);
-                model = db.Events.Where(x => x.endTime <= timeTo);
+                model = model.Where(x => x.endTime <= timeTo);
             }
+            var events = model.OrderBy(m => m.Id).ToPagedList(page, 10);
 
             if (Request.IsAjaxRequest())
-                return PartialView("_EventResults", model);
-            return View(model);
+                return PartialView("_EventResults", events);
+            return View(events);
         }
 
         // GET: User/ProposeEvent
@@ -326,6 +334,8 @@ namespace EventManagementSystem.Controllers
                 endTime = e.endTime,
                 approvalStat = e.approvalStat,
                 photoURL = e.photoURL,
+                venueId = e.venueId,
+                Venue = e.Venue,
                 OrgId = e.OrgId
             };
 
