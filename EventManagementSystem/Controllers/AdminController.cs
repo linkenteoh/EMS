@@ -621,8 +621,91 @@ namespace EventManagementSystem.Controllers
             var url = Request.UrlReferrer?.AbsolutePath ?? "/";
             return Redirect(url);
         }
-   
 
+        public ActionResult Generate()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Generate(QRCodeModel qrcode)
+        {
+            var q = db.Events.Find(1);
+
+
+            qrcode.name = q.name;
+            qrcode.des = q.des;
+            qrcode.price = q.price;
+            qrcode.startTime = q.startTime;
+            qrcode.endTime = q.endTime;
+            //date = q.startDate
+
+            try
+            {
+                qrcode.QRCodeImagePath = GenerateQRCode(qrcode.name + );
+                qrcode.QRCodeImagePath = GenerateQRCode(qrcode.des);
+                /*      qrcode.QRCodeImagePath = GenerateQRCode(qrcode.des);
+                      qrcode.QRCodeImagePath = GenerateQRCode(qrcode.price.ToString());
+                      qrcode.QRCodeImagePath = GenerateQRCode(qrcode.startTime.ToString());
+                      qrcode.QRCodeImagePath = GenerateQRCode(qrcode.endTime.ToString());*/
+                ViewBag.Message = "QR Code Created successfully";
+            }
+            catch (Exception ex)
+            {
+                ;//catch exception if there is any
+            }
+            return View(qrcode);
+        }
+
+        private string GenerateQRCode(string qrcodeText)
+        {
+            string folderPath = "~/Photo";
+            string imagePath = "~/Photo/QRCode.png";
+            // If the directory doesn't exist then create it.
+            if (!Directory.Exists(Server.MapPath(folderPath)))
+            {
+                Directory.CreateDirectory(Server.MapPath(folderPath));
+            }
+
+            var barcodeWriter = new BarcodeWriter();
+            barcodeWriter.Format = BarcodeFormat.QR_CODE;
+            //print details
+            var result = barcodeWriter.Write(qrcodeText);
+
+            string barcodePath = Server.MapPath(imagePath);
+            var barcodeBitmap = new Bitmap(result);
+            using (MemoryStream memory = new MemoryStream())
+            {
+                using (FileStream fs = new FileStream(barcodePath, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    barcodeBitmap.Save(memory, ImageFormat.Jpeg);
+                    byte[] bytes = memory.ToArray();
+                    fs.Write(bytes, 0, bytes.Length);
+                }
+            }
+            return imagePath;
+        }
+
+        public ActionResult Read()
+        {
+            return View(ReadQRCode());
+        }
+
+        private QRCodeModel ReadQRCode()
+        {
+            QRCodeModel barcodeModel = new QRCodeModel();
+            string barcodeText = "";
+            string imagePath = "~/Photo/QRCode.png";
+            string barcodePath = Server.MapPath(imagePath);
+            var barcodeReader = new BarcodeReader();
+
+            var result = barcodeReader.Decode(new Bitmap(barcodePath));
+            if (result != null)
+            {
+                barcodeText = result.Text;
+            }
+            return new QRCodeModel() { name = barcodeText, QRCodeImagePath = imagePath };
+        }
     }
 
 }

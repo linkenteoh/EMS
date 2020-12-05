@@ -339,6 +339,8 @@
     <Content Include="Views\User\ManageEventProposed.cshtml" />
     <Content Include="Views\Admin\DisplayOrganizerApproval.cshtml" />
     <Content Include="Views\User\RegOrganisera.cshtml" />
+    <Content Include="Views\Admin\Generate.cshtml" />
+    <Content Include="Views\Admin\Read.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\DisplayUser.cshtml" />
