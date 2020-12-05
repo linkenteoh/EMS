@@ -1,48 +1,56 @@
 ﻿@model IEnumerable<Event>
 
-@{ 
+@{
     var ao = new AjaxOptions
     {
         Url = "/User/EventDetail",
         HttpMethod = "get",
     };
 }
-<table class="table table-bordered table-hover resultsTable">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Start Date</th>
-            <th> End  Date</th>
-            <th>Start Time</th>
-            <th> End  Time</th>
-            <th>Duration</th>
-            <th>Venue</th>
-            <th>View Details</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (Event s in Model)
-        {
+@if (@Model.Count() > 0)
+{
+    <table class="table table-bordered table-hover resultsTable">
+        <thead>
             <tr>
-                <td>@s.name</td>
-                <td>@s.des</td>
-                <td>@s.price</td>
-                <td>@s.startDate.ToString("dd-MM-yyyy")</td>
-                <td>@s.endDate.ToString("dd-MM-yyyy")</td>
-                <td>@s.startTime</td>
-                <td>@s.endTime</td>
-                <td>@s.duration</td>
-                <td>@s.Venue.name</td>
-                <td>
-                    @Ajax.ActionLink("Detail", "EventDetail", new { Id = s.Id }, ao, new { @class = "btn btn-default " })
-                </td>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Start Date</th>
+                <th> End  Date</th>
+                <th>Start Time</th>
+                <th> End  Time</th>
+                <th>Duration</th>
+                <th>Venue</th>
+                <th>View Details</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (Event s in Model)
+            {
+                <tr>
+                    <td>@s.name</td>
+                    <td>@s.des</td>
+                    <td>@s.price</td>
+                    <td>@s.startDate.ToString("dd-MM-yyyy")</td>
+                    <td>@s.endDate.ToString("dd-MM-yyyy")</td>
+                    <td>@s.startTime</td>
+                    <td>@s.endTime</td>
+                    <td>@s.Venue.name</td>
+                    <td>
+                        @Ajax.ActionLink("Detail", "EventDetail", new { Id = s.Id }, ao, new { @class = "btn btn-default " })
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <span style="font-size: 16pt; text-align:center;">No Records Founded.</span>
+}
+
 <script>
-    
-   
+
+
 </script>
