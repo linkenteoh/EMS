@@ -88,14 +88,14 @@
     <hr />
     @using (Ajax.BeginForm(null, null, results, attr))
     {
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Filter
-            </button>
+        <span class="btn btn-secondary dropdown-toggle searchButton">Filter</span>
 
-            <button class="btn btn-secondary">Sort by</button>
-            <input type="text" class="form-control" style="display:inline" placeholder="Search.." />
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="width:100%;">
+
+        <button class="btn btn-secondary">Sort by</button>
+        <input type="text" class="form-control" style="display:inline" placeholder="Search.." />
+
+        <div class="parent">
+            <div class="searchCont" style="display:none">
                 <div style="padding-left: 10px;">
                     <h3>Filters</h3>
 
@@ -129,9 +129,12 @@
                     </div>
                     <img src="~/Images/loader.gif" id="loader" style="display: none;">
                 </div>
-
             </div>
         </div>
+
+
+
+
 
 
 
@@ -142,7 +145,19 @@
     </div>
 
 
-</div>
+    @section foot{
 
+        <script>
+            //when search button click
+            jQuery(document).on('click', '.searchButton', function () {
+                if (jQuery('.parent').hasClass('menuActive')) {
+                    jQuery('.parent').removeClass('menuActive');
+                    jQuery('.parent .menu').slideUp(0);
+                }
+                jQuery('.parent').toggleClass('searchActive').children('.searchCont').slideToggle(200);
+            })
+        </script>
+    }
+</div>
 
 
