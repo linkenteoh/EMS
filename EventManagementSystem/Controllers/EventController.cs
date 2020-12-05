@@ -99,17 +99,15 @@ namespace EventManagementSystem.Controllers
             var eventCurrent = db.Events.Find(Id);
             ViewBag.eventCurrent = eventCurrent;
             // Validate Availability
-            var eventsExisting = db.Events.Where(x => x.Id != Id).AsQueryable();
+            var eventsExisting = db.Events.Where(x => x.Id != Id);
 
             // Check if the dates in each event is within range of current Event
-            eventsExisting = db.Events.Where(x => x.date == eventCurrent.date);
+            eventsExisting = eventsExisting.Where(x => x.date == eventCurrent.date);
             // Check if  the time in each event is within range of current event
-            eventsExisting = eventsExisting.Where(x => x.startTime <= eventCurrent.endTime);
-            eventsExisting = eventsExisting.Where(x => x.endTime >= eventCurrent.startTime);
-            // Check if venue exist
-            eventsExisting = db.Events.Where(x => x.venueId != null);
-            ViewBag.venueOccupied = eventsExisting;
+            eventsExisting = eventsExisting.Where(x => x.startTime < eventCurrent.endTime);
+            eventsExisting = eventsExisting.Where(x => x.endTime > eventCurrent.startTime);
 
+            ViewBag.venueOccupied = eventsExisting;
             var model = db.Venues;
             return View(model);
         }
