@@ -6,53 +6,124 @@
 @{
     ViewBag.Title = "Advertisement List";
     Layout = "~/Views/Shared/_Dashboard.cshtml";
+    var results = new AjaxOptions
+    {
+        Url = "/Admin/DisplayAdvert",
+        HttpMethod = "get",
+        LoadingElementId = "loader",
+        UpdateTargetId = "adsTable",
+    };
+    var attr = new
+    {
+        @class = "form-horizontal"
+    };
 }
+
+
+<style>
+    #loader {
+        text-align: center;
+        display: none;
+    }
+
+    #paged, #countModel {
+        margin: 10px;
+        text-align: center;
+        display: block;
+    }
+
+    #adsTable {
+        margin: 10px 10px 10px 10px;
+        margin-top: 50px;
+    }
+</style>
 
 <h1>Advertisement List</h1>
 <input class="btn btn-primary" data-get="/Admin/InsertAdvert" type="button" value="Add Advertisement">
 
-<p>@Model.Where(a => a.status == true).Count() record(s) in advertisement list</p>
-<table class="table table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Description</th>
-            <th scope="col">Charge</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var a in Model)
+@using (Ajax.BeginForm("DisplayAdvert", "Admin", results, attr))
+{
+    <span class="btn btn-secondary dropdown-toggle searchButton">Filter</span>
+    <span>@Html.DropDownList("sort", ViewBag.SortList as SelectList, "Sort By", new { @class = "btn btn-secondary", onChange = "sortData(this);" })</span>
+    <span>
+        @Html.TextBox("searchName", null, new
         {
-            if (a.status == true)
-            {
+            data_upper = "",
+            autofocus = "",
+            @class = "form-control",
+            style = "display:inline; width:600px;",
+            placeholder = "Search..."
+        })
+    </span>
+    <i class="fa fa-search fa-2x"></i>
+    <div class="parent">
+        <div class="searchCont" style="display:none">
+            <div style="padding-left: 10px;">
+                <h3 style="padding-top: 10px; padding-bottom: 10px;">Filters</h3>
+                <div class="form-group row">
+                    @Html.Label("name", "Event Name", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("name", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control col-sm-2" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("startDate", "Date From", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("startDate", null, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-2" })
+                    @Html.Label("endDate", "To", new { @class = "control-label col-sm-1" })
+                    @Html.TextBox("endDate", null, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-2" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("startTime", "Time From", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("startTime", null, "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
+                    @Html.Label("endTime", "To", new { @class = "control-label col-sm-1" })
+                    @Html.TextBox("endTime", null, "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("desc", "Description", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("desc", null, new { data_upper = "", autofocus = "", type = "search", @class = "form-control col-sm-2" })
+                    <div class="col-sm-offset-1 col-sm-1">
+                        <input type="submit" class="btn btn-primary searchBtn" name="Search" value="Search" />
+                    </div>
+                    <div class="col-sm-1">
+                        <input type="reset" class="btn btn-primary " name="Reset" value="Reset" onclick="resetData();" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
-                <tr>
-                    <td scope="row">@a.Id</td>
-                    <td scope="row">@a.name</td>
-                    <td scope="row">@a.des</td>
-                    <td scope="row">@a.charge</td>
-                    <td scope="row">@a.startDate.ToString("dd/MM/yyyy") @a.startTime </td>
-                    <td scope="row">@a.endDate.ToString("dd/MM/yyyy") @a.endTime </td>
-                    <td>
-                        <input class="btn btn-primary" data-get="/Admin/EditAdvert?id=@a.Id" type="button" value="Edit">
-                    </td>
-                    <td>
-                        <input class="btn btn-danger" data-get="/Admin/DeleteAdvert?id=@a.Id" type="button" value="Delete">
-                    </td>
-                </tr>
+<div id="adsTable">
+    <div id="loader"><img src="~/Images/loader.gif"></div>
+    @Html.Partial("_AdsList")
+</div>
+
+@section foot{
+
+    <script>
+        //when search button click
+        jQuery(document).on('click', '.searchButton', function () {
+            if (jQuery('.parent').hasClass('menuActive')) {
+                jQuery('.parent').removeClass('menuActive');
+                jQuery('.parent .menu').slideUp(0);
             }
+            jQuery('.parent').toggleClass('searchActive').children('.searchCont').slideToggle(200);
+        });
+
+        // Search Name
+        let timer = null;
+        $('#searchName').on('input', e => {
+            // when user enter text, it will clear previous execution
+            clearTimeout(timer);
+            timer = setTimeout(() => $(e.target.form).submit(), 1000);
+        });
+
+        // Sort By
+        function sortData(e) {
+            e.form.submit();
         }
 
-    </tbody>
-</table>
-
-@Html.PagedListPager(
-    Model,
-    p => "?page=" + p,
-    PagedListRenderOptions.Classic
-)
+        // reset data filter
+        function resetData() {
+            $("input .form-control").val(0);
+        }
+    </script>
+}

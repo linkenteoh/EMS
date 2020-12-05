@@ -316,7 +316,7 @@ namespace EventManagementSystem.Controllers
                     new SortItems { Id = "name", name = "Name"},
                     new SortItems { Id = "price", name = "Price"},
                     new SortItems { Id = "date", name = "Date"},
-                    new SortItems { Id = "Venue.name", name = "Venue"}
+                    new SortItems { Id = "venue", name = "Venue"}
                 }, "Id", "name");
             var model = db.Events.Where(u => u.OrgId == db.Users.FirstOrDefault(org => org.username == User.Identity.Name).Id);
 
@@ -374,13 +374,13 @@ namespace EventManagementSystem.Controllers
                 case "name": fn = s => s.name; break;
                 case "price": fn = s => s.price; break;
                 case "date": fn = s => s.date; break;
-                case "Venue.name": fn = s => s.venueId; break;
+                case "venue": fn = s => s.venueId; break;
             }
             // PagedList
             var events = model.OrderBy(fn).ToPagedList(page, 10);
 
             if (Request.IsAjaxRequest())
-                return PartialView("_ProposedList", events);
+                return PartialView("_EventApproveList", events);
             return View(events);
         }
 
