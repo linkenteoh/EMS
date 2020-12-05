@@ -166,10 +166,17 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
 
-        public ActionResult EventSearchIndex(string name = "", string date = "",
-            string startTime = "", string endTime = "", string venue = "", int page = 1)
+        public ActionResult EventSearchIndex(string searchName = "", string name = "", string date = "",
+            string startTime = "", string endTime = "", string venue = "", string sort = "", string sortdir = "", int page = 1)
         {
             ViewBag.VenueList = new SelectList(db.Venues, "name", "name");
+            ViewBag.sortList = new SelectList(
+                new List<SortItems> { 
+                    new SortItems { Id = "Id", name = "Id"}, 
+                    new SortItems { Id = "name", name = "Name"}, 
+                    new SortItems { Id = "date", name = "Date"}, 
+                    new SortItems { Id = "Venue.name", name = "Venue"} 
+                },"Id", "name") ;
             var username = User.Identity.Name;
             var u = db.Users.Where(x => x.username == username).FirstOrDefault();
             // Get userID in registration
@@ -210,7 +217,24 @@ namespace EventManagementSystem.Controllers
                 var timeTo = TimeSpan.Parse(endTime);
                 model = model.Where(x => x.endTime <= timeTo);
             }
-            var events = model.OrderBy(m => m.Id).ToPagedList(page, 10);
+            // Search name
+            model = model.Where(x => x.name.Contains(searchName) || x.des.Contains(searchName) || x.Venue.name.Contains(searchName));
+            // Sort By
+            Func<Event, object> fn = s => s.Id;
+
+            switch (sort)
+            {
+                case "Id": fn = s => s.Id; break;
+                case "name": fn = s => s.name; break;
+                case "date": fn = s => s.date; break;
+                case "Venue.name": fn = s => s.Venue.name; break;
+            }
+
+            //var sorted = sortdir == "DESC" ?
+            //             .OrderByDescending(fn) :
+            //             db.Students.OrderBy(fn);
+            // PagedList
+            var events = model.OrderBy(fn).ToPagedList(page, 10);
 
             if (Request.IsAjaxRequest())
                 return PartialView("_EventResults", events);
