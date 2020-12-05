@@ -1,6 +1,7 @@
-﻿@model EventEditVM
+﻿@model OrgEditEventVM
 @{
     ViewBag.Title = "ManageEventProposed";
+
 }
 
 @section head{
@@ -65,7 +66,7 @@
             <div class="outerDiv">
                 <div class="head" style="display:inline-block">
                     <div>
-                        <h3 style="margin:0;padding-bottom:10px; display:inline-block">@Model.name</h3> (@if (Model.approvalStat == null)
+                        <h3 style="margin:0;padding-bottom:10px; display:inline-block">@Model.name</h3> ( @if (Model.approvalStat == null)
                         {<span class="text-warning">Pending</span> }
                         else if (Model.approvalStat == true)
                         { <span class="text-success">Accepted</span> }
@@ -144,7 +145,7 @@
                             <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                                 <label class="upload">
                                     <img class="img-thumbnail" src="~/Photo/@Model.photoURL">
-                                    @Html.TextBoxFor(e => e.photoURL, new
+                                    @Html.TextBoxFor(e => e.Photo, new
                                     {
                                    type = "file",
                                         accept = "image/jpeg, image/png",
@@ -166,7 +167,7 @@
                             </div>
                             <div class="row mt-4">
                                 <div class="col-md-6">
-                                    @Html.LabelFor(e => e.date, "Date")@Html.TextBoxFor(e => e.date, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control" })
+                                    @Html.LabelFor(e => e.date, "Date")@Html.TextBoxFor(e => e.date, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control" })
                                     @*<small>(@min to @max )</small>*@
                                     @Html.ValidationMessageFor(e => e.date)
                                 </div>

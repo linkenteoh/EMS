@@ -5,35 +5,32 @@
 
 <h2>Billing</h2>
 
-<table class="table table-hover table-responsive">
+<table class="table table-hover table-striped">
     <thead class="thead-dark">
         <tr>
             <th scope="col">ID</th>
             <th scope="col">Event name</th>
-            <th scope="col">Price</th>
-            <th scope="col">Reg. Status</th>
+            <th scope="col">Price(RM)</th>
+            <th scope="col">Additional Charge(RM)</th>
+            <th scope="col">Payment Status</th>
             <th scope="col">Date</th>
-            <th scope="col"></th>
             <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            if (item.status == false)
-            {
-
                 <tr>
                     <td scope="row">@item.Id</td>
                     <td scope="row">@item.Registration.Event.name</td>
-                    <td scope="row">@item.Registration.Event.price</td>
-                    <td scope="row">@item.Registration.status</td>
+                    <td scope="row">@item.price</td>
+                    <td scope="row">@item.addCharge</td>
+                    <td scope="row">@(item.status == true ? "Paid" :"Unpaid")</td>
                     <td scope="row">@item.Registration.Event.date</td>
-                    <td>
-                        <input class="btn btn-primary" data-get="/Admin/EditUser?id=@item.Id" type="button" value="Pay now">
+                    <td style="text-align:center">
+                        @Html.ActionLink("Make payment", "Payment", "User", new { id = item.Id } ,new { @class ="btn btn-secondary" })
                     </td>
                 </tr>
-            }
         }
 
     </tbody>

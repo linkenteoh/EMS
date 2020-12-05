@@ -295,6 +295,13 @@ namespace EventManagementSystem.Controllers
             {
                 ModelState.AddModelError("Photo", error);
             }
+            if (ModelState.IsValidField("startTime"))
+            {
+                if (model.startTime > model.endTime)
+                {
+                    ModelState.AddModelError("startTime", "start time cannot exceed or equal end time!");
+                }
+            }
             if (ModelState.IsValid)
             {
                 var e = new Event
@@ -341,11 +348,13 @@ namespace EventManagementSystem.Controllers
         {
             ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             ViewBag.VenueList = new SelectList(db.Venues, "Id", "name");
+
             var e = db.Events.Find(id);
             if (e == null)
             {
                 return RedirectToAction("Index", "Admin");
             }
+
             var model = new EventEditVM
             {
                 Id = id,
@@ -370,7 +379,13 @@ namespace EventManagementSystem.Controllers
             var e = db.Events.Find(model.Id);
             ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             ViewBag.VenueList = new SelectList(db.Venues, "Id", "name");
-
+            if (ModelState.IsValidField("startTime"))
+            {
+                if (model.startTime > model.endTime)
+                {
+                    ModelState.AddModelError("startTime", "start time cannot exceed or equal end time!");
+                }
+            }
             if (model == null)
             {
                 return RedirectToAction("Index", "Admin");

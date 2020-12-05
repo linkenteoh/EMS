@@ -83,6 +83,27 @@
                         @Html.ValidationMessageFor(e => e.endTime)
                     </div>
                 </div>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        @Html.LabelFor(e => e.venueId, "Venue")
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                @Html.DropDownListFor(e => e.venueId, ViewBag.VenueList as SelectList, "- Select One -", new { @class = "btn btn-secondary dropdown-toggle" })
+                                @Html.ValidationMessageFor(e => e.venueId)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(e => e.OrgId, "Organized By")
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                @Html.DropDownListFor(e => e.OrgId, ViewBag.OrganizerList as SelectList, "- Select One -", new { @class = "btn btn-secondary dropdown-toggle" })
+                                @Html.ValidationMessageFor(e => e.OrgId)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row mt-6">
                     <div class="col-md-6">
                         @Html.LabelFor(e => e.des, "Description")@Html.TextAreaFor(e => e.des, new
@@ -95,9 +116,8 @@ placeholder = "Description"
                         @Html.ValidationMessageFor(e => e.des)
 
                     </div>
-
                 </div>
-                <div class="mt-12" style="margin-top:15px"><section><button class="btn btn-primary profile-button">Propose Event</button></section></div>
+                <div class="mt-12" style="margin-top:15px"><section><button class="btn btn-primary profile-button">Insert Event</button></section></div>
             </div>
 
         </div>

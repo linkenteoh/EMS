@@ -393,7 +393,8 @@ namespace EventManagementSystem.Controllers
                 return RedirectToAction("EventsProposed", "User");
             }
 
-            var model = new EventEditVM
+
+            var model = new OrgEditEventVM
             {
                 Id = Id,
                 name = e.name,
@@ -423,12 +424,12 @@ namespace EventManagementSystem.Controllers
 
         // POST: Event/ManageEventProposed
         [HttpPost]
-        public ActionResult ManageEventProposed(EventEditVM model)
+        public ActionResult ManageEventProposed(OrgEditEventVM model)
         {
             var e = db.Events.Find(model.Id);
             if (model == null)
             {
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("EventsProposed", "User");
             }
             if (ModelState.IsValid)
             {
@@ -440,7 +441,6 @@ namespace EventManagementSystem.Controllers
                 e.date = model.date;
                 e.startTime = model.startTime;
                 e.endTime = model.endTime;
-                e.approvalStat = true;
                 if (model.Photo != null)
                 {
                     DeletePhoto(e.photoURL);
@@ -448,7 +448,7 @@ namespace EventManagementSystem.Controllers
                 }
                 db.SaveChanges();
                 TempData["info"] = "Event record updated successfully";
-                return RedirectToAction("ManageEventProposed", "User", new { id=model.Id });
+                return RedirectToAction("ManageEventProposed", "User", new { id = model.Id });
             }
             return View(model);
         }
@@ -458,6 +458,34 @@ namespace EventManagementSystem.Controllers
             int uId = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
             var bill = db.Payments.ToList().Where(p => p.Registration.userId == uId);
             return View(bill);
+        }
+
+        // GET: User/Payment
+        public ActionResult Payment(int id)
+        {
+            var payment = db.Payments.Find(id);
+
+            var model = new PaymentVM
+            {
+                price = payment.price,
+                addCharge = payment.addCharge,
+                Registration = payment.Registration
+            };
+
+            return View(model);
+        }
+
+        // POST: User/Payment
+        [HttpPost]
+        public ActionResult Payment(PaymentVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var payment = db.Payments.Find(model.Id);
+                payment.status = true;
+                db.SaveChanges();
+            }
+            return View();
         }
 
     }

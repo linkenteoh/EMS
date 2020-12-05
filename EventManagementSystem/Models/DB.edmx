@@ -56,8 +56,8 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="paymentdate" Type="date" />
-          <Property Name="duedate" Type="date" />
-          <Property Name="gst" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="addCharge" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="commision" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="status" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Registration">
@@ -318,8 +318,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="paymentdate" Type="DateTime" Precision="0" />
-          <Property Name="duedate" Type="DateTime" Precision="0" />
-          <Property Name="gst" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="addCharge" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="commision" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="status" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Registration" Relationship="DBModel.FK_Payment_Registration" FromRole="Payment" ToRole="Registration" />
         </EntityType>
@@ -510,8 +510,8 @@
             <EntityTypeMapping TypeName="DBModel.Payment">
               <MappingFragment StoreEntitySet="Payment">
                 <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="gst" ColumnName="gst" />
-                <ScalarProperty Name="duedate" ColumnName="duedate" />
+                <ScalarProperty Name="commision" ColumnName="commision" />
+                <ScalarProperty Name="addCharge" ColumnName="addCharge" />
                 <ScalarProperty Name="paymentdate" ColumnName="paymentdate" />
                 <ScalarProperty Name="price" ColumnName="price" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
