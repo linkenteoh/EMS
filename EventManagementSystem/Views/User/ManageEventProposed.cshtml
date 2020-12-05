@@ -47,14 +47,15 @@
             }
             else
             {
-                <li class="tooltip1"><a style="cursor:not-allowed" href="#" disabled>Edit Detail</a><span class="tooltiptext">Accepted event can't be edited</span></li>
-            }
-            @{ 
-                int participants = Model.participants - Model.availability;
+                <li class="tooltip1"><a style="cursor:not-allowed" href="#" disabled>Edit Detail</a><span class="tooltiptext">Only pending event can be edited</span></li>
             }
 
-            <li><a data-toggle="pill" href="#registration">Registration (@participants/@Model.participants)</a></li>
+            <li><a data-toggle="pill" href="#registration">Registration (@Model.NoOfParticipants/@Model.participants)</a></li>
             <li><a data-toggle="pill" href="#payment">Payment</a></li>
+            @if (Model.venueId == null && Model.approvalStat == true)
+            {
+            <li><a class="btn btn-primary" href="/Event/VenueBooking?Id=@Model.Id">Book Venue</a></li>
+            }
         </ul>
     </div>
 
@@ -111,6 +112,10 @@
                         <tr>
                             <th>Registration fees (RM)</th>
                             <td>: @Model.price</td>
+                        </tr>
+                        <tr>
+                            <th>Venue</th>
+                            <td> : @(Model.venueId == null ? "No Venue Booked" : Model.Venue.name)</td>
                         </tr>
 
                     </table>
@@ -239,7 +244,7 @@ placeholder = "Description"
         </div>
         <div id="payment" class="tab-pane fade in">
             <h3>Transactions</h3>
-            @if (ViewBag.PaymentsCount == null)
+            @if (ViewBag.PaymentsCount == 0)
             {
                 <p>No active transaction(s) yet.</p>
             }

@@ -37,8 +37,18 @@ namespace EventManagementSystem.Controllers
         // Register Event
         public ActionResult RegisterEvent(string username, int eventId, DateTime d)
         {
+
             int id = db.Users.FirstOrDefault(u => u.username == username).Id;
+
+            if (db.Registrations.Any(r => r.eventId == eventId && r.userId == id))
+            {
+                TempData["Info"] = "You've registered this event already!";
+                return RedirectToAction("EventDetail", new { id = eventId });
+            }
+
             int regId = db.Registrations.Count() + 1;
+
+
 
             var register = new Registration
             {
@@ -66,33 +76,51 @@ namespace EventManagementSystem.Controllers
             return RedirectToAction("");     
         }
 
-        // Register Event
+        // GET venue booking index
+        public ActionResult VenueBooking(int Id)
+        {
+            ViewBag.eventID = Id;
+            // Get current event date and time
+            var eventCurrent = db.Events.Find(Id);
+            ViewBag.eventCurrent = eventCurrent;
+            // Validate Availability
+            var eventsExisting = db.Events.Where(x => x.Id != Id).AsQueryable();
+
+            // Check if the dates in each event is within range of current Event
+            eventsExisting = db.Events.Where(x => x.startDate >= eventCurrent.startDate && x.endDate <= eventCurrent.endDate);
+
+            // Check if  the time in each event is within range of current event
+            eventsExisting = db.Events.Where(x => x.startTime >= eventCurrent.startTime && x.endTime <= eventCurrent.endTime);
+
+            // Check if venue exist
+            eventsExisting = db.Events.Where(x => x.venueId != null);
+            ViewBag.venueOccupied = eventsExisting;
+
+            var model = db.Venues;
+            return View(model);
+        }
+
+        // Confirm Venue
         [HttpPost]
-        public ActionResult JoinEvent(Event eve)
+        public ActionResult VenueBooking(int eventID, int venueID)
         {
-            return View();
+            var model = db.Venues.Where(v => v.Id == venueID).FirstOrDefault();
+            if (model != null)
+            {
+                var eve = db.Events.Find(eventID);
+                eve.venueId = model.Id;
+                db.SaveChanges();
+                TempData["info"] = "Venue Booked Successfully";
+                return RedirectToAction("ManageEventProposed", "User", new { id = eventID });
+            }
+            else
+            {
+                TempData["info"] = "Venue Booking Error";
+                return View(model);
+            }
         }
 
-        public ActionResult ProposeEvent()
-        {
-            ViewBag.step = 1;
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult ProposeEvent(int step)
-        {
-            return View();
-        }
-
-        public ActionResult VenueBooking(string btn = "")
-        {
-            
-            if (Request.IsAjaxRequest())
-                return PartialView("_Venue");
-            return View();
-        }
-
+        //[HttpPost]
         public ActionResult EventSuccess()
         {
             return View();

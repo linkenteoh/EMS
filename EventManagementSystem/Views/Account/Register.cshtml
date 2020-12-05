@@ -160,14 +160,14 @@
 
                         </div>
                     </div>
-
+                            @Html.TextBoxFor(m => m.webPhoto, new { style="display:none" })
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             @Html.GoogleCaptcha()
                             @Html.InvalidGoogleCaptchaLabel("Captcha is not valid")
                         </div>
                     </div>
-
+                        
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <hr />
@@ -266,10 +266,21 @@
             onSave: function () {
                 $("#cameraDiv").css('display', 'none');
                 $("#optDiv").css('display', 'block');
+                $.ajax({
+                    url: '/Account/GetTempName',
+                    type: 'POST',
+                    success: function (temp) {
+                        alert('Captured successfull.');
+                        $('#blah').attr("src", "../Photo/" + temp);
+                        $('#webPhoto').val(temp);
+                    },
+                    error: function () {
+                        alert("Some error occured!");
+                    }
+                });
              },
-             onCapture: function () {
-                 webcam.save("@Url.Content("~/Account/Capture")/");
-
+            onCapture: function () {
+                webcam.save("@Url.Content("~/Account/Capture")/");
 
              },
              debug: function () { },

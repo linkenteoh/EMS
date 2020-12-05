@@ -24,6 +24,7 @@
 <body>
     <div class="info">@TempData["Info"]</div>
 
+
     <div class="page-wrapper chiller-theme toggled">
         <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
             <i class="fas fa-bars"></i>
@@ -70,10 +71,7 @@
                                     <li>
                                         <a href="~/Admin/DisplayUser">Manage users</a>
                                     </li>
-                                    <li>
-                                        <a href="~/Admin/DisplayApporval">Organiser requests<span class="badge badge-pill badge-danger">3</span></a>
 
-                                    </li>
                                 </ul>
                             </div>
                         </li>
@@ -98,10 +96,16 @@
                             <div class="sidebar-submenu">
                                 <ul>
                                     <li>
+                                        <a href="~/Admin/DisplayOrganizerApproval">Organiser requests<span class="badge badge-pill badge-danger"></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="~/Admin/DisplayProposalApporval">Event proposals</a>
+                                    </li>
+                                    <li>
                                         <a href="~/Admin/DisplayEvent">Manage events</a>
                                     </li>
                                     <li>
-                                        <a href="#">Manage event venue bookings</a>
+                                        <a href="#">Manage Venue</a>
                                     </li>
                                 </ul>
                             </div>
@@ -149,6 +153,8 @@
     <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
     <script src="~/Scripts/app.js"></script>
+
+
     <!-- Menu Toggle Script -->
     <script>
 

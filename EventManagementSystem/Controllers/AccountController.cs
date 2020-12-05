@@ -70,6 +70,13 @@ namespace EventManagementSystem.Controllers
             string path = Server.MapPath($"~/Photo/{name}");
 
             System.IO.File.WriteAllBytes(path, String_To_Bytes2(dump));
+            Session["tempName"] = name;
+        }
+
+        [HttpPost]
+        public string GetTempName()
+        {
+            return Session["tempName"].ToString(); 
         }
 
         private byte[] String_To_Bytes2(string strInput)
@@ -145,15 +152,39 @@ namespace EventManagementSystem.Controllers
         public ActionResult Register(RegisterVM model)
         {
             //If entered here captcha = valid
-            string err = ValidatePhoto(model.Photo);
-            if (err != null)
+
+
+            if (Session["tempName"] != null)
             {
-                ModelState.AddModelError("Photo", err);
+                Session.Clear();
+            }
+
+            if(model.webPhoto == null && model.Photo == null)
+            {
+                ModelState.AddModelError("Photo", "Photo is required");
+            }
+
+            if(model.Photo != null)
+            {
+                string err = ValidatePhoto(model.Photo);
+                if (err != null)
+                {
+                    ModelState.AddModelError("Photo", err);
+                }
             }
 
             if (ModelState.IsValid)
             {
                 int count = db.Users.Count() + 1;
+                string photoUrl = "";
+
+                if(model.Photo != null)
+                {
+                    photoUrl = SavePhoto(model.Photo);
+                }else if(model.webPhoto != null)
+                {
+                    photoUrl = model.webPhoto;
+                }
 
                 var user = new User
                 {
@@ -168,7 +199,7 @@ namespace EventManagementSystem.Controllers
                     activated = false,
                     recoveryCode = null,
                     activationCode = Guid.NewGuid().ToString(),
-                    photo = SavePhoto(model.Photo)
+                    photo = photoUrl
                 };
 
                 try

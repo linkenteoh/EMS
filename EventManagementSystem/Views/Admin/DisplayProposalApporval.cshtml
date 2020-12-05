@@ -82,10 +82,10 @@
                     <td scope="row">@s.endDate.ToString("dd/MM/yyyy") @s.endTime</td>
                     <td scope="row">@s.Organiser.represent </td>
                     <td>
-                        <input class="btn btn-primary" data-get="/Admin/Approve?id=@s.Id" type="button" value="Approve">
+                        <input class="btn btn-primary" data-get="/Admin/ApproveProposal?id=@s.Id" type="button" value="Approve">
                     </td>
                     <td>
-                        <input class="btn btn-danger" data-get="/Admin/Decline?id=@s.Id" type="button" value="Decline">
+                        <input class="btn btn-danger" data-get="/Admin/DeclineProposal?id=@s.Id" type="button" value="Decline">
                     </td>
                 </tr>
             }

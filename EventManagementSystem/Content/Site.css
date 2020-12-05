@@ -90,4 +90,15 @@ footer{
         top: -100px;
         opacity: 0;
     }
+   
 }
+
+#advertisement img {
+    width: 500px;
+    height: 500px;
+    background-position: center;
+    background-size: cover;
+    object-fit: fill;
+}
+
+

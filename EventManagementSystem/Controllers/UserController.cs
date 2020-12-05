@@ -47,7 +47,7 @@ namespace EventManagementSystem.Controllers
                     Id = id,
                     represent = model.represent,
                     position = model.position,
-                    status = false
+                    status = null
                 };
 
                 db.Organisers.Add(oragniser);
@@ -223,7 +223,7 @@ namespace EventManagementSystem.Controllers
         // GET: User/ProposeEvent
         public ActionResult ProposeEvent()
         {
-            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id", "represent");
+            ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             return View();
         }
 
@@ -255,6 +255,8 @@ namespace EventManagementSystem.Controllers
             }
             if (ModelState.IsValid)
             {
+                int id = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
+
                 var e = new Event
                 {
                     name = model.name,
@@ -270,12 +272,13 @@ namespace EventManagementSystem.Controllers
                     status = true,
                     venueId = null,
                     photoURL = SavePhoto(model.Photo),
-                    OrgId = model.OrgId
+                    OrgId = id
                 };
                 try { 
-                db.Events.Add(e);
-                db.SaveChanges();
-                TempData["info"] = "Event proposed successfully";
+                    db.Events.Add(e);
+                    db.SaveChanges();
+                    TempData["info"] = "Event proposed successfully";
+                    return RedirectToAction("ManageEventProposed", "User", new { Id=e.Id });
                 }
                 catch(Exception ex)
                 {
@@ -288,7 +291,7 @@ namespace EventManagementSystem.Controllers
             {
                 TempData["Error"] = "Error";
             }
-            ViewBag.OrganizerList = new SelectList(db.Organisers, "Id", "represent");
+            ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             return View(model);
         }
 
@@ -323,9 +326,13 @@ namespace EventManagementSystem.Controllers
                 endDate = e.endDate,
                 startTime = e.startTime,
                 endTime = e.endTime,
+                availability = e.availability,
                 approvalStat = e.approvalStat,
                 photoURL = e.photoURL,
-                OrgId = e.OrgId
+                OrgId = e.OrgId,
+                venueId = e.venueId,
+                Organiser = e.Organiser,
+                Venue = e.Venue
             };
 
             ViewBag.Registrations = db.Registrations.Where(r => r.eventId == Id);

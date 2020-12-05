@@ -94,7 +94,7 @@
                     </div>
 
                     <div id="optDiv" style="text-align:center;display: block">
-                        <img id="blah" src="~/Photo/@Model.PhotoUrl" alt="your image" style="width:250px; height: 250px; border-radius:50%;" />
+                        <img id="blah" src="~/Photo/@Model.PhotoUrl" alt="your image" style="width:250px; height: 250px; border-radius:50%; object-fit:cover" />
                         <label class="custom-file-upload">
                             @Html.TextBoxFor(m => m.Photo, new
                                {
