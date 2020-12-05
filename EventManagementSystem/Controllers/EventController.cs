@@ -88,7 +88,8 @@ namespace EventManagementSystem.Controllers
             db.Payments.Add(bill);
             db.SaveChanges();
 
-            return RedirectToAction("");     
+            TempData["Info"] = "You've registered successfully, please make your payment before the event date.";
+            return RedirectToAction("Billing", "User");     
         }
 
         // GET venue booking index

@@ -11,7 +11,8 @@
             <th scope="col">ID</th>
             <th scope="col">Event name</th>
             <th scope="col">Price(RM)</th>
-            <th scope="col">Additional Charge(RM)</th>
+            <th scope="col">Add. Charge(RM)</th>
+            <th scope="col">Total(RM)</th>
             <th scope="col">Payment Status</th>
             <th scope="col">Date</th>
             <th scope="col"></th>
@@ -23,12 +24,13 @@
                 <tr>
                     <td scope="row">@item.Id</td>
                     <td scope="row">@item.Registration.Event.name</td>
-                    <td scope="row">@item.price</td>
+                    <td scope="row">@item.Registration.Event.price</td>
                     <td scope="row">@item.addCharge</td>
+                    <td scope="row">@item.price</td>
                     <td scope="row">@(item.status == true ? "Paid" :"Unpaid")</td>
-                    <td scope="row">@item.Registration.Event.date</td>
+                    <td scope="row">@item.Registration.Event.date.ToString("dd-MM-yyyy")</td>
                     <td style="text-align:center">
-                        @Html.ActionLink("Make payment", "Payment", "User", new { id = item.Id } ,new { @class ="btn btn-secondary" })
+                        <a class="btn btn-secondary" href="~/User/Payment?id=@item.Id">Make payment</a>
                     </td>
                 </tr>
         }
