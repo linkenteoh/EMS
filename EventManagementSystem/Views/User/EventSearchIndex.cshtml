@@ -1,6 +1,4 @@
-﻿@using PagedList
-@using PagedList.Mvc
-@{
+﻿@{
     ViewBag.Title = "Events Joined";
     
     var results = new AjaxOptions
@@ -142,11 +140,7 @@
     <div id="eventTable">
         @Html.Partial("_EventResults")
     </div>
-    @Html.PagedListPager(
-Model,
-p => "?page=" + p,
-PagedListRenderOptions.Classic
-)
+
 
 </div>
 

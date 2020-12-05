@@ -1,6 +1,8 @@
-﻿@model IEnumerable<Event>
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<Event>
 
-@{ 
+@{
     var ao = new AjaxOptions
     {
         Url = "/User/EventDetail",
@@ -40,7 +42,9 @@
         }
     </tbody>
 </table>
-<script>
-    
-   
-</script>
+
+@Html.PagedListPager(
+Model,
+p => "?page=" + p,
+PagedListRenderOptions.Classic
+)
