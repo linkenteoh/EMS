@@ -14,6 +14,9 @@ using System.Configuration;
 using System.Text;
 using System.Web.Script.Serialization;
 using Microsoft.AspNet.Identity;
+using ZXing;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace EventManagementSystem.Controllers
 {
@@ -638,12 +641,18 @@ namespace EventManagementSystem.Controllers
             qrcode.price = q.price;
             qrcode.startTime = q.startTime;
             qrcode.endTime = q.endTime;
-            //date = q.startDate
-
+            qrcode.date = q.date;
+            string word = "Event Name  :" + qrcode.name + @<br> + 
             try
             {
-                qrcode.QRCodeImagePath = GenerateQRCode(qrcode.name + );
-                qrcode.QRCodeImagePath = GenerateQRCode(qrcode.des);
+                qrcode.QRCodeImagePath = GenerateQRCode(
+                    "Event Name  :" + qrcode.name + '\n' +
+                    "Description :" + qrcode.des + '\n' +
+                    "Price       :" + qrcode.price + '\n' +
+                    "Start Time  :" + qrcode.startTime + '\n' +
+                    "End TIme    :" + qrcode.endTime + '\n' +
+                    "Date        :" + qrcode.date.ToString("yyyy-MM-dd")
+                    );
                 /*      qrcode.QRCodeImagePath = GenerateQRCode(qrcode.des);
                       qrcode.QRCodeImagePath = GenerateQRCode(qrcode.price.ToString());
                       qrcode.QRCodeImagePath = GenerateQRCode(qrcode.startTime.ToString());
