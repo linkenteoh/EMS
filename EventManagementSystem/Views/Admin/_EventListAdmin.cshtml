@@ -5,7 +5,7 @@
 
 @if (Model.Count() > 0)
 {
-<div id="countModel"><span>@Model.Where(e => e.status == true && e.approvalStat == true).Count() record(s) in event list</span></div>
+    <span id="countModel" style="text-align:left;margin-left:0px;">@Model.Where(u => u.status == true).Count() record(s) in user list</span>
     <table class="table table-hover">
         <thead class="thead-dark">
             <tr>
@@ -28,32 +28,33 @@
         <tbody>
             @foreach (var e in Model)
             {
-               <tr>
-                        <td scope="row">@e.Id</td>
-                        <td scope="row">@e.name</td>
-                        <td scope="row">@e.des</td>
-                        <td scope="row">@e.price</td>
-                        <td scope="row">@e.availability</td>
-                        <td scope="row">@e.participants</td>
-                        <td scope="row">@e.date.ToString("dd/MM/yyyy")</td>
-                        <td scope="row">@e.startTime</td>
-                        <td scope="row">@e.endTime</td>
-                        @if (e.venueId == null)
-                        {
-                            <td scope="row"> </td>
-                        }
-                        else
-                        {
-                            <td scope="row">@e.Venue.name</td>
-                        }
-                        <td scope="row">@e.Organiser.represent </td>
-                        <td>
-                            <a class="btn btn-primary" href="/Admin/EditEvent?id=@e.Id">Edit</a>
-                        </td>
-                        <td>
-                            <a class="btn btn-danger" href="/Admin/DeleteEvent?id=@e.Id">Delete</a>
-                        </td>
-               </tr>                
+                <tr>
+                    <td scope="row">@e.Id</td>
+                    <td scope="row">@e.name</td>
+                    <td scope="row">@e.des</td>
+                    <td scope="row">@e.price</td>
+                    <td scope="row">@e.availability</td>
+                    <td scope="row">@e.participants</td>
+                    <td scope="row">@e.date.ToString("dd/MM/yyyy")</td>
+                    <td scope="row">@e.startTime</td>
+                    <td scope="row">@e.endTime</td>
+                    @if (e.venueId == null)
+                    {
+                        <td scope="row"> </td>
+                    }
+                    else
+                    {
+                        <td scope="row">@e.Venue.name</td>
+                    }
+                    <td scope="row">@e.Organiser.represent </td>
+                    <td>
+                        <a class="btn btn-primary" href="/Admin/EditEvent?id=@e.Id">Edit</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" href="/Admin/DeleteEvent?id=@e.Id">Delete</a>
+                    </td>
+                </tr>
+
             }
         </tbody>
     </table>

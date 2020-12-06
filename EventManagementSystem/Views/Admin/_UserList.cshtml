@@ -4,7 +4,7 @@
 
 @if (@Model.Count() > 0)
 {
-    <span id="countModel">@Model.Where(u => u.status == true).Count() record(s) in user list</span>
+    <span id="countModel" style="text-align:left;margin-left:0px;">@Model.Where(u => u.status == true).Count() record(s) in user list</span>
     <table class="table table-hover">
         <thead class="thead-dark">
             <tr>
