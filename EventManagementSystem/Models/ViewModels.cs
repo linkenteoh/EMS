@@ -72,7 +72,35 @@ namespace EventManagementSystem.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Registration> Registrations { get; set; }
     }
+    public class EventProposeVM
+    {
+        public string Id { get; set; }
+        [Required]
+        [StringLength(100)]
+        [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only")]
+        public string name { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string des { get; set; }
+        [Required]
+        public decimal price { get; set; }
+        [Required]
+        public int participants { get; set; }
+        public int availability { get; set; }
+        [Required]
+        public DateTime date { get; set; }
+        [Required]
+        public TimeSpan startTime { get; set; }
+        [Required]
+        public TimeSpan endTime { get; set; }
+        public bool approvalStat { get; set; }
+        [Required(ErrorMessage = "The organized by field is required!")]
+        public int OrgId { get; set; }
+        public bool status { get; set; }
+        public int? venueId { get; set; }
+        public HttpPostedFileBase Photo { get; set; }
 
+    }
     public class OrgEditEventVM
     {
         public int Id { get; set; }
@@ -139,35 +167,7 @@ namespace EventManagementSystem.Models
         public string activationCode { get; set; }
 
     }
-    public class EventProposeVM
-    {
-        public string Id { get; set; }
-        [Required]
-        [StringLength(100)]
-        [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only")]
-        public string name { get; set; }
-        [Required]
-        [StringLength(100)]
-        public string des { get; set; }
-        [Required]
-        public decimal price { get; set; }
-        [Required]
-        public int participants { get; set; }
-        public int availability { get; set; }
-        [Required]
-        public DateTime date { get; set; }
-        [Required]
-        public TimeSpan startTime { get; set; }
-        [Required]
-        public TimeSpan endTime { get; set; }
-        public bool approvalStat { get; set; }
-        [Required(ErrorMessage = "The organized by field is required!")]
-        public int OrgId { get; set; }
-        public bool status { get; set; }
-        public int? venueId { get; set; }
-        public HttpPostedFileBase Photo { get; set; }
-
-    }
+  
 
     public class QRCodeModel
     {

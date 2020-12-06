@@ -51,6 +51,7 @@ namespace EventManagementSystem.Controllers
             var prop = new AuthenticationProperties
             {
                 IsPersistent = rememberMe //Remember
+                
             };
 
             // TODO(3): Sign in
@@ -141,7 +142,6 @@ namespace EventManagementSystem.Controllers
         // GET: Account/Register
         public ActionResult Register()
         {
-
             return View();
         }
 

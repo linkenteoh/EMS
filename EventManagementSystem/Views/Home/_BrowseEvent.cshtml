@@ -14,7 +14,7 @@
             <div class="panel-body" style="">
                 <h5 class="panel-title">@e.name</h5>
                 <p class="card-text">@e.des</p>
-                @Html.ActionLink("View Event", "EventDetail", "Event", new { id = e.Id }, new { @class = "btn btn-primary" })
+                <a class="btn btn-primary" href="/Event/EventDetail?id=@e.Id">View Event</a>
             </div>
         </div>
     }
