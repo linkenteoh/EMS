@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        @if (Model.Organiser.User.username != User.Identity.Name)
+        @if (Model.Organiser.User.username != User.Identity.Name || Model.availability == 0)
         {
             <hr />
             <h4>Interested in this event?</h4>
@@ -99,7 +99,7 @@
             </div>
         </div>
 
-        <div id="participants" class="tab-pane fade in active">
+        <div id="participants" class="tab-pane fade in">
             <h3>Participants (@ViewBag.ParticipantsCount)</h3>
             @{
                 if (ViewBag.ParticipantsCount == 0)
@@ -112,10 +112,12 @@
                     {
                         if (item.Payment.status == true)
                         {
-                            <div>
-                                <img src="~/Photo/@item.User.photo" />
+                            <div class="col-md-2">
+                                <img src="~/Photo/@item.User.photo" style="width:100px;height:100px;object-fit:cover;border-radius:50%; border:1px solid grey" />
+                                <div>
+                                    <p class="text-center" style="font-weight:bold">@item.User.username</p>
+                                </div>
                             </div>
-                            <p>@item.User.username</p>
                         }
                     }
                 }

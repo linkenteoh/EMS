@@ -4,7 +4,7 @@
 
 @if (Model.Count() > 0)
 {
-    <div id="countModel"><span>@Model.Count() of @Model.TotalItemCount record(s) | Page @Model.PageNumber of @Model.PageCount</span></div>
+    <div id="countModel" style="text-align:left; padding-left:0px;"><span>@Model.Count() of @Model.TotalItemCount record(s) | Page @Model.PageNumber of @Model.PageCount</span></div>
     <table class="table table-hover table-striped">
         <thead class="thead-dark">
             <tr>
@@ -48,5 +48,5 @@
 }
 else
 {
-    <div style=" text-align: center; margin-top:50px;"><span style="font-size: 16pt; text-align:center;">No Records Founded.</span></div>
+    <div style=" text-align: center; margin-top:50px;"><span style="font-size: 16pt; text-align:center;">No Records Found.</span></div>
 }

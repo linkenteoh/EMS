@@ -39,7 +39,12 @@ namespace EventManagementSystem.Controllers
         [Authorize]
         public ActionResult RegOrganiser()
         {
-            return View();
+            int id = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
+            if (db.Organisers.FirstOrDefault(o => o.Id == id).status == true)
+            {
+                return RedirectToAction("ProposeEvent", "User");
+            }
+                return View();
         }
 
         // POST: User/RegOrganiser
@@ -49,6 +54,12 @@ namespace EventManagementSystem.Controllers
         [HttpPost]
         public ActionResult RegOrganiser(RegOrgVM model)
         {
+            int id = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
+            if (db.Organisers.Any(o=> o.Id == id))
+            {
+                TempData["Info"] = "You've already registered, please wait for your request to be accepted.";
+                return RedirectToAction("RegOrganiser", "User");
+            }
 
             if (ModelState.IsValid)
             {
@@ -494,7 +505,7 @@ namespace EventManagementSystem.Controllers
                 e.name = model.name;
                 e.des = model.des;
                 e.price = model.price;
-                e.availability = e.availability;
+                e.availability = model.participants;
                 e.participants = model.participants;
                 e.date = model.date;
                 e.startTime = model.startTime;
@@ -620,7 +631,14 @@ namespace EventManagementSystem.Controllers
             {
                 var payment = db.Payments.Find(model.Id);
                 payment.status = true;
+                payment.paymentdate = DateTime.Now;
                 db.SaveChanges();
+
+                int eveId = payment.Registration.eventId;
+                var eve = db.Events.Find(eveId);
+                eve.availability = eve.availability - 1;
+                db.SaveChanges();
+                
                 var user = db.Users.FirstOrDefault(u => u.username == User.Identity.Name);
                 int eventId = db.Registrations.FirstOrDefault(r => r.Id == model.Id).eventId;
                 string link = "https://localhost:44302/Event/EventDetail?id=" + eventId;
