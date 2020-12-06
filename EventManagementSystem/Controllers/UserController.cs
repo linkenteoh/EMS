@@ -490,13 +490,10 @@ namespace EventManagementSystem.Controllers
                 var user = db.Users.FirstOrDefault(u => u.username == User.Identity.Name);
                 int eventId = db.Registrations.FirstOrDefault(r => r.Id == model.Id).eventId;
                 string link = "https://localhost:44302/Event/EventDetail?id=" + eventId;
-                /*ViewBag.txtQRCode = link;*/
                 QRCodeGenerator qrGenerator = new QRCodeGenerator();
                 QRCodeData qrCodeData = qrGenerator.CreateQrCode(link, QRCodeGenerator.ECCLevel.Q);
                 QRCode qrCode = new QRCode(qrCodeData);
-                //System.Web.UI.WebControls.Image imgBarCode = new System.Web.UI.WebControls.Image();
-                //imgBarCode.Height = 150;
-                //imgBarCode.Width = 150;
+
                 string base64String = null;
                 using (Bitmap bitMap = qrCode.GetGraphic(20))
                 {
@@ -506,25 +503,9 @@ namespace EventManagementSystem.Controllers
                         byte[] imageByte = ms.ToArray();
                         base64String = Convert.ToBase64String(imageByte);
                         SaveImage(base64String, "QR");
-                        //imgBarCode.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(byteImage);
+                        
                     }
                 }    
-                /*  
-                                StringBuilder builder = new StringBuilder();
-                                foreach (string images in ViewBag.imageBytes)
-                                {
-                                    builder.Append(images);
-                                }
-
-                                string x = builder.ToString();
-                                // Convert Base64 String to byte[]
-                                byte[] imageBytes = Convert.FromBase64String(x);
-                                MemoryStream ms1 = new MemoryStream(imageBytes, 0, imageBytes.Length);
-
-                                // Convert byte[] to Image
-                                ms1.Write(imageBytes, 0, imageBytes.Length);
-                                System.Drawing.Image image = System.Drawing.Image.FromStream(ms1, true);
-                                image.Save(Server.MapPath("~/Photo/QR.png"), System.Drawing.Imaging.ImageFormat.Png);*/
 
                 string path = Server.MapPath("~/Photo/QR.jpg");
                 var att = new Attachment(path);
