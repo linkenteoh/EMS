@@ -1,39 +1,118 @@
-﻿@model IEnumerable<Payment> 
+﻿
 @{
     ViewBag.Title = "Billing";
+    var results = new AjaxOptions
+    {
+        Url = "/User/Billing",
+        HttpMethod = "get",
+        LoadingElementId = "loader",
+        UpdateTargetId = "billTable",
+    };
+    var attr = new
+    {
+        @class = "form-horizontal",
+    };
+}
+
+@section head{
+    <style>
+        #loader {
+            text-align: center;
+            display: none;
+        }
+
+        #paged, #countModel {
+            margin: 10px;
+            text-align: center;
+            display: block;
+        }
+    </style>
 }
 
 <h2>Billing</h2>
-
-<table class="table table-hover table-striped">
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Event name</th>
-            <th scope="col">Price(RM)</th>
-            <th scope="col">Add. Charge(RM)</th>
-            <th scope="col">Total(RM)</th>
-            <th scope="col">Payment Status</th>
-            <th scope="col">Date</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+<hr />
+@using (Ajax.BeginForm("DisplayProposalApporval", "Admin", results, attr))
+{
+    <span class="btn btn-secondary dropdown-toggle searchButton">Filter</span>
+    <span>@Html.DropDownList("sort", ViewBag.SortList as SelectList, "Sort By", new { @class = "btn btn-secondary", onChange = "sortData(this);" })</span>
+    <span>
+        @Html.TextBox("searchName", null, new
         {
-                <tr>
-                    <td scope="row">@item.Id</td>
-                    <td scope="row">@item.Registration.Event.name</td>
-                    <td scope="row">@item.Registration.Event.price</td>
-                    <td scope="row">@item.addCharge</td>
-                    <td scope="row">@item.price</td>
-                    <td scope="row">@(item.status == true ? "Paid" :"Unpaid")</td>
-                    <td scope="row">@item.Registration.Event.date.ToString("dd-MM-yyyy")</td>
-                    <td style="text-align:center">
-                        <a class="btn btn-secondary" href="~/User/Payment?id=@item.Id">Make payment</a>
-                    </td>
-                </tr>
+            data_upper = "",
+            autofocus = "",
+            @class = "form-control",
+            style = "display:inline;",
+            placeholder = "Search..."
+        })
+    </span>
+    <i class="fa fa-search fa-2x"></i>
+    <div class="parent">
+        <div class="searchCont" style="display:none">
+            <div style="padding-left: 10px;">
+                <h3 style="padding-top: 10px; padding-bottom: 10px;">Filters</h3>
+                <div class="form-group row">
+                    @Html.Label("name", "Event Name", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("name", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control col-sm-2" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("startDate", "Date From", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("startDate", null, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-2" })
+                    @Html.Label("endDate", "To", new { @class = "control-label col-sm-1" })
+                    @Html.TextBox("endDate", null, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-2" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("priceFrom", "Price(RM) From", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("priceFrom", 0,new { type = "number", @class = "form-control col-sm-2" })
+                    @Html.Label("priceTo", "To", new { @class = "control-label col-sm-1" })
+                    @Html.TextBox("priceTo", 0,  new { type = "number", @class = "form-control col-sm-2" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("price", "Price", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("price", "Price", new { type = "number", @class = "form-control  col-sm-2", placeholder = "price", min = "0" })
+                    <div class="col-sm-offset-1 col-sm-1">
+                        <input type="submit" class="btn btn-primary searchBtn" name="Search" value="Search" />
+                    </div>
+                    <div class="col-sm-1">
+                        <input type="reset" class="btn btn-primary " name="Reset" value="Reset" onclick="resetData();" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div id="billTable">
+    <div id="loader"><img src="~/Images/loader.gif"></div>
+    @Html.Partial("_BillingList")
+</div>
+
+@section foot{
+
+    <script>
+        //when search button click
+        jQuery(document).on('click', '.searchButton', function () {
+            if (jQuery('.parent').hasClass('menuActive')) {
+                jQuery('.parent').removeClass('menuActive');
+                jQuery('.parent .menu').slideUp(0);
+            }
+            jQuery('.parent').toggleClass('searchActive').children('.searchCont').slideToggle(200);
+        });
+
+        // Search Name
+        let timer = null;
+        $('#searchName').on('input', e => {
+            // when user enter text, it will clear previous execution
+            clearTimeout(timer);
+            timer = setTimeout(() => $(e.target.form).submit(), 1000);
+        });
+
+        // Sort By
+        function sortData(e) {
+            e.form.submit();
         }
 
-    </tbody>
-</table>
+        // reset data filter
+        function resetData() {
+            $("input .form-control").val(0);
+        }
+    </script>
+}

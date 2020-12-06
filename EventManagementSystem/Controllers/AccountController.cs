@@ -277,7 +277,7 @@ namespace EventManagementSystem.Controllers
            
             user.lockoutValue = user.lockoutValue +1;
             db.SaveChanges();
-            int count = user.lockoutValue.Value;
+            int count = user.lockoutValue;
 
             if (getCookie == null)
             {

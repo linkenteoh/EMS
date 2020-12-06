@@ -10,56 +10,84 @@
         
         
         
-        <EntityTypeShape EntityType="DBModel.Advertisement" Width="1.5" PointX="10.543707852505012" PointY="22.554764713419026" />
-        <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="6.4422366183447828" PointY="5.3019958461178449" />
-        <EntityTypeShape EntityType="DBModel.Organiser" Width="1.5" PointX="0.85498086775419346" PointY="0.17879544206838843" />
-        <EntityTypeShape EntityType="DBModel.Payment" Width="1.5" PointX="0.80922066644263491" PointY="27.97513119688962" />
-        <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="1.5666496760987907" PointY="1.6702642597585284" />
-        <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="8.039616793412538" PointY="26.862458927027163" />
-        <EntityTypeShape EntityType="DBModel.Venue" Width="1.5" PointX="4.4626049401530086" PointY="13.406784883424074" />
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <EntityTypeShape EntityType="DBModel.Advertisement" Width="1.5" PointX="1.9197665834425792" PointY="24.506799828497133" />
+        <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="0.096277199730406132" PointY="7.6558019852525563" />
+        <EntityTypeShape EntityType="DBModel.Organiser" Width="1.5" PointX="4.0290417447821429" PointY="16.355651356445463" />
+        <EntityTypeShape EntityType="DBModel.Payment" Width="1.5" PointX="2.1508124201329482" PointY="6.7849670829181408" />
+        <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="2.316979968136633" PointY="24.207978408880521" />
+        <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="3.9023365433804393" PointY="9.5536071702621914" />
+        <EntityTypeShape EntityType="DBModel.Venue" Width="1.5" PointX="4.551726671192668" PointY="18.397140228374461" />
         <AssociationConnector Association="DBModel.FK_Table_User" />
         <AssociationConnector Association="DBModel.FK_Event_Organiser" />
         <AssociationConnector Association="DBModel.FK_Event_Venue" />
         <AssociationConnector Association="DBModel.FK_Registration_Event" />
         <AssociationConnector Association="DBModel.FK_Organiser_User" />
         <AssociationConnector Association="DBModel.FK_Payment_Registration" />
-        <AssociationConnector Association="DBModel.FK_Registration_User" />
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        &gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
+        <AssociationConnector Association="DBModel.FK_Registration_User" />&gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
         
         
         

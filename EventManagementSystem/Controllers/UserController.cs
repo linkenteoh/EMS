@@ -453,11 +453,71 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
 
-        public ActionResult Billing()
+        public ActionResult Billing(string searchName = "", string name = "", string price = "", string startDate = "", string  endDate ="",
+            int priceFrom = 0, int priceTo = 0, string sort = "", int page = 1)
         {
+            ViewBag.sortList = new SelectList(
+                new List<SortItems> {
+                    new SortItems { Id = "Id", name = "Id"},
+                    new SortItems { Id = "name", name = "Name"},
+                    new SortItems { Id = "price", name = "Price"},
+                    new SortItems { Id = "date", name = "Date"},
+                    new SortItems { Id = "status", name = "Status"}
+                }, "Id", "name");
             int uId = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
-            var bill = db.Payments.ToList().Where(p => p.Registration.userId == uId);
+            var model = db.Payments.Where(p => p.Registration.userId == uId);
+
+            // Date Range
+            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
+            {
+                var timeFrom = DateTime.Parse(startDate);
+                var timeTo = DateTime.Parse(endDate);
+                model = model.Where(x => x.Registration.date >= timeFrom && x.Registration.date <= timeTo);
+            }
+            else if (!string.IsNullOrEmpty(startDate))
+            {
+                var timeFrom = DateTime.Parse(startDate);
+                model = model.Where(x => x.Registration.date >= timeFrom);
+            }
+            else if (!string.IsNullOrEmpty(endDate))
+            {
+                var timeTo = DateTime.Parse(endDate);
+                model = model.Where(x => x.Registration.date <= timeTo);
+            }
+            // Price Range
+            if (priceFrom != 0 && priceTo != 0)
+            {
+                model = model.Where(x => x.price >= priceFrom && x.price <= priceTo);
+            }
+            else if (priceFrom != 0)
+            {
+                model = model.Where(x => x.price >= priceFrom);
+            }
+            else if (priceTo != 0)
+            {
+                model = model.Where(x => x.price <= priceTo);
+            }
+
+            // Search name
+            model = model.Where(x => x.Registration.Event.name.Contains(searchName));
+            // Sort By
+            Func<Payment, object> fn = s => s.Id;
+            switch (sort)
+            {
+                case "Id": fn = s => s.Id; break;
+                case "name": fn = s => s.Registration.Event.name; break;
+                case "price": fn = s => s.price; break;
+                case "date": fn = s => s.Registration.date; break;
+                case "status": fn = s => s.status; break;
+            }
+
+            // PagedList
+            var bill = model.OrderBy(fn).ToPagedList(page, 10);
+
+            if (Request.IsAjaxRequest())
+                return PartialView("_BillingList", bill);
             return View(bill);
+
         }
 
         // GET: User/Payment

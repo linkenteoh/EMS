@@ -34,7 +34,7 @@ namespace EventManagementSystem.Models
         public string activationCode { get; set; }
         public string photo { get; set; }
         public bool activated { get; set; }
-        public Nullable<int> lockoutValue { get; set; }
+        public int lockoutValue { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Advertisement> Advertisements { get; set; }
