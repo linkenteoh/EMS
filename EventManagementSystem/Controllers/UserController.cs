@@ -266,14 +266,13 @@ namespace EventManagementSystem.Controllers
                 return PartialView("_EventResults", events);
             return View(events);
         }
-        [Authorize(Roles = "Organizer")]
+
         // GET: User/ProposeEvent
         public ActionResult ProposeEvent()
         {
             ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             return View();
         }
-        [Authorize(Roles = "Organizer")]
         // POST: User/ProposeEvent
         [HttpPost]
         public ActionResult ProposeEvent(EventProposeVM model)
@@ -417,7 +416,6 @@ namespace EventManagementSystem.Controllers
                 return PartialView("_EventApproveList", events);
             return View(events);
         }
-        [Authorize(Roles = "Organizer")]
         // GET: Event/ManageEventProposed
         public ActionResult ManageEventProposed(int Id)
         {
@@ -455,7 +453,7 @@ namespace EventManagementSystem.Controllers
             ViewBag.PaymentsCount = db.Payments.Where(p => p.Registration.eventId == Id).Count();
             return View(model);
         }
-        [Authorize(Roles = "Organizer")]
+ 
         // POST: Event/ManageEventProposed
         [HttpPost]
         public ActionResult ManageEventProposed(OrgEditEventVM model)
