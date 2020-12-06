@@ -11,15 +11,16 @@
             <img class="panel-heading text-center" src="~/Photo/@e.photoURL" alt="Card image cap" style="object-fit:cover; width:245px; height:245px;" />
             <hr style="margin:0px;padding:0px;" />
             <div class="panel-body" style="">
-                <h5 class="panel-title"><b>@e.name</b></h5>
-                <p class="card-text">@e.date.ToString("dd-MM-yy") | @e.startTime - @e.endTime</p>
+                <h4 class="panel-title"><b>@e.name</b><small> (@e.date.ToString("dd-MM-yy"))</small></h4>
+                <p class="card-text">From @e.startTime until @e.endTime</p>
+                 <p style="margin-bottom:0px"><b>RM @e.price</b></p>
                 @if (e.venueId != null)
                 {
-                    <p class="card-text">@e.Venue.name</p>
+                    <small class="card-text">@e.Venue.name</small>
                 }
                 else
                 {
-                    <p>Venue to be booked</p>
+                    <small>Venue to be booked</small><br />
                 }
                 <a class="btn btn-primary" href="/Event/EventDetail?id=@e.Id"> View Event </a>
  
@@ -36,6 +37,6 @@
 }
 else
 {
-    <div style=" text-align: center; margin-top:50px;"><span style="font-size: 16pt; text-align:center;">No Records Founded.</span></div>
+    <div style=" text-align: center; margin-top:50px;"><span style="font-size: 16pt; text-align:center;">No Records Found.</span></div>
 }
 

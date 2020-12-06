@@ -52,6 +52,13 @@ namespace EventManagementSystem.Controllers
             }
 
             var e = db.Events.Find(eventId);
+            
+            if(user.Id == e.OrgId)
+            {
+                TempData["Info"] = "You can't register you own organised event";
+                return RedirectToAction("EventDetail", "Event", new { id = eventId });
+            }
+
             double price = 0;
             double comission = 0;
             double addCharge = 0;
