@@ -9,17 +9,10 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="des" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="startDate" Type="date" Nullable="false" />
-          <Property Name="endDate" Type="date" Nullable="false" />
-          <Property Name="startTime" Type="time" Precision="7" Nullable="false" />
-          <Property Name="endTime" Type="time" Precision="7" Nullable="false" />
-          <Property Name="charge" Type="decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="photoURL" Type="varchar" MaxLength="100" />
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="startDate" Type="datetime" Nullable="false" />
+          <Property Name="endDate" Type="datetime" Nullable="false" />
           <Property Name="status" Type="bit" Nullable="false" />
-          <Property Name="userId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
@@ -87,7 +80,7 @@
           <Property Name="activationCode" Type="varchar" MaxLength="50" />
           <Property Name="photo" Type="varchar(max)" />
           <Property Name="activated" Type="bit" Nullable="false" />
-          <Property Name="lockoutValue" Type="int" />
+          <Property Name="lockoutValue" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Venue">
           <Key>
@@ -100,6 +93,18 @@
           <Property Name="capacity" Type="int" Nullable="false" />
           <Property Name="photoURL" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Advertisement_ToEvent">
+          <End Role="Event" Type="Self.Event" Multiplicity="1" />
+          <End Role="Advertisement" Type="Self.Advertisement" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Advertisement">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Event_Organiser">
           <End Role="Organiser" Type="Self.Organiser" Multiplicity="1" />
           <End Role="Event" Type="Self.Event" Multiplicity="*" />
@@ -172,18 +177,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Table_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Advertisement" Type="Self.Advertisement" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Advertisement">
-              <PropertyRef Name="userId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="DBModelStoreContainer">
           <EntitySet Name="Advertisement" EntityType="Self.Advertisement" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
@@ -192,6 +185,10 @@
           <EntitySet Name="Registration" EntityType="Self.Registration" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Venue" EntityType="Self.Venue" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Advertisement_ToEvent" Association="Self.FK_Advertisement_ToEvent">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="Advertisement" EntitySet="Advertisement" />
+          </AssociationSet>
           <AssociationSet Name="FK_Event_Organiser" Association="Self.FK_Event_Organiser">
             <End Role="Organiser" EntitySet="Organiser" />
             <End Role="Event" EntitySet="Event" />
@@ -216,10 +213,6 @@
             <End Role="User" EntitySet="User" />
             <End Role="Registration" EntitySet="Registration" />
           </AssociationSet>
-          <AssociationSet Name="FK_Table_User" Association="Self.FK_Table_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="Advertisement" EntitySet="Advertisement" />
-          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -233,8 +226,8 @@
           <EntitySet Name="Registrations" EntityType="DBModel.Registration" />
           <EntitySet Name="Users" EntityType="DBModel.User" />
           <EntitySet Name="Venues" EntityType="DBModel.Venue" />
-          <AssociationSet Name="FK_Table_User" Association="DBModel.FK_Table_User">
-            <End Role="User" EntitySet="Users" />
+          <AssociationSet Name="FK_Advertisement_ToEvent" Association="DBModel.FK_Advertisement_ToEvent">
+            <End Role="Event" EntitySet="Events" />
             <End Role="Advertisement" EntitySet="Advertisements" />
           </AssociationSet>
           <AssociationSet Name="FK_Event_Organiser" Association="DBModel.FK_Event_Organiser">
@@ -266,18 +259,11 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="des" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="startDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="endDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="startTime" Type="Time" Nullable="false" Precision="7" />
-          <Property Name="endTime" Type="Time" Nullable="false" Precision="7" />
-          <Property Name="charge" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="photoURL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="startDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="endDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="status" Type="Boolean" Nullable="false" />
-          <Property Name="userId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="User" Relationship="DBModel.FK_Table_User" FromRole="Advertisement" ToRole="User" />
+          <NavigationProperty Name="Event" Relationship="DBModel.FK_Advertisement_ToEvent" FromRole="Advertisement" ToRole="Event" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
@@ -297,6 +283,7 @@
           <Property Name="venueId" Type="Int32" />
           <Property Name="photoURL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="OrgId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Advertisement" Relationship="DBModel.FK_Advertisement_ToEvent" FromRole="Event" ToRole="Advertisement" />
           <NavigationProperty Name="Organiser" Relationship="DBModel.FK_Event_Organiser" FromRole="Event" ToRole="Organiser" />
           <NavigationProperty Name="Venue" Relationship="DBModel.FK_Event_Venue" FromRole="Event" ToRole="Venue" />
           <NavigationProperty Name="Registrations" Relationship="DBModel.FK_Registration_Event" FromRole="Event" ToRole="Registration" />
@@ -354,8 +341,7 @@
           <Property Name="activationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="activated" Type="Boolean" Nullable="false" />
-          <Property Name="lockoutValue" Type="Int32" />
-          <NavigationProperty Name="Advertisements" Relationship="DBModel.FK_Table_User" FromRole="User" ToRole="Advertisement" />
+          <Property Name="lockoutValue" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Organiser" Relationship="DBModel.FK_Organiser_User" FromRole="User" ToRole="Organiser" />
           <NavigationProperty Name="Registrations" Relationship="DBModel.FK_Registration_User" FromRole="User" ToRole="Registration" />
         </EntityType>
@@ -371,15 +357,15 @@
           <Property Name="photoURL" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Events" Relationship="DBModel.FK_Event_Venue" FromRole="Venue" ToRole="Event" />
         </EntityType>
-        <Association Name="FK_Table_User">
-          <End Type="DBModel.User" Role="User" Multiplicity="1" />
-          <End Type="DBModel.Advertisement" Role="Advertisement" Multiplicity="*" />
+        <Association Name="FK_Advertisement_ToEvent">
+          <End Type="DBModel.Event" Role="Event" Multiplicity="1" />
+          <End Type="DBModel.Advertisement" Role="Advertisement" Multiplicity="0..1" />
           <ReferentialConstraint>
-            <Principal Role="User">
+            <Principal Role="Event">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Advertisement">
-              <PropertyRef Name="userId" />
+              <PropertyRef Name="Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -464,16 +450,9 @@
           <EntitySetMapping Name="Advertisements">
             <EntityTypeMapping TypeName="DBModel.Advertisement">
               <MappingFragment StoreEntitySet="Advertisement">
-                <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="photoURL" ColumnName="photoURL" />
-                <ScalarProperty Name="charge" ColumnName="charge" />
-                <ScalarProperty Name="endTime" ColumnName="endTime" />
-                <ScalarProperty Name="startTime" ColumnName="startTime" />
                 <ScalarProperty Name="endDate" ColumnName="endDate" />
                 <ScalarProperty Name="startDate" ColumnName="startDate" />
-                <ScalarProperty Name="des" ColumnName="des" />
-                <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

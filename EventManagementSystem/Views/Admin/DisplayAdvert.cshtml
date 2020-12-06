@@ -39,6 +39,7 @@
 </style>
 
 <h1>Advertisement List</h1>
+<hr />
 <input class="btn btn-primary" data-get="/Admin/InsertAdvert" type="button" value="Add Advertisement">
 
 @using (Ajax.BeginForm("DisplayAdvert", "Admin", results, attr))
@@ -77,8 +78,6 @@
                     @Html.TextBox("endTime", null, "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
                 </div>
                 <div class="form-group row">
-                    @Html.Label("desc", "Description", new { @class = "control-label col-sm-2" })
-                    @Html.TextBox("desc", null, new { data_upper = "", autofocus = "", type = "search", @class = "form-control col-sm-2" })
                     <div class="col-sm-offset-1 col-sm-1">
                         <input type="submit" class="btn btn-primary searchBtn" name="Search" value="Search" />
                     </div>

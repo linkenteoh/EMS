@@ -316,28 +316,15 @@ namespace EventManagementSystem.Models
 
     public class AdvertManageVM
     {
+        [Required(ErrorMessage = "Please select your event name")]
         public int Id { get; set; }
-        [Required]
-        [StringLength(100)]
-        [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only")]
-        public string name { get; set; }
-        [Required]
-        [StringLength(100)]
-        public string des { get; set; }
-        [Required]
-        public decimal charge { get; set; }
         [Required]
         public DateTime startDate { get; set; }
         [Required]
         public DateTime endDate { get; set; }
-        [Required]
-        public TimeSpan startTime { get; set; }
-        [Required]
-        public TimeSpan endTime { get; set; }
+        public string eventName { get; set; }
         public bool status { get; set; }
-        public int? userId { get; set; }
-        public HttpPostedFileBase Photo { get; set; }
-        public string photoURL { get; set; }
+
 
     }
     public class RegOrgVM

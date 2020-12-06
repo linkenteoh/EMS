@@ -35,45 +35,10 @@
         <h2>Add Advertisement</h2>
         <hr />
         <div class="row">
-
-            <div class="col-md-3 border-right">
-                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <label class="upload">
-                        <img class="img-thumbnail" src="~/Photo/no-image-icon.jpg">
-                        @Html.TextBoxFor(e => e.Photo, new
-                   {
-                       type = "file",
-                       accept = "image/jpeg, image/png",
-                       hidden = ""
-
-                   })
-                        @Html.ValidationMessageFor(e => e.Photo)
-                    </label>
-                </div>
+            <div class="col-md-7 border-left">
             </div>
-
             <div class="col-md-7 border-right">
-                <div class="row mt-2">
-                    <div class="col-md-6">
-                        @Html.LabelFor(e => e.name, "Name")@Html.TextBoxFor(e => e.name, new { maxlength = 20, autofocus = "", @class = "form-control", placeholder = "Name" }) @Html.ValidationMessageFor(e => e.name)
-                    </div>
-                    <div class="col-md-6">
-                        @Html.LabelFor(e => e.charge, "Charge")@Html.TextBoxFor(e => e.charge, new { type = "number", @class = "form-control", placeholder = "price", min = "0" }) @Html.ValidationMessageFor(e => e.charge)
-                    </div>
-                </div>
-                <div class="row mt-6">
-                    <div class="col-md-12">
-                        @Html.LabelFor(e => e.des, "Description")@Html.TextAreaFor(e => e.des, new
-{
-style = "width: 650px; height: 200px; resize: none",
-@class = "form-control",
-autofocus = "",
-placeholder = "Description"
-})
-                        @Html.ValidationMessageFor(e => e.des)
 
-                    </div>
-                </div>
                 <div class="row mt-4">
                     <div class="col-md-6">
                         @Html.LabelFor(e => e.startDate, "Start Date")@Html.TextBoxFor(e => e.startDate, "{0:yyyy-MM-dd}", new { type = "date", min, max, @class = "form-control" })
@@ -87,19 +52,20 @@ placeholder = "Description"
                     </div>
                 </div>
                 <div class="row mt-4">
-                    <div class="col-md-6">
-                        @Html.LabelFor(e => e.startTime, "Start Time")@Html.TextBoxFor(e => e.startTime, new { type = "time", @class = "form-control" })
-                        @Html.ValidationMessageFor(e => e.startTime)
-                    </div>
-                    <div class="col-md-6">
-                        @Html.LabelFor(e => e.endTime, "End Time")@Html.TextBoxFor(e => e.endTime, new { type = "time", @class = "form-control" })
-                        @Html.ValidationMessageFor(e => e.endTime)
+                    <div class="col-md-4">
+                        @Html.LabelFor(e => e.Id, "Event Name")
+                        @Html.DropDownListFor(e => e.Id, ViewBag.EventList as SelectList, "- Select One -", new { @class = "btn btn-secondary dropdown-toggle" })
+                        @Html.ValidationMessageFor(e => e.Id)
                     </div>
                 </div>
-                <div class="mt-12" style="margin-top:15px"><section><button class="btn btn-primary profile-button">Add</button></section></div>
+                    <div class="col-md-6">
+                        <div class="mt-12" style="margin-top:15px"><section><button class="btn btn-primary profile-button">Add</button></section></div>
+                    </div>
+                </div>
             </div>
+
+
         </div>
-    </div>
 </form>
 
 
