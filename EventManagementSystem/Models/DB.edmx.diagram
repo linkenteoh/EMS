@@ -7,17 +7,58 @@
       <Diagram DiagramId="41ed6b36fb9c4deaa67df0ad533950c2" Name="Diagram1" ZoomLevel="80">
         <<<<<<< HEAD
         
-        <EntityTypeShape EntityType="DBModel.Advertisement" PointX="9.16575450318202" PointY="4.7983108185223822" Width="1.5" />
-        <EntityTypeShape EntityType="DBModel.Event" PointX="11.73886689159035" PointY="6.1455062209374764" Width="1.5" />
-        <EntityTypeShape EntityType="DBModel.Organiser" PointX="1.2201406197716205" PointY="5.4143194879471883" Width="1.5" />
-        <EntityTypeShape EntityType="DBModel.Payment" PointX="1.2256831644222528" PointY="28.790619803960723" Width="1.5" />
-        <EntityTypeShape EntityType="DBModel.Registration" PointX="8.9869960178560557" PointY="14.530638343901671" Width="1.5" />
-        <EntityTypeShape EntityType="DBModel.User" PointX="0.2428411190597532" PointY="21.446660349819187" Width="1.5" />
-        <EntityTypeShape EntityType="DBModel.Venue" PointX="1.0410815985133319" PointY="2.399515048786772" Width="1.5" />
+        
+        <EntityTypeShape EntityType="DBModel.Advertisement" Width="1.5" PointX="3.9545733406928241" PointY="0.37278571742250849" />
+        <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="11.134035380153932" PointY="28.424701435689208" />
+        <EntityTypeShape EntityType="DBModel.Organiser" Width="1.5" PointX="7.3041156918295265" PointY="22.685341756178691" />
+        <EntityTypeShape EntityType="DBModel.Payment" Width="1.5" PointX="4.666577263114311" PointY="12.944621628590218" />
+        <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="1.7050371606392027" PointY="17.913880386349689" />
+        <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="1.4803594916501826" PointY="26.0585103752364" />
+        <EntityTypeShape EntityType="DBModel.Venue" Width="1.5" PointX="8.3975590506557189" PointY="9.1016397369567486" />
         <AssociationConnector Association="DBModel.FK_Table_User" />
         <AssociationConnector Association="DBModel.FK_Event_Organiser" />
         <AssociationConnector Association="DBModel.FK_Event_Venue" />
+        <AssociationConnector Association="DBModel.FK_Registration_Event" />
+        <AssociationConnector Association="DBModel.FK_Organiser_User" />
+        <AssociationConnector Association="DBModel.FK_Payment_Registration" />
+        <AssociationConnector Association="DBModel.FK_Registration_User" />
+        
+        
+        
+        
+        
+        
+        
+        
+        
         &gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
+        
+        
+        
+        
+        
+        
+        
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
+        
+        
+        
+        
+        
+        
+        
+      
+=======
+        
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
+        
+        
+        
+        
+        
+        
+        
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
         
         
         

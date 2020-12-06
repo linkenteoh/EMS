@@ -40,17 +40,18 @@ namespace EventManagementSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                var id = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
+                var user = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
 
                 var oragniser = new Organiser
                 {
-                    Id = id,
+                    Id = user,
                     represent = model.represent,
                     position = model.position,
                     status = null
                 };
-
+                
                 db.Organisers.Add(oragniser);
+
                 db.SaveChanges();
                 TempData["Info"] = "You've registered successfully. Please wait until it is accepted by an admin.";
             }
@@ -219,14 +220,14 @@ namespace EventManagementSystem.Controllers
                 return PartialView("_EventResults", model);
             return View(model);
         }
-
+        [Authorize(Roles = "Organizer")]
         // GET: User/ProposeEvent
         public ActionResult ProposeEvent()
         {
             ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             return View();
         }
-
+        [Authorize(Roles = "Organizer")]
         // POST: User/ProposeEvent
         [HttpPost]
         public ActionResult ProposeEvent(EventProposeVM model)
@@ -305,7 +306,7 @@ namespace EventManagementSystem.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "Organizer")]
         // GET: Event/ManageEventProposed
         public ActionResult ManageEventProposed(int Id)
         {
@@ -342,7 +343,7 @@ namespace EventManagementSystem.Controllers
             ViewBag.PaymentsCount = db.Payments.Where(p => p.Registration.eventId == Id).Count();
             return View(model);
         }
-
+        [Authorize(Roles = "Organizer")]
         // POST: Event/ManageEventProposed
         [HttpPost]
         public ActionResult ManageEventProposed(EventEditVM model)

@@ -166,9 +166,9 @@ namespace EventManagementSystem.Models
         public string confirmPassword { get; set; }
         public HttpPostedFileBase Photo { get; set; }
         public string photoURL { get; set; }
-        public Role role { get; set; }
         [Required(ErrorMessage = "Please choose the option!")]
-        public Nullable<bool> organizer { get; set; }
+        public Role role { get; set; }
+        public string memberRole { get; set; }
         public bool status { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
@@ -198,8 +198,7 @@ namespace EventManagementSystem.Models
         public HttpPostedFileBase Photo { get; set; }
         public string webPhoto { get; set; }
         public string role { get; set; }
-
-        public Nullable<bool> organizer { get; set; }
+        public string memberRole { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
     }
@@ -228,7 +227,7 @@ namespace EventManagementSystem.Models
         public HttpPostedFileBase Photo { get; set; }
         public string PhotoUrl { get; set; }
         public string role { get; set; }
-        public Nullable<bool> organizer { get; set; }
+        public string memberRole { get; set; }
         public Nullable<bool> status { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }

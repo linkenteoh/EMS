@@ -329,7 +329,6 @@ namespace EventManagementSystem.Controllers
                     username = model.username,
                     password = model.password,
                     role = model.role.ToString(),
-                    organizer = model.organizer,
                     status = true,
                     recoveryCode = "ABCDEF",
                     activationCode = "ABCDEF",
@@ -366,7 +365,6 @@ namespace EventManagementSystem.Controllers
                 email = u.email,
                 username = u.username,
                 password = u.password,
-                organizer = u.organizer,
                 confirmPassword = u.password,
                 role = (Role)Enum.Parse(typeof(Role), u.role),
                 photoURL = u.photo,
@@ -389,7 +387,6 @@ namespace EventManagementSystem.Controllers
                 u.name = model.name;
                 u.contact_no = model.contact_no.Trim();
                 u.email = model.email;
-                u.organizer = model.organizer;
                 u.password = model.password;
                 u.role = model.role.ToString();
                 if (model.Photo != null)
@@ -420,9 +417,11 @@ namespace EventManagementSystem.Controllers
         public ActionResult ApproveOrganizer(int id)
         {
             var e = db.Organisers.Find(id);
+            var user = db.Users.Find(id);
             if (e != null)
             {
                 e.status = true;
+                user.role = "Organizer";
                 db.SaveChanges();
                 TempData["info"] = "Request Approved!";
             }
