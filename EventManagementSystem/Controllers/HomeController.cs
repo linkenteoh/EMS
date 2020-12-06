@@ -38,11 +38,10 @@ namespace EventManagementSystem.Controllers
             ViewBag.VenueList = new SelectList(db.Venues, "name", "name");
             ViewBag.sortList = new SelectList(
                 new List<SortItems> {
-                    new SortItems { Id = "Id", name = "Id"},
                     new SortItems { Id = "name", name = "Name"},
                     new SortItems { Id = "price", name = "Price"},
                     new SortItems { Id = "date", name = "Date"},
-                    new SortItems { Id = "Venue.name", name = "Venue"}
+                    new SortItems { Id = "venue", name = "Venue"}
                 }, "Id", "name");
             var model = db.Events.Where(e => e.approvalStat == true && e.status == true);
 
@@ -96,11 +95,10 @@ namespace EventManagementSystem.Controllers
             Func<Event, object> fn = s => s.Id;
             switch (sort)
             {
-                case "Id": fn = s => s.Id; break;
                 case "name": fn = s => s.name; break;
                 case "price": fn = s => s.price; break;
                 case "date": fn = s => s.date; break;
-                case "Venue.name": fn = s => s.venueId; break;
+                case "venue": fn = s => s.venueId; break;
             }
             // PagedList
             var events = model.OrderBy(fn).ToPagedList(page, 10);
