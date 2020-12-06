@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -138,5 +140,32 @@ namespace EventManagementSystem.Controllers
         {
             return View();
         }
+      /*  public ActionResult DisplayQR()
+        {
+            return View();
+        }*/
+
+       /* [HttpPost]
+        public ActionResult DisplayQR(string txtQRCode)
+        {
+            string link = "https://localhost:44302/Event/EventDetail?id=";
+            ViewBag.txtQRCode = txtQRCode;
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(txtQRCode, QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            //System.Web.UI.WebControls.Image imgBarCode = new System.Web.UI.WebControls.Image();
+            //imgBarCode.Height = 150;
+            //imgBarCode.Width = 150;
+            using (Bitmap bitMap = qrCode.GetGraphic(20))
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    bitMap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    ViewBag.imageBytes = ms.ToArray();
+                    //imgBarCode.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(byteImage);
+                }
+            }
+            return View();
+        }*/
     }
 }
