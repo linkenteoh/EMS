@@ -486,6 +486,11 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
 
+        public ActionResult AdvertisementSelect(int Id)
+        {
+            return View();
+        }
+
         public ActionResult Billing(string searchName = "", string name = "", string startDate = "", string  endDate ="",
             int priceFrom = 0, int priceTo = 0, string status = "", string sort = "", int page = 1)
         {

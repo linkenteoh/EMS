@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "Select Your Time Range";
+}
+
+
+@section head{
+    <style>
+        #chargeInfo {
+            border:1px solid black;
+            width: 300px;
+            height: 150px;
+            padding-top: 5px;
+            padding-bottom: 30px;
+            margin:10px;
+            margin-bottom: 50px;
+            border-radius: 5px;
+        }
+    </style>
+}
+<h3>@ViewBag.Title</h3>
+
+<hr />
+<div id="second" style="display:block;">
+    <!--Back to Homepage-->
+    <p onclick="bckFunc()" id="bckBtn" class="btn btn-primary" style="font-weight: bold"><</p>
+</div>
+
+<div class="container" id="chargeInfo">
+    <span style="text-align:left; font-size:16pt;">Info</span>
+    <table class="table">
+        <tr>
+            <th>Charges per day</th>
+            <td>:   RM 3.00</td>
+        </tr>
+    </table>
+</div>
+<div class="form-group row">
+    @Html.Label("startDate", "Date From", new { @class = "control-label col-sm-2" })
+    @Html.TextBox("startDate", null, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-2" })
+    @Html.Label("endDate", "To", new { @class = "control-label col-sm-1" })
+    @Html.TextBox("endDate", null, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-2" })
+</div>
+<div class="form-group row">
+    @Html.Label("startTime", "Time From", new { @class = "control-label col-sm-2" })
+    @Html.TextBox("startTime", null, "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
+    @Html.Label("endTime", "To", new { @class = "control-label col-sm-1" })
+    @Html.TextBox("endTime", null, "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
+    <div class="col-sm-4">
+        <a class="btn btn-primary" href="/User/Billing">Confirm</a>
+    </div>
+</div>
+
+@section foot{
+    <script>
+        function bckFunc() {
+            window.history.back();
+        }
+    </script>
+}

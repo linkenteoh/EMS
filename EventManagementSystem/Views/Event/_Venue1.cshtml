@@ -94,18 +94,18 @@
     @foreach (Venue m in Model)
     {
         <div class="venueDetailsGet" id="@m.Id">
-            <table>
+            <table class="table">
                 <tr>
                     <td colspan="2">
                         <img src="~/Images/@m.photoURL" />
                     </td>
                 </tr>
                 <tr>
-                    <td>Capacity</td>
+                    <th>Capacity</th>
                     <td>: @m.capacity</td>
                 </tr>
                 <tr>
-                    <td>Equipment</td>
+                    <th>Equipment</th>
                     <td>: @m.equipment</td>
                 </tr>
             </table>
