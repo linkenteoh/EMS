@@ -9,11 +9,9 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Description</th>
-                <th scope="col">Charge</th>
                 <th scope="col">Start Date</th>
                 <th scope="col">End Date</th>
+                <th scope="col">Event Name</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
             </tr>
@@ -26,11 +24,9 @@
 
                     <tr>
                         <td scope="row">@a.Id</td>
-                        <td scope="row">@a.name</td>
-                        <td scope="row">@a.des</td>
-                        <td scope="row">@a.charge</td>
-                        <td scope="row">@a.startDate.ToString("dd/MM/yyyy") @a.startTime </td>
-                        <td scope="row">@a.endDate.ToString("dd/MM/yyyy") @a.endTime </td>
+                        <td scope="row">@a.startDate.ToString("dd/MM/yyyy")  </td>
+                        <td scope="row">@a.endDate.ToString("dd/MM/yyyy")  </td>
+                        <td scope="row">@a.Event.name </td>
                         <td>
                             <a class="btn btn-primary" href="/Admin/EditAdvert?id=@a.Id">Edit</a>
                         </td>

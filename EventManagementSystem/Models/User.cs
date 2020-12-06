@@ -17,7 +17,6 @@ namespace EventManagementSystem.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
-            this.Advertisements = new HashSet<Advertisement>();
             this.Registrations = new HashSet<Registration>();
         }
     
@@ -34,10 +33,8 @@ namespace EventManagementSystem.Models
         public string activationCode { get; set; }
         public string photo { get; set; }
         public bool activated { get; set; }
-        public Nullable<int> lockoutValue { get; set; }
+        public int lockoutValue { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Advertisement> Advertisements { get; set; }
         public virtual Organiser Organiser { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Registration> Registrations { get; set; }

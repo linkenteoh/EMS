@@ -24,6 +24,8 @@
         <tbody>
             @foreach (var u in Model)
             {
+                if (u.status == true)
+                {
                     <tr>
                         <td scope="row">@u.Id</td>
                         <td scope="row">@u.name</td>
@@ -37,7 +39,9 @@
                             <a class="btn btn-primary" href="/Admin/EditUser?id=@u.Id">Edit</a>
                             <a class="btn btn-danger" href="/Admin/DeleteUser?id=@u.Id">Delete</a>
                         </td>
-                    </tr>               
+                    </tr>
+
+                }
             }
 
         </tbody>

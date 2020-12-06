@@ -12,8 +12,11 @@
         <ol class="carousel-indicators">
             @foreach (var a in Model)
             {
-                <li data-target="#myCarousel" data-slide-to="@indCount" class="active"></li>
-                indCount++;
+                if (a.status == true)
+                {
+                    <li data-target="#myCarousel" data-slide-to="@indCount" class="active"></li>
+                    indCount++;
+                }
             }
         </ol>
 
@@ -28,13 +31,13 @@
                     if (count == 1)
                     {
                         <div class="item active" id="advertisement">
-                            <a href="@count"><img src="~/Photo/@a.photoURL" style="width:100%;" alt="@a.name"></a>
+                            <a href="~/Event/EventDetail?id=@a.Id"><img src="~/Photo/@a.Event.photoURL" style="width:100%;" alt="@a.Event.photoURL"></a>
                         </div>
                     }
                     else
                     {
                         <div class="item" id="advertisement">
-                            <a href="@count"><img src="~/Photo/@a.photoURL" style="width:100%;" alt="@a.name"></a>
+                            <a href="~/Event/EventDetail?id=@a.Id"><img src="~/Photo/@a.Event.photoURL" style="width:100%;" alt="@a.Event.photoURL"></a>
                         </div>
                     }
                 }
