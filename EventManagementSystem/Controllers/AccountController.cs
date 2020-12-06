@@ -198,8 +198,8 @@ namespace EventManagementSystem.Controllers
                     email = model.email,
                     username = model.username,
                     password = HashPassword(model.password),
-                    role = model.role,    
-                    
+                    role = "Member",
+                    memberRole = model.memberRole,
                     status = true,
                     activated = false,
                     recoveryCode = null,
@@ -267,6 +267,11 @@ namespace EventManagementSystem.Controllers
         // GET: Account/Login
         public ActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                TempData["Info"] = "You've already logged in.";
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
  
@@ -281,16 +286,32 @@ namespace EventManagementSystem.Controllers
             
             HttpCookie blockCookie = new HttpCookie("block");
             HttpCookie getCookie = HttpContext.Request.Cookies.Get("block");
-           
-            user.lockoutValue = user.lockoutValue +1;
-            db.SaveChanges();
-            int count = user.lockoutValue;
+
+            int count = user.lockoutValue.Value;
 
             if (getCookie == null)
             {
                 if (ModelState.IsValid)
                 {
-                    //Get user record based on username
+                    if (count > 3)
+                    {
+
+                        blockCookie.Value = "IAMDONE";
+                        blockCookie.Expires = DateTime.Now.AddMinutes(1);
+                        Response.Cookies.Set(blockCookie);
+                        user.lockoutValue = 0;
+                        db.SaveChanges();
+                        ModelState.AddModelError("Password", "Please login after 1 mintue!");
+                        return View(model);
+                    }
+
+                    if (!VerifyPassword(user.password, model.Password))
+                    {
+                        ModelState.AddModelError("Password", "Wrong Password");
+                        user.lockoutValue = user.lockoutValue + 1;
+                        db.SaveChanges();
+                        return View(model);
+                    }
 
                     //Check pass
                     if (user != null && VerifyPassword(user.password, model.Password))
@@ -307,31 +328,18 @@ namespace EventManagementSystem.Controllers
                         if (returnUrl == "")
                         {
                             TempData["Info"] = "You have successfully logged in.";
-                            if (user.role == "Student")
+                            user.lockoutValue = 0;
+                            db.SaveChanges();
+                            if (user.role == "Member" || user.role == "Organizer")
                                 return RedirectToAction("Index", "Home");
                             else if (user.role == "Admin")
                                 return RedirectToAction("Index", "Admin");
-     
-                            user.lockoutValue = 0;
-                            db.SaveChanges();
                         }
-
-                    }
-                    else if (count > 3)
-                    {
-                        
-                        blockCookie.Value = "IAMDONE";
-                        blockCookie.Expires = DateTime.Now.AddMinutes(1);
-                        Response.Cookies.Set(blockCookie);
-                        ModelState.AddModelError("Password", "Please login after 1 mintue!");
-                        user.lockoutValue = 0;
-                        db.SaveChanges();
 
                     }
                     else
                     {
                         ModelState.AddModelError("Password", "Username and password not matched.");
-
                     }
 
 

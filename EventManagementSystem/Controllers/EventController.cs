@@ -52,17 +52,24 @@ namespace EventManagementSystem.Controllers
             }
 
             var e = db.Events.Find(eventId);
+            
+            if(user.Id == e.OrgId)
+            {
+                TempData["Info"] = "You can't register you own organised event";
+                return RedirectToAction("EventDetail", "Event", new { id = eventId });
+            }
+
             double price = 0;
             double comission = 0;
             double addCharge = 0;
             double temp = 0;
 
-            if(user.role == "Student")
+            if(user.memberRole == "Student")
             {
                 addCharge = 0;
                 price = (double)e.price;
                 comission = price * 0.1;
-            }else if(user.role == "Outsider")
+            }else if(user.memberRole == "Outsider")
             {
                 addCharge = (double)e.price * 0.1;    //Additional charge
                 price = (double)e.price + addCharge; 

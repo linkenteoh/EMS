@@ -284,8 +284,8 @@ namespace EventManagementSystem.Models
     public class LoginVM
     {
         [Required]
+        [Remote("IsUserNameRegistered", "Account", ErrorMessage = "Username does not exists")]
         public string Username { get; set; }
-
         [Required]
         public string Password { get; set; }
 
