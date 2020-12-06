@@ -1,0 +1,28 @@
+﻿@model SetNewPassVM
+@{
+    ViewBag.Title = "ResetPass";
+}
+
+<h2>Enter your new password</h2>
+<hr />
+<form class="form" method="post">
+    @Html.ValidationSummary(true)
+    <div>
+        @Html.LabelFor(m => m.password, "Password")
+        @Html.PasswordFor(m => m.password, new { autofocus = "", @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.password, "", new { @class = "text-danger" })
+    </div>
+
+    <div>
+        @Html.LabelFor(m => m.confirmPassword, "New password")
+        @Html.PasswordFor(m => m.confirmPassword, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.confirmPassword, "", new { @class = "text-danger" })
+    </div>
+
+    <br>
+    <section>
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </section>
+
+</form>
+

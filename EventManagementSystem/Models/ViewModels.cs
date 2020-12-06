@@ -215,16 +215,12 @@ namespace EventManagementSystem.Models
         [Required]
         [EmailAddress(ErrorMessage = "Invalid format")]
         public string email { get; set; }
-        [Required]
-        [MinLength(5, ErrorMessage = "5 minimum length")]
-        [MaxLength(15, ErrorMessage = "15 maximum length")]
         public string username { get; set; }
-        [Required]
-        public string password { get; set; }
-        [System.ComponentModel.DataAnnotations.Compare("password", ErrorMessage = "Password not matched")]
+        public string newPassword { get; set; }
+        [System.ComponentModel.DataAnnotations.Compare("newPassword", ErrorMessage = "Password not matched")]
         public string confirmPassword { get; set; }
-        //[Required]
         public HttpPostedFileBase Photo { get; set; }
+        public string webPhoto { get; set; }
         public string PhotoUrl { get; set; }
         public string role { get; set; }
         public string memberRole { get; set; }
@@ -242,6 +238,27 @@ namespace EventManagementSystem.Models
         public string Password { get; set; }
 
         public bool RememberMe { get; set; }
+    }
+
+    public class PassRecoverVM
+    {
+        [Required(ErrorMessage ="Please enter your username")]
+        [Remote("IsUserNameRegistered", "Account", ErrorMessage = "Username does not exists")]
+        public string username { get; set; }
+        [Required(ErrorMessage ="Please enter your registered email")]
+        [EmailAddress]
+        public string email { get; set; }
+    }
+
+    public class SetNewPassVM
+    {
+        [Required]
+        public string password { get; set; }
+        [Required]
+        [System.ComponentModel.DataAnnotations.Compare("password", ErrorMessage = "Password not matched")]
+        public string confirmPassword { get; set; }
+        public int userId { get; set; }
+
     }
 
 
@@ -278,6 +295,39 @@ namespace EventManagementSystem.Models
         [Required]
         public string position { get; set; }
         public Nullable<bool> status { get; set; }
+    }
+
+    public class SortItems
+    {
+        public string Id { get; set; }
+        public string name { get; set; }
+    }
+    public class PaymentVM
+    {
+        [Required(ErrorMessage = "Name is required")]
+        [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only")]
+        public string name { get; set; }
+        [Required(ErrorMessage = "Card No is required")]
+        [RegularExpression(@"^(?:(4[0-9]{12}(?:[0-9]{3})?)|(5[1-5][0-9]{14})|↵
+(6(?:011|5[0-9]{2})[0-9]{12})|(3[47][0-9]{13})|↵
+(3(?:0[0-5]|[68][0-9])[0-9]{11})|((?:2131|1800|35[0-9]{3})[0-9]{11}))$", ErrorMessage = "Invalid Format.")]
+        public string cardNum { get; set; }
+        [Required(ErrorMessage = "Required")]
+        [MaxLength(3)]
+        public string cvv { get; set; }
+        [Required(ErrorMessage = "Required")]
+        [MaxLength(5)]
+        [RegularExpression(@"^\d{2}\/\d{2}$", ErrorMessage = "Invalid Format.")]
+        public string expDate { get; set; }
+        public int Id { get; set; }
+        public decimal price { get; set; }
+        public Nullable<System.DateTime> paymentdate { get; set; }
+        public decimal addCharge { get; set; }
+        public decimal commision { get; set; }
+        public bool status { get; set; }
+
+        public virtual Registration Registration { get; set; }
+
     }
 
 }

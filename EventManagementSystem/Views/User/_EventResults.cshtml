@@ -7,8 +7,8 @@
 
 @if (@Model.Count() > 0)
 {
-    <span id="countModel">@Model.Count() of @Model.TotalItemCount record(s) | Page @Model.PageNumber of @Model.PageCount</span>
-    <table class="table table-hover table-striped resultsTable">
+    <span id="countModel" style="float:left; margin-left:0px;">@Model.Count() of @Model.TotalItemCount record(s) | Page @Model.PageNumber of @Model.PageCount</span>
+    <table class="table table-hover resultsTable">
         <thead class="thead-dark">
             <tr>
                 <th>Name</th>
@@ -18,7 +18,7 @@
                 <th>Start Time</th>
                 <th> End  Time</th>
                 <th>Venue</th>
-                <th>View Details</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -32,7 +32,7 @@
                     <td>@s.startTime</td>
                     <td>@s.endTime</td>
                     <td>@(s.venueId == null ? " - " : s.Venue.name)</td>
-                    <td><a class="btn btn-primary" href="/Event/EventDetail?id=@s.Id">Details</a></td>
+                    <td style="text-align:center"><a class="btn btn-primary" href="/Event/EventDetail?id=@s.Id">Details</a></td>
                 </tr>
             }
         </tbody>

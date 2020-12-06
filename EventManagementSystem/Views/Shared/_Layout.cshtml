@@ -49,7 +49,7 @@
                         if (User.Identity.IsAuthenticated)
                         {
                             DBEntities db = new DBEntities();
-                            var org = db.Organisers.FirstOrDefault(or => or.Id == (db.Users.FirstOrDefault(o => o.username == User.Identity.Name).Id));
+                            var org = db.Organisers.FirstOrDefault(or => or.Id == (db.Users.FirstOrDefault(o => o.username == User.Identity.Name).Id) && or.status == true);
                             if (org != null)
                             {
                                 <div class="dropdown">

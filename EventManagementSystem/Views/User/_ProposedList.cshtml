@@ -5,9 +5,9 @@
 
 @if (@Model.Count() > 0)
 {
-    <span id="countModel">@Model.Count() of @Model.TotalItemCount record(s) | Page @Model.PageNumber of @Model.PageCount</span>
+    <span id="countModel" style="margin-left:0px;text-align:left">@Model.Count() of @Model.TotalItemCount record(s) | Page @Model.PageNumber of @Model.PageCount</span>
     <table class="table">
-        <thead>
+        <thead class="thead-dark">
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Name</th>
@@ -15,7 +15,7 @@
                 <th scope="col">Start</th>
                 <th scope="col">End</th>
                 <th scope="col">Status</th>
-                <th scope="col">Action</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -41,7 +41,7 @@
                             <td><b>Denied</b></td>
                         }
                     }
-                    <td><a href="~/User/ManageEventProposed?id=@e.Id" class="btn btn-danger">Manage</a></td>
+                    <td style="text-align:center"><a href="~/User/ManageEventProposed?id=@e.Id" class="btn btn-danger">Manage</a></td>
                 </tr>
             }
         </tbody>

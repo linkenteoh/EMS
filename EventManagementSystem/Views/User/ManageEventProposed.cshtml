@@ -216,8 +216,7 @@ placeholder = "Description"
                 {
                     <p>No participant(s) yet.</p>
                 }
-
-                if (ViewBag.Regisrations != null)
+                else 
                 {
                     foreach (var item in ViewBag.Registrations)
                     {
@@ -263,8 +262,7 @@ placeholder = "Description"
             @if (ViewBag.PaymentsCount == 0)
             {
                 <p>No active transaction(s) yet.</p>
-            }
-            @if (ViewBag.Payments != null)
+            }else
             {
                 <table class="table">
                     <thead>
