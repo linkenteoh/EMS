@@ -199,7 +199,8 @@ namespace EventManagementSystem.Controllers
                     activated = false,
                     recoveryCode = null,
                     activationCode = Guid.NewGuid().ToString(),
-                    photo = photoUrl
+                    photo = photoUrl,
+                    lockoutValue  = 0
                 };
 
                 try

@@ -88,10 +88,8 @@ namespace EventManagementSystem.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
-
-            var url = Request.UrlReferrer?.AbsolutePath ?? "/";
            
-            return View(url);
+            return View();
         }
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayProposalApporval(string searchName = "", string name = "", string startDate = "", string endDate = "",
@@ -1002,77 +1000,9 @@ namespace EventManagementSystem.Controllers
             return new QRCodeModel() { name = barcodeText, QRCodeImagePath = imagePath };
         }
 
-        public ActionResult DisplayQR()
-        {
-            return View();
-        }
+      
 
-        [HttpPost]
-        public ActionResult DisplayQR(string txtQRCode)
-        {
-            ViewBag.txtQRCode = txtQRCode;
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(txtQRCode, QRCodeGenerator.ECCLevel.Q);
-            QRCode qrCode = new QRCode(qrCodeData);
-            //System.Web.UI.WebControls.Image imgBarCode = new System.Web.UI.WebControls.Image();
-            //imgBarCode.Height = 150;
-            //imgBarCode.Width = 150;
-            using (Bitmap bitMap = qrCode.GetGraphic(20))
-            {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    bitMap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                    ViewBag.imageBytes = ms.ToArray();
-                    //imgBarCode.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(byteImage);
-                }
-            }
-            return View();
-        }
-
-
-        public static string Encrypt(string clearText)
-        {
-            string EncryptionKey = "hyddhrii%2moi43Hd5%%";
-            byte[] clearBytes = Encoding.Unicode.GetBytes(clearText);
-            using (Aes encryptor = Aes.Create())
-            {
-                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
-                encryptor.Key = pdb.GetBytes(32);
-                encryptor.IV = pdb.GetBytes(16);
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
-                    {
-                        cs.Write(clearBytes, 0, clearBytes.Length);
-                        cs.Close();
-                    }
-                    clearText = Convert.ToBase64String(ms.ToArray());
-                }
-            }
-            return clearText;
-        }
-        public static string Decrypt(string cipherText)
-        {
-            string EncryptionKey = "hyddhrii%2moi43Hd5%%";
-            cipherText = cipherText.Replace(" ", "+");
-            byte[] cipherBytes = Convert.FromBase64String(cipherText);
-            using (Aes encryptor = Aes.Create())
-            {
-                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
-                encryptor.Key = pdb.GetBytes(32);
-                encryptor.IV = pdb.GetBytes(16);
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
-                    {
-                        cs.Write(cipherBytes, 0, cipherBytes.Length);
-                        cs.Close();
-                    }
-                    cipherText = Encoding.Unicode.GetString(ms.ToArray());
-                }
-            }
-            return cipherText;
-        }
+        
     }
 
 }
