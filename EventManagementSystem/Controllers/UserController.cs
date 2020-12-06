@@ -63,7 +63,6 @@ namespace EventManagementSystem.Controllers
                 };
                 
                 db.Organisers.Add(oragniser);
-
                 db.SaveChanges();
                 TempData["Info"] = "You've registered successfully. Please wait until it is accepted by an admin.";
             }
@@ -452,7 +451,6 @@ namespace EventManagementSystem.Controllers
             {
                 return RedirectToAction("EventsProposed", "User");
             }
-
 
             var model = new OrgEditEventVM
             {

@@ -198,8 +198,8 @@ namespace EventManagementSystem.Controllers
                     email = model.email,
                     username = model.username,
                     password = HashPassword(model.password),
-                    role = model.role,    
-                    
+                    role = "Member",
+                    memberRole = model.memberRole,
                     status = true,
                     activated = false,
                     recoveryCode = null,
@@ -307,7 +307,7 @@ namespace EventManagementSystem.Controllers
                         if (returnUrl == "")
                         {
                             TempData["Info"] = "You have successfully logged in.";
-                            if (user.role == "Student")
+                            if (user.role == "Member")
                                 return RedirectToAction("Index", "Home");
                             else if (user.role == "Admin")
                                 return RedirectToAction("Index", "Admin");

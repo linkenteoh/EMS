@@ -57,12 +57,12 @@ namespace EventManagementSystem.Controllers
             double addCharge = 0;
             double temp = 0;
 
-            if(user.role == "Student")
+            if(user.memberRole == "Student")
             {
                 addCharge = 0;
                 price = (double)e.price;
                 comission = price * 0.1;
-            }else if(user.role == "Outsider")
+            }else if(user.memberRole == "Outsider")
             {
                 addCharge = (double)e.price * 0.1;    //Additional charge
                 price = (double)e.price + addCharge; 

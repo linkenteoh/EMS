@@ -5,13 +5,13 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="41ed6b36fb9c4deaa67df0ad533950c2" Name="Diagram1" ZoomLevel="80">
-        <EntityTypeShape EntityType="DBModel.Advertisement" Width="1.5" PointX="4.176541430957867" PointY="8.8195290308536638" />
-        <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="2.3963216051442182" PointY="18.806403362567725" />
-        <EntityTypeShape EntityType="DBModel.Organiser" Width="1.5" PointX="5.8338291970239151" PointY="29.11523279413359" />
-        <EntityTypeShape EntityType="DBModel.Payment" Width="1.5" PointX="10.308618786888484" PointY="11.836677899508121" />
-        <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="8.2134793867419837" PointY="15.641238532793354" />
-        <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="1.0122139272336912" PointY="28.625712959387204" />
-        <EntityTypeShape EntityType="DBModel.Venue" Width="1.5" PointX="6.0797523083536653" PointY="18.860279285749552" />
+        <EntityTypeShape EntityType="DBModel.Advertisement" Width="1.5" PointX="8.5253759159359035" PointY="23.851056795497918" />
+        <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="7.7044662831837618" PointY="7.2768648747712676" />
+        <EntityTypeShape EntityType="DBModel.Organiser" Width="1.5" PointX="4.2309379876735331" PointY="8.8283586841208663" />
+        <EntityTypeShape EntityType="DBModel.Payment" Width="1.5" PointX="4.4466514794373193" PointY="23.994360428300855" />
+        <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="4.0770234018922888" PointY="14.865480057366881" />
+        <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="8.756792031580952" PointY="2.5512596529681515" />
+        <EntityTypeShape EntityType="DBModel.Venue" Width="1.5" PointX="2.5492548935810362" PointY="29.5920650202744" />
         <AssociationConnector Association="DBModel.FK_Table_User" />
         <AssociationConnector Association="DBModel.FK_Event_Organiser" />
         <AssociationConnector Association="DBModel.FK_Event_Venue" />

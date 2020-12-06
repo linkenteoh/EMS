@@ -21,7 +21,8 @@
                 {
                     <p>Venue to be booked</p>
                 }
-                @Html.ActionLink("View Event", "EventDetail", "Event", new { id = e.Id }, new { @class = "btn btn-primary" })
+                <a class="btn btn-primary" href="/Event/EventDetail?id=@e.Id"> View Event </a>
+ 
             </div>
         </div>
     }
