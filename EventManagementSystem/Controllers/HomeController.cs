@@ -33,13 +33,15 @@ namespace EventManagementSystem.Controllers
         }
 
         public ActionResult Events(string searchName = "", string name = "", string startDate = "", string endDate = "",
-            string startTime = "", string endTime = "", string venue = "", string sort = "", int page = 1)
+            int priceFrom = 0, int priceTo = 0, string startTime = "", string endTime = "", string venue = "", string sort = "", int page = 1)
         {
             ViewBag.VenueList = new SelectList(db.Venues, "name", "name");
             ViewBag.sortList = new SelectList(
                 new List<SortItems> {
                     new SortItems { Id = "name", name = "Name"},
                     new SortItems { Id = "price", name = "Price"},
+                    new SortItems { Id = "startTime", name = "Start Time"},
+                    new SortItems { Id = "endTime", name = "End Time"},
                     new SortItems { Id = "date", name = "Date"},
                     new SortItems { Id = "venue", name = "Venue"}
                 }, "Id", "name");
@@ -89,6 +91,19 @@ namespace EventManagementSystem.Controllers
                 var timeTo = TimeSpan.Parse(endTime);
                 model = model.Where(x => x.endTime <= timeTo);
             }
+            // Price Range
+            if (priceFrom != 0 && priceTo != 0)
+            {
+                model = model.Where(x => x.price >= priceFrom && x.price <= priceTo);
+            }
+            else if (priceFrom != 0)
+            {
+                model = model.Where(x => x.price >= priceFrom);
+            }
+            else if (priceTo != 0)
+            {
+                model = model.Where(x => x.price <= priceTo);
+            }
             // Search name
             model = model.Where(x => x.name.Contains(searchName) || x.des.Contains(searchName) || x.Venue.name.Contains(searchName));
             // Sort By
@@ -98,6 +113,8 @@ namespace EventManagementSystem.Controllers
                 case "name": fn = s => s.name; break;
                 case "price": fn = s => s.price; break;
                 case "date": fn = s => s.date; break;
+                case "startTime": fn = s => s.startTime; break;
+                case "endTime": fn = s => s.endTime; break;
                 case "venue": fn = s => s.venueId; break;
             }
             // PagedList
