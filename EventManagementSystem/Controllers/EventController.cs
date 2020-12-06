@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -138,5 +140,6 @@ namespace EventManagementSystem.Controllers
         {
             return View();
         }
+     
     }
 }

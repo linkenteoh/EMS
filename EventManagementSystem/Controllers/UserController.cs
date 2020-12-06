@@ -10,7 +10,10 @@ using EventManagementSystem.reCAPTCHA;
 using System.Text.RegularExpressions;
 using System.Web.Helpers;
 using PagedList;
-
+using QRCoder;
+using System.Drawing;
+using System.Net.Mail;
+using System.Text;
 
 namespace EventManagementSystem.Controllers
 {
@@ -544,8 +547,64 @@ namespace EventManagementSystem.Controllers
                 var payment = db.Payments.Find(model.Id);
                 payment.status = true;
                 db.SaveChanges();
+                var user = db.Users.FirstOrDefault(u => u.username == User.Identity.Name);
+                int eventId = db.Registrations.FirstOrDefault(r => r.Id == model.Id).eventId;
+                string link = "https://localhost:44302/Event/EventDetail?id=" + eventId;
+                QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode(link, QRCodeGenerator.ECCLevel.Q);
+                QRCode qrCode = new QRCode(qrCodeData);
+
+                string base64String = null;
+                using (Bitmap bitMap = qrCode.GetGraphic(20))
+                {
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        bitMap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                        byte[] imageByte = ms.ToArray();
+                        base64String = Convert.ToBase64String(imageByte);
+                        SaveImage(base64String, "QR");
+                        
+                    }
+                }    
+
+                string path = Server.MapPath("~/Photo/QR.jpg");
+                var att = new Attachment(path);
+                MailMessage m = new MailMessage();
+                m.Attachments.Add(att);
+                string mail = @"";
+               
+                m.To.Add(user.email);
+                m.Subject = "Event Details";
+                m.Body = link;
+                m.IsBodyHtml = true; //Can send HTML FORMATTED Mail
+                new SmtpClient().Send(m);
+                TempData["Info"] = "Payment successful! You will receive an email! ";
+                return RedirectToAction("Billing", "User");
             }
+          
             return View();
+        }
+
+        public bool SaveImage(string base64String, string ImgName)
+        {
+            String path = Server.MapPath("~/Photo/"); //Path
+
+            //Check if directory exist
+            if (!System.IO.Directory.Exists(path))
+            {
+                System.IO.Directory.CreateDirectory(path); //Create directory if it doesn't exist
+            }
+
+            string imageName = ImgName + ".jpg";
+
+            //set the image path
+            string imgPath = Path.Combine(path, imageName);
+
+            byte[] imageBytes = Convert.FromBase64String(base64String);
+
+            System.IO.File.WriteAllBytes(imgPath, imageBytes);
+
+            return true;
         }
 
     }
