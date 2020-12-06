@@ -520,7 +520,6 @@ namespace EventManagementSystem.Controllers
                     username = model.username,
                     password = HashPassword(model.password),
                     role = model.role.ToString(),
-                    organizer = model.organizer,
                     status = true,
                     recoveryCode = "ABCDEF",
                     activationCode = "ABCDEF",
@@ -557,7 +556,6 @@ namespace EventManagementSystem.Controllers
                 email = u.email,
                 username = u.username,
                 password = u.password,
-                organizer = u.organizer,
                 role = (Role)Enum.Parse(typeof(Role), u.role),
                 photoURL = u.photo,
             };
@@ -580,7 +578,6 @@ namespace EventManagementSystem.Controllers
                 u.name = model.name;
                 u.contact_no = model.contact_no.Trim();
                 u.email = model.email;
-                u.organizer = model.organizer;
                 if(model.newPassword == null)
                 {
                     u.password = u.password;
@@ -603,6 +600,20 @@ namespace EventManagementSystem.Controllers
                 return RedirectToAction("DisplayUser", "Admin");
             }
             return View(model);
+        }
+        [Authorize(Roles = "Admin")]
+        public ActionResult RestoreUser(int id)
+        {
+            var u = db.Users.Find(id);
+            if (u != null)
+            {
+                u.status = true;
+                db.SaveChanges();
+                TempData["info"] = "User record deleleted successfully";
+            }
+
+            var url = Request.UrlReferrer?.AbsolutePath ?? "/";
+            return Redirect(url);
         }
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayOrganizerApproval(string searchName = "", string rep = "", string position = "", string sort = "", int page = 1)

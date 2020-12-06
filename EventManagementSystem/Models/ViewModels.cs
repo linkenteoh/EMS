@@ -161,31 +161,13 @@ namespace EventManagementSystem.Models
         public HttpPostedFileBase Photo { get; set; }
         public Role role { get; set; }
         [Required(ErrorMessage = "Please choose the option!")]
-        public Nullable<bool> organizer { get; set; }
         public int status { get; set; }
+        public string memberRole { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
 
     }
   
-
-    public class QRCodeModel
-    {
-        [Display(Name = "Event Name")]
-        public string name { get; set; }
-        [Display(Name = "Description")]
-        public string des { get; set; }
-        [Display(Name = "Date")]
-        public DateTime date { get; set; }
-        [Display(Name = "From")]
-        public TimeSpan startTime { get; set; }
-        [Display(Name = "TO")]
-        public TimeSpan endTime { get; set; }
-        [Display(Name = "Paid")]
-        public decimal price { get; set; }
-        [Display(Name = "QRCode Image")]
-        public string QRCodeImagePath { get; set; }
-    }
     public enum Role
     {
         Student,
@@ -216,8 +198,8 @@ namespace EventManagementSystem.Models
         public string photoURL { get; set; }
         public Role role { get; set; }
         [Required(ErrorMessage = "Please choose the option!")]
-        public Nullable<bool> organizer { get; set; }
         public bool status { get; set; }
+        public string memberRole { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
 
@@ -246,6 +228,7 @@ namespace EventManagementSystem.Models
         public HttpPostedFileBase Photo { get; set; }
         public string webPhoto { get; set; }
         public string role { get; set; }
+        public string memberRole { get; set; }
 
         public Nullable<bool> organizer { get; set; }
         public string recoveryCode { get; set; }

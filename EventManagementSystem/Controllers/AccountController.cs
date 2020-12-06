@@ -194,7 +194,8 @@ namespace EventManagementSystem.Controllers
                     email = model.email,
                     username = model.username,
                     password = HashPassword(model.password),
-                    role = model.role,
+                    role = model.role,    
+     
                     status = true,
                     activated = false,
                     recoveryCode = null,

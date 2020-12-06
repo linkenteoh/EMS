@@ -87,6 +87,13 @@
         <AssociationConnector Association="DBModel.FK_Registration_Event" />
         <AssociationConnector Association="DBModel.FK_Organiser_User" />
         <AssociationConnector Association="DBModel.FK_Payment_Registration" />
+        <AssociationConnector Association="DBModel.FK_Registration_User" />
+        <AssociationConnector Association="DBModel.FK_Table_User" />
+        <AssociationConnector Association="DBModel.FK_Event_Organiser" />
+        <AssociationConnector Association="DBModel.FK_Event_Venue" />
+        <AssociationConnector Association="DBModel.FK_Registration_Event" />
+        <AssociationConnector Association="DBModel.FK_Organiser_User" />
+        <AssociationConnector Association="DBModel.FK_Payment_Registration" />
         <AssociationConnector Association="DBModel.FK_Registration_User" />&gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
         
         

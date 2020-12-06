@@ -28,7 +28,7 @@ namespace EventManagementSystem.Models
         public string username { get; set; }
         public string password { get; set; }
         public string role { get; set; }
-        public Nullable<bool> organizer { get; set; }
+        public string memberRole { get; set; }
         public bool status { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }

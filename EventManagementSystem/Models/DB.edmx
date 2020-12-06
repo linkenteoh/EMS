@@ -81,7 +81,7 @@
           <Property Name="username" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="password" Type="varchar(max)" Nullable="false" />
           <Property Name="role" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="organizer" Type="bit" />
+          <Property Name="memberRole" Type="varchar" MaxLength="50" />
           <Property Name="status" Type="bit" Nullable="false" />
           <Property Name="recoveryCode" Type="varchar" MaxLength="50" />
           <Property Name="activationCode" Type="varchar" MaxLength="50" />
@@ -348,7 +348,7 @@
           <Property Name="username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="role" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="organizer" Type="Boolean" />
+          <Property Name="memberRole" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="status" Type="Boolean" Nullable="false" />
           <Property Name="recoveryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="activationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -540,7 +540,7 @@
                 <ScalarProperty Name="activationCode" ColumnName="activationCode" />
                 <ScalarProperty Name="recoveryCode" ColumnName="recoveryCode" />
                 <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="organizer" ColumnName="organizer" />
+                <ScalarProperty Name="memberRole" ColumnName="memberRole" />
                 <ScalarProperty Name="role" ColumnName="role" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="username" ColumnName="username" />
