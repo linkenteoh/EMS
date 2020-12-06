@@ -556,6 +556,8 @@ namespace EventManagementSystem.Controllers
                 email = u.email,
                 username = u.username,
                 password = u.password,
+                organizer = u.organizer,
+                confirmPassword = u.password,
                 role = (Role)Enum.Parse(typeof(Role), u.role),
                 photoURL = u.photo,
             };
@@ -578,7 +580,7 @@ namespace EventManagementSystem.Controllers
                 u.name = model.name;
                 u.contact_no = model.contact_no.Trim();
                 u.email = model.email;
-                if(model.newPassword == null)
+                if (model.newPassword == null)
                 {
                     u.password = u.password;
                 }
@@ -586,7 +588,6 @@ namespace EventManagementSystem.Controllers
                 {
                     u.password = HashPassword(model.newPassword);
                 }
-               
                 u.role = model.role.ToString();
                 if (model.Photo != null)
                 {
@@ -651,9 +652,11 @@ namespace EventManagementSystem.Controllers
         public ActionResult ApproveOrganizer(int id)
         {
             var e = db.Organisers.Find(id);
+            var user = db.Users.Find(id);
             if (e != null)
             {
                 e.status = true;
+                user.role = "Organizer";
                 db.SaveChanges();
                 TempData["info"] = "Request Approved!";
             }
