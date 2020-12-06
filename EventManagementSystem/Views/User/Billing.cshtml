@@ -31,7 +31,7 @@
 
 <h2>Billing</h2>
 <hr />
-@using (Ajax.BeginForm("DisplayProposalApporval", "Admin", results, attr))
+@using (Ajax.BeginForm("Billing", "User", results, attr))
 {
     <span class="btn btn-secondary dropdown-toggle searchButton">Filter</span>
     <span>@Html.DropDownList("sort", ViewBag.SortList as SelectList, "Sort By", new { @class = "btn btn-secondary", onChange = "sortData(this);" })</span>
@@ -62,13 +62,13 @@
                 </div>
                 <div class="form-group row">
                     @Html.Label("priceFrom", "Price(RM) From", new { @class = "control-label col-sm-2" })
-                    @Html.TextBox("priceFrom", 0,new { type = "number", @class = "form-control col-sm-2" })
+                    @Html.TextBox("priceFrom", null, new { type = "number", @class = "form-control col-sm-2", placeholder = "0.00", min = "0" })
                     @Html.Label("priceTo", "To", new { @class = "control-label col-sm-1" })
-                    @Html.TextBox("priceTo", 0,  new { type = "number", @class = "form-control col-sm-2" })
+                    @Html.TextBox("priceTo", null, new { type = "number", @class = "form-control col-sm-2", placeholder = "0.00", min = "0" })
                 </div>
                 <div class="form-group row">
-                    @Html.Label("price", "Price", new { @class = "control-label col-sm-2" })
-                    @Html.TextBox("price", "Price", new { type = "number", @class = "form-control  col-sm-2", placeholder = "price", min = "0" })
+                    @Html.Label("status", "Status", new { @class = "control-label col-sm-2" })
+                    @Html.DropDownList("status", ViewBag.statusList as SelectList, " - Select One - ", new { @class = "btn btn-secondary form-control col-sm-2" })
                     <div class="col-sm-offset-1 col-sm-1">
                         <input type="submit" class="btn btn-primary searchBtn" name="Search" value="Search" />
                     </div>

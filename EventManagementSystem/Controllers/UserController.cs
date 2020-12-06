@@ -130,7 +130,6 @@ namespace EventManagementSystem.Controllers
                 name = u.name,
                 contact_no = u.contact_no.Trim(),
                 email = u.email,
-                password = u.password,
                 PhotoUrl = u.photo
             };
             return View(Model);
@@ -170,16 +169,17 @@ namespace EventManagementSystem.Controllers
         }
 
         public ActionResult EventSearchIndex(string searchName = "", string name = "", string startDate = "", string endDate = "",
-            string startTime = "", string endTime = "", string venue = "", string sort = "", int page = 1)
+            int priceFrom = 0, int priceTo = 0, string startTime = "", string endTime = "", string venue = "", string sort = "", int page = 1)
         {
             ViewBag.VenueList = new SelectList(db.Venues, "name", "name");
             ViewBag.sortList = new SelectList(
                 new List<SortItems> { 
-                    new SortItems { Id = "Id", name = "Id"}, 
                     new SortItems { Id = "name", name = "Name"}, 
                     new SortItems { Id = "price", name = "Price"}, 
-                    new SortItems { Id = "date", name = "Date"}, 
-                    new SortItems { Id = "Venue.name", name = "Venue"} 
+                    new SortItems { Id = "date", name = "Date"},
+                    new SortItems { Id = "startTime", name = "Start Time"},
+                    new SortItems { Id = "endTime", name = "End Time"},
+                    new SortItems { Id = "venue", name = "Venue"} 
                 },"Id", "name") ;
             var username = User.Identity.Name;
             var u = db.Users.Where(x => x.username == username).FirstOrDefault();
@@ -188,7 +188,7 @@ namespace EventManagementSystem.Controllers
             // Get EventID in registration that contains the userID
             var model = db.Events.Where(m => reg.Contains(m.Id));
 
-            //// Name
+            // Name
             if (!string.IsNullOrEmpty(name))
             {
                 model = model.Where(m => m.name.Contains(name));
@@ -232,17 +232,31 @@ namespace EventManagementSystem.Controllers
                 var timeTo = TimeSpan.Parse(endTime);
                 model = model.Where(x => x.endTime <= timeTo);
             }
+            // Price Range
+            if (priceFrom != 0 && priceTo != 0)
+            {
+                model = model.Where(x => x.price >= priceFrom && x.price <= priceTo);
+            }
+            else if (priceFrom != 0)
+            {
+                model = model.Where(x => x.price >= priceFrom);
+            }
+            else if (priceTo != 0)
+            {
+                model = model.Where(x => x.price <= priceTo);
+            }
             // Search name
             model = model.Where(x => x.name.Contains(searchName) || x.des.Contains(searchName) || x.Venue.name.Contains(searchName));
             // Sort By
             Func<Event, object> fn = s => s.Id;
             switch (sort)
             {
-                case "Id": fn = s => s.Id; break;
                 case "name": fn = s => s.name; break;
                 case "price": fn = s => s.price; break;
                 case "date": fn = s => s.date; break;
-                case "Venue.name": fn = s => s.venueId; break;
+                case "startTime": fn = s => s.startTime; break;
+                case "endTime": fn = s => s.endTime; break;
+                case "venue": fn = s => s.venueId; break;
             }
             // PagedList
             var events = model.OrderBy(fn).ToPagedList(page, 10);
@@ -310,28 +324,44 @@ namespace EventManagementSystem.Controllers
         }
 
         public ActionResult EventsProposed(string searchName = "", string name = "", string startDate = "", string endDate = "",
-            string startTime = "", string endTime = "", string venue = "", string sort = "", int page = 1)
+            string startTime = "", string endTime = "", string status = "", string sort = "", int page = 1)
         {
-            ViewBag.VenueList = new SelectList(db.Venues, "name", "name");
+            ViewBag.statusList = new SelectList(
+                new List<SortItems> {
+                    new SortItems { Id = "approved", name = "Approved"},
+                    new SortItems { Id = "pending", name = "Pending"},
+                    new SortItems { Id = "rejected", name = "Rejected"},
+                }, "Id", "name");
             ViewBag.sortList = new SelectList(
                 new List<SortItems> {
-                    new SortItems { Id = "Id", name = "Id"},
                     new SortItems { Id = "name", name = "Name"},
-                    new SortItems { Id = "price", name = "Price"},
                     new SortItems { Id = "date", name = "Date"},
-                    new SortItems { Id = "venue", name = "Venue"}
+                    new SortItems { Id = "startTime", name = "Start Time"},
+                    new SortItems { Id = "endTime", name = "End Time"},
+                    new SortItems { Id = "status", name = "Status"}
                 }, "Id", "name");
             var model = db.Events.Where(u => u.OrgId == db.Users.FirstOrDefault(org => org.username == User.Identity.Name).Id);
 
-            //// Name
+            // Name
             if (!string.IsNullOrEmpty(name))
             {
                 model = model.Where(m => m.name.Contains(name));
             }
-            // Venue
-            if (!string.IsNullOrEmpty(venue))
+            // Status
+            if (!string.IsNullOrEmpty(status))
             {
-                model = model.Where(x => x.Venue.name.Contains(venue));
+                if (status == "approved")
+                {
+                    model = model.Where(x => x.approvalStat == true);
+                }
+                else if (status == "rejected")
+                {
+                    model = model.Where(x => x.approvalStat == false);
+                }
+                else if (status == "pending")
+                {
+                    model = model.Where(x => x.approvalStat == null);
+                }
             }
             // Start Date && End Date
             if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
@@ -373,11 +403,11 @@ namespace EventManagementSystem.Controllers
             Func<Event, object> fn = s => s.Id;
             switch (sort)
             {
-                case "Id": fn = s => s.Id; break;
                 case "name": fn = s => s.name; break;
-                case "price": fn = s => s.price; break;
                 case "date": fn = s => s.date; break;
-                case "venue": fn = s => s.venueId; break;
+                case "startTime": fn = s => s.startTime; break;
+                case "endTime": fn = s => s.endTime; break;
+                case "status": fn = s => s.approvalStat; break;
             }
             // PagedList
             var events = model.OrderBy(fn).ToPagedList(page, 10);
@@ -456,12 +486,16 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
 
-        public ActionResult Billing(string searchName = "", string name = "", string price = "", string startDate = "", string  endDate ="",
-            int priceFrom = 0, int priceTo = 0, string sort = "", int page = 1)
+        public ActionResult Billing(string searchName = "", string name = "", string startDate = "", string  endDate ="",
+            int priceFrom = 0, int priceTo = 0, string status = "", string sort = "", int page = 1)
         {
+            ViewBag.statusList = new SelectList(
+                new List<SortItems> {
+                    new SortItems { Id = "paid", name = "Paid"},
+                    new SortItems { Id = "unpaid", name = "Unpaid"},
+                }, "Id", "name");
             ViewBag.sortList = new SelectList(
                 new List<SortItems> {
-                    new SortItems { Id = "Id", name = "Id"},
                     new SortItems { Id = "name", name = "Name"},
                     new SortItems { Id = "price", name = "Price"},
                     new SortItems { Id = "date", name = "Date"},
@@ -470,35 +504,52 @@ namespace EventManagementSystem.Controllers
             int uId = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
             var model = db.Payments.Where(p => p.Registration.userId == uId);
 
+            // Event Name
+            if (!string.IsNullOrEmpty(name))
+            {
+                model = model.Where(x => x.Registration.Event.name.Contains(name));
+            }
             // Date Range
             if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
             {
                 var timeFrom = DateTime.Parse(startDate);
                 var timeTo = DateTime.Parse(endDate);
-                model = model.Where(x => x.Registration.date >= timeFrom && x.Registration.date <= timeTo);
+                model = model.Where(x => x.Registration.Event.date >= timeFrom && x.Registration.Event.date <= timeTo);
             }
             else if (!string.IsNullOrEmpty(startDate))
             {
                 var timeFrom = DateTime.Parse(startDate);
-                model = model.Where(x => x.Registration.date >= timeFrom);
+                model = model.Where(x => x.Registration.Event.date >= timeFrom);
             }
             else if (!string.IsNullOrEmpty(endDate))
             {
                 var timeTo = DateTime.Parse(endDate);
-                model = model.Where(x => x.Registration.date <= timeTo);
+                model = model.Where(x => x.Registration.Event.date <= timeTo);
             }
             // Price Range
             if (priceFrom != 0 && priceTo != 0)
             {
-                model = model.Where(x => x.price >= priceFrom && x.price <= priceTo);
+                model = model.Where(x => x.Registration.Event.price >= priceFrom && x.Registration.Event.price <= priceTo);
             }
             else if (priceFrom != 0)
             {
-                model = model.Where(x => x.price >= priceFrom);
+                model = model.Where(x => x.Registration.Event.price >= priceFrom);
             }
             else if (priceTo != 0)
             {
-                model = model.Where(x => x.price <= priceTo);
+                model = model.Where(x => x.Registration.Event.price <= priceTo);
+            }
+            // Status
+            if (!string.IsNullOrEmpty(status))
+            {
+                if(status == "paid")
+                {
+                    model = model.Where(x => x.status == true);
+                }
+                else if(status == "unpaid")
+                {
+                    model = model.Where(x => x.status == false);
+                }
             }
 
             // Search name
@@ -507,10 +558,9 @@ namespace EventManagementSystem.Controllers
             Func<Payment, object> fn = s => s.Id;
             switch (sort)
             {
-                case "Id": fn = s => s.Id; break;
                 case "name": fn = s => s.Registration.Event.name; break;
                 case "price": fn = s => s.price; break;
-                case "date": fn = s => s.Registration.date; break;
+                case "date": fn = s => s.Registration.Event.date; break;
                 case "status": fn = s => s.status; break;
             }
 
@@ -520,7 +570,6 @@ namespace EventManagementSystem.Controllers
             if (Request.IsAjaxRequest())
                 return PartialView("_BillingList", bill);
             return View(bill);
-
         }
 
         // GET: User/Payment
