@@ -17,8 +17,8 @@ namespace EventManagementSystem.Models
         public int Id { get; set; }
         public decimal price { get; set; }
         public Nullable<System.DateTime> paymentdate { get; set; }
-        public decimal addCharge { get; set; }
         public decimal commision { get; set; }
+        public decimal addCharge { get; set; }
         public bool status { get; set; }
     
         public virtual Registration Registration { get; set; }

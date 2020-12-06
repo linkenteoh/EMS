@@ -36,7 +36,7 @@
 <hr />
 @using (Ajax.BeginForm("Events", "Home", results, attr))
 {
-<div class="dropdown">
+
     <span class="btn btn-secondary dropdown-toggle searchButton">Filter</span>
     <span>@Html.DropDownList("sort", ViewBag.SortList as SelectList, "Sort By", new { @class = "btn btn-secondary", onChange = "sortData(this);" })</span>
     <span>

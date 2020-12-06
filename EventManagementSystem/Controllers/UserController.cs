@@ -657,7 +657,7 @@ namespace EventManagementSystem.Controllers
                 TempData["Info"] = "Payment successful! You will receive an email! ";
                 return RedirectToAction("Billing", "User");
             }
-          
+            return View();
         }
 
         public bool SaveImage(string base64String, string ImgName)

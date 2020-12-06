@@ -199,7 +199,7 @@ namespace EventManagementSystem.Controllers
                     username = model.username,
                     password = HashPassword(model.password),
                     role = model.role,    
-     
+                    
                     status = true,
                     activated = false,
                     recoveryCode = null,
@@ -284,7 +284,7 @@ namespace EventManagementSystem.Controllers
            
             user.lockoutValue = user.lockoutValue +1;
             db.SaveChanges();
-            int count = user.lockoutValue;
+            int count = user.lockoutValue.Value;
 
             if (getCookie == null)
             {

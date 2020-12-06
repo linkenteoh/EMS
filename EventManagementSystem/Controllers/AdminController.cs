@@ -556,8 +556,6 @@ namespace EventManagementSystem.Controllers
                 email = u.email,
                 username = u.username,
                 password = u.password,
-                organizer = u.organizer,
-                confirmPassword = u.password,
                 role = (Role)Enum.Parse(typeof(Role), u.role),
                 photoURL = u.photo,
             };
