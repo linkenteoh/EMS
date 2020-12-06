@@ -23,7 +23,9 @@ namespace EventManagementSystem.Models
         public int participants { get; set; }
         public int availability { get; set; }
         [Required]
-        public DateTime date { get; set; }
+        public DateTime startDate { get; set; }
+        [Required]
+        public DateTime endDate { get; set; }
         [Required]
         public TimeSpan startTime { get; set; }
         [Required]
@@ -53,7 +55,9 @@ namespace EventManagementSystem.Models
         public int availability { get; set; }
         public int participants { get; set; }   
         [Required]
-        public DateTime date { get; set; }
+        public DateTime startDate { get; set; }
+        [Required]
+        public DateTime endDate { get; set; }
         [Required]
         public TimeSpan startTime { get; set; }
         [Required]
@@ -72,42 +76,6 @@ namespace EventManagementSystem.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Registration> Registrations { get; set; }
     }
-
-    public class OrgEditEventVM
-    {
-        public int Id { get; set; }
-        [Required]
-        [StringLength(100)]
-        [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only")]
-        public string name { get; set; }
-        [Required]
-        [StringLength(100)]
-        public string des { get; set; }
-        [Required]
-        public decimal price { get; set; }
-        [Required]
-        public int availability { get; set; }
-        [Required]
-        public int participants { get; set; }
-        [Required]
-        public DateTime date { get; set; }
-        [Required]
-        public TimeSpan startTime { get; set; }
-        [Required]
-        public TimeSpan endTime { get; set; }
-        public bool? approvalStat { get; set; }
-        public int OrgId { get; set; }
-        public Nullable<int> venueId { get; set; }
-        public HttpPostedFileBase Photo { get; set; }
-        public string photoURL { get; set; }
-        public virtual Organiser Organiser { get; set; }
-        public virtual Venue Venue { get; set; }
-
-        public int NoOfParticipants => participants - availability;
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Registration> Registrations { get; set; }
-    }
-
     public class UserInsertVM
     {
         public int Id { get; set; }
@@ -155,7 +123,9 @@ namespace EventManagementSystem.Models
         public int participants { get; set; }
         public int availability { get; set; }
         [Required]
-        public DateTime date { get; set; }
+        public DateTime startDate { get; set; }
+        [Required]
+        public DateTime endDate { get; set; }
         [Required]
         public TimeSpan startTime { get; set; }
         [Required]
@@ -167,24 +137,6 @@ namespace EventManagementSystem.Models
         public int? venueId { get; set; }
         public HttpPostedFileBase Photo { get; set; }
 
-    }
-
-    public class QRCodeModel
-    {
-        [Display(Name = "Event Name")]
-        public string name { get; set; }
-        [Display(Name = "Description")]
-        public string des { get; set; }
-        [Display(Name = "Date")]
-        public DateTime date { get; set; }
-        [Display(Name = "From")]
-        public TimeSpan startTime { get; set; }
-        [Display(Name = "TO")]
-        public TimeSpan endTime { get; set; }
-        [Display(Name = "Paid")]
-        public decimal price { get; set; }
-        [Display(Name = "QRCode Image")]
-        public string QRCodeImagePath { get; set; }
     }
     public enum Role
     {
@@ -208,15 +160,15 @@ namespace EventManagementSystem.Models
         [EmailAddress(ErrorMessage = "Invalid format")]
         public string email { get; set; }
         public string username { get; set; }
-        public string password { get; set; }        
-        public string newPassword { get;  set; }
-        [System.ComponentModel.DataAnnotations.Compare("newPassword", ErrorMessage = "Password not matched")]
-        public string newConfirmPassword { get; set; }
+        [Required]
+        public string password { get; set; }
+        [System.ComponentModel.DataAnnotations.Compare("password", ErrorMessage = "Password not matched")]
+        public string confirmPassword { get; set; }
         public HttpPostedFileBase Photo { get; set; }
         public string photoURL { get; set; }
-        public Role role { get; set; }
         [Required(ErrorMessage = "Please choose the option!")]
-        public Nullable<bool> organizer { get; set; }
+        public Role role { get; set; }
+        public string memberRole { get; set; }
         public bool status { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
@@ -246,8 +198,7 @@ namespace EventManagementSystem.Models
         public HttpPostedFileBase Photo { get; set; }
         public string webPhoto { get; set; }
         public string role { get; set; }
-
-        public Nullable<bool> organizer { get; set; }
+        public string memberRole { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
     }
@@ -272,7 +223,7 @@ namespace EventManagementSystem.Models
         public string webPhoto { get; set; }
         public string PhotoUrl { get; set; }
         public string role { get; set; }
-        public Nullable<bool> organizer { get; set; }
+        public string memberRole { get; set; }
         public Nullable<bool> status { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
@@ -378,7 +329,5 @@ namespace EventManagementSystem.Models
         public virtual Registration Registration { get; set; }
 
     }
-
-
 
 }

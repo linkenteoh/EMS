@@ -86,6 +86,7 @@ namespace EventManagementSystem.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
+
             return View();
         }
 
@@ -212,13 +213,8 @@ namespace EventManagementSystem.Controllers
                     new SortItems { Id = "date", name = "Date"},
                     new SortItems { Id = "Venue.name", name = "Venue"}
                 }, "Id", "name");
-            var username = User.Identity.Name;
-
-            var u = db.Users.Where(x => x.username == username).FirstOrDefault();
-            // Get userID in registration
-            var reg = db.Registrations.Where(r => u.Id.Equals(r.userId)).Select(r => r.eventId).ToArray();
-            // Get EventID in registration that contains the userID
-            var model = db.Events.Where(m => reg.Contains(m.Id));
+    
+            var model = db.Events.Where(e => e.status == true && e.venueId != null);
 
             //// Name
             if (!string.IsNullOrEmpty(name))
@@ -524,7 +520,6 @@ namespace EventManagementSystem.Controllers
                     username = model.username,
                     password = HashPassword(model.password),
                     role = model.role.ToString(),
-                    organizer = model.organizer,
                     status = true,
                     recoveryCode = "ABCDEF",
                     activationCode = "ABCDEF",
@@ -562,6 +557,7 @@ namespace EventManagementSystem.Controllers
                 username = u.username,
                 password = u.password,
                 organizer = u.organizer,
+                confirmPassword = u.password,
                 role = (Role)Enum.Parse(typeof(Role), u.role),
                 photoURL = u.photo,
             };
@@ -584,7 +580,6 @@ namespace EventManagementSystem.Controllers
                 u.name = model.name;
                 u.contact_no = model.contact_no.Trim();
                 u.email = model.email;
-                u.organizer = model.organizer;
                 if (model.newPassword == null)
                 {
                     u.password = u.password;
@@ -607,6 +602,20 @@ namespace EventManagementSystem.Controllers
                 return RedirectToAction("DisplayUser", "Admin");
             }
             return View(model);
+        }
+        [Authorize(Roles = "Admin")]
+        public ActionResult RestoreUser(int id)
+        {
+            var u = db.Users.Find(id);
+            if (u != null)
+            {
+                u.status = true;
+                db.SaveChanges();
+                TempData["info"] = "User record deleleted successfully";
+            }
+
+            var url = Request.UrlReferrer?.AbsolutePath ?? "/";
+            return Redirect(url);
         }
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayOrganizerApproval(string searchName = "", string rep = "", string position = "", string sort = "", int page = 1)
@@ -644,9 +653,11 @@ namespace EventManagementSystem.Controllers
         public ActionResult ApproveOrganizer(int id)
         {
             var e = db.Organisers.Find(id);
+            var user = db.Users.Find(id);
             if (e != null)
             {
                 e.status = true;
+                user.role = "Organizer";
                 db.SaveChanges();
                 TempData["info"] = "Request Approved!";
             }

@@ -25,7 +25,6 @@ namespace EventManagementSystem.Models
         public string location { get; set; }
         public string equipment { get; set; }
         public int capacity { get; set; }
-        public string photoURL { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Event> Events { get; set; }

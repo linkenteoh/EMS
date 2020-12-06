@@ -19,10 +19,6 @@
 
 @section head{
     <style>
-        .searchCont {
-            display: none;
-        }
-
         #loader {
             text-align: center;
             display: none;
@@ -62,18 +58,28 @@
                     @Html.TextBox("name", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control" })
                 </div>
                 <div class="form-group">
+                <div class="form-group row">
+
                     @Html.Label("startDate", "Date From", new { @class = "control-label col-sm-2" })
                     @Html.TextBox("startDate", null, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-2" })
                     @Html.Label("endDate", "To", new { @class = "control-label col-sm-1" })
                     @Html.TextBox("endDate", null, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-2" })
                 </div>
-                <div class="form-group">
+
+                <div class="form-group row">
                     @Html.Label("startTime", "Time From", new { @class = "control-label col-sm-2" })
                     @Html.TextBox("startTime", null, "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
                     @Html.Label("endTime", "To", new { @class = "control-label col-sm-1" })
                     @Html.TextBox("endTime", null, "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
                 </div>
-                <div class="form-group">
+
+                <div class="form-group row">
+                    @Html.Label("priceFrom", "Price(RM) From", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("priceFrom", null, new { type = "number", @class = "form-control col-sm-2", placeholder = "0.00", min = "0" })
+                    @Html.Label("priceTo", "To", new { @class = "control-label col-sm-1" })
+                    @Html.TextBox("priceTo", null, new { type = "number", @class = "form-control col-sm-2", placeholder = "0.00", min = "0" })
+                </div>
+                <div class="form-group row">
                     @Html.Label("venue", "Venue", new { @class = "control-label col-sm-2" })
                     @Html.DropDownList("venue", ViewBag.VenueList as SelectList, "- Select One -", new { @class = "control-label col-sm-2 btn btn-secondary form-control" })
                     <div class="col-sm-offset-1 col-sm-1">

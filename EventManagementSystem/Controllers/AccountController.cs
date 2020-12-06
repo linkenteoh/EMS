@@ -55,6 +55,7 @@ namespace EventManagementSystem.Controllers
             var prop = new AuthenticationProperties
             {
                 IsPersistent = rememberMe //Remember
+                
             };
 
             // TODO(3): Sign in
@@ -145,7 +146,6 @@ namespace EventManagementSystem.Controllers
         // GET: Account/Register
         public ActionResult Register()
         {
-
             return View();
         }
 
@@ -198,13 +198,15 @@ namespace EventManagementSystem.Controllers
                     email = model.email,
                     username = model.username,
                     password = HashPassword(model.password),
-                    role = model.role,
+                    role = model.role,    
+     
                     status = true,
                     activated = false,
                     recoveryCode = null,
                     activationCode = Guid.NewGuid().ToString(),
                     photo = photoUrl,
                     lockoutValue = 0
+
                 };
 
                 try
@@ -282,7 +284,7 @@ namespace EventManagementSystem.Controllers
            
             user.lockoutValue = user.lockoutValue +1;
             db.SaveChanges();
-            int count = user.lockoutValue.Value;
+            int count = user.lockoutValue;
 
             if (getCookie == null)
             {

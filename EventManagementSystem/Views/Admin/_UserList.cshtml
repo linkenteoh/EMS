@@ -15,9 +15,10 @@
                 <th scope="col">Username</th>
                 <th scope="col">Role</th>
                 <th scope="col">Organizer</th>
+                <th scope="col">Status</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
-                <th scope="col"></th>
+ 
             </tr>
         </thead>
         <tbody>
@@ -34,11 +35,10 @@
                         <td scope="row">@u.username</td>
                         <td scope="row">@u.role</td>
                         <td scope="row">@u.organizer</td>
+                        <td scope="row">@u.status</td>
+                        <td scope="row"></td>
                         <td>
-                            <input class="btn btn-primary" data-get="/Admin/EditUser?id=@u.Id" type="button" value="Edit">
-                        </td>
-                        <td>
-                            <input class="btn btn-danger" data-get="/Admin/DeleteUser?id=@u.Id" type="button" value="Delete">
+                            <a class="btn btn-primary" href="/Admin/EditUser?id=@u.Id">Edit</a>
                         </td>
                     </tr>
                 }

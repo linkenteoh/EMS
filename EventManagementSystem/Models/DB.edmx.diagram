@@ -4,13 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="41ed6b36fb9c4deaa67df0ad533950c2" Name="Diagram1" ZoomLevel="80">
-        <<<<<<< HEAD
-        
-        
-        
-        
-        
+      <Diagram DiagramId="41ed6b36fb9c4deaa67df0ad533950c2" Name="Diagram1" ZoomLevel="80">           
         <EntityTypeShape EntityType="DBModel.Advertisement" Width="1.5" PointX="1.970586772063089" PointY="11.159726282190404" />
         <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="10.007128921340746" PointY="27.591480804417042" />
         <EntityTypeShape EntityType="DBModel.Organiser" Width="1.5" PointX="1.5857122417472824" PointY="27.902708737134333" />
@@ -25,108 +19,6 @@
         <AssociationConnector Association="DBModel.FK_Organiser_User" />
         <AssociationConnector Association="DBModel.FK_Payment_Registration" />
         <AssociationConnector Association="DBModel.FK_Registration_User" />
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        &gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
-        
-        
-        
-        
-        
-        
-        
-      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
-        
-        
-        
-        
-        
-        
-        
-      
-=======
-        
-&gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
-        
-        
-        
-        
-        
-        
-        
-      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
-        
-        
-        
-        
-        
-        
-        
-      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
-        
-        
-        
-        
-        
-        
-        
-      
-=======
-        
-&gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
-        
-        
-        
-        
-        
-        
-        
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

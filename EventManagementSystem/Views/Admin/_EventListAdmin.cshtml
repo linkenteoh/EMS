@@ -28,10 +28,7 @@
         <tbody>
             @foreach (var e in Model)
             {
-                if (e.status == true && e.approvalStat == true)
-                {
-
-                    <tr>
+               <tr>
                         <td scope="row">@e.Id</td>
                         <td scope="row">@e.name</td>
                         <td scope="row">@e.des</td>
@@ -51,13 +48,12 @@
                         }
                         <td scope="row">@e.Organiser.represent </td>
                         <td>
-                            <input class="btn btn-primary" data-get="/Admin/EditEvent?id=@e.Id" type="button" value="Edit">
+                            <a class="btn btn-primary" href="/Admin/EditEvent?id=@e.Id">Edit</a>
                         </td>
                         <td>
-                            <input class="btn btn-danger" data-get="/Admin/DeleteEvent?id=@e.Id" type="button" value="Delete">
+                            <a class="btn btn-danger" href="/Admin/DeleteEvent?id=@e.Id">Delete</a>
                         </td>
-                    </tr>
-                }
+               </tr>                
             }
         </tbody>
     </table>
