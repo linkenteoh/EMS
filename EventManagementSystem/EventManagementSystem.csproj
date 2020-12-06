@@ -366,6 +366,7 @@
     <Content Include="Views\User\Payment.cshtml" />
     <Content Include="Views\User\_ProposedList.cshtml" />
     <Content Include="Views\User\_BillingList.cshtml" />
+    <Content Include="Views\Event\DisplayQR.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\DisplayUser.cshtml" />
