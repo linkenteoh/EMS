@@ -14,11 +14,9 @@ using System.Configuration;
 using System.Text;
 using System.Web.Script.Serialization;
 using Microsoft.AspNet.Identity;
-using ZXing;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Net.Mail;
-using QRCoder;
 using System.Security.Cryptography;
 
 namespace EventManagementSystem.Controllers
@@ -87,9 +85,12 @@ namespace EventManagementSystem.Controllers
         }
         [Authorize(Roles = "Admin")]
         public ActionResult Index()
-        {           
+        {
+
             return View();
         }
+
+
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayProposalApporval(string searchName = "", string name = "", string startDate = "", string endDate = "",
             string startTime = "", string endTime = "", string venue = "", string sort = "", int page = 1)
@@ -103,8 +104,7 @@ namespace EventManagementSystem.Controllers
                     new SortItems { Id = "date", name = "Date"},
                     new SortItems { Id = "venue", name = "Venue"}
                 }, "Id", "name");
-
-            var model = db.Events.Where(u => u.approvalStat == null && u.status == true);
+            var model = db.Events.Where(u => u.approvalStat == null);
 
             //// Name
             if (!string.IsNullOrEmpty(name))
@@ -417,7 +417,7 @@ namespace EventManagementSystem.Controllers
             }
             return View(model);
         }
-        
+
 
         [Authorize(Roles = "Admin")]
         public ActionResult DeleteEvent(int id)
@@ -502,7 +502,7 @@ namespace EventManagementSystem.Controllers
         [HttpPost]
         public ActionResult InsertUser(UserInsertVM model)
         {
-            int id = db.Users.Count() +1;
+            int id = db.Users.Count() + 1;
 
             string error = ValidatePhoto(model.Photo);
             if (error != null)
@@ -520,7 +520,6 @@ namespace EventManagementSystem.Controllers
                     username = model.username,
                     password = HashPassword(model.password),
                     role = model.role.ToString(),
-                    organizer = model.organizer,
                     status = true,
                     recoveryCode = "ABCDEF",
                     activationCode = "ABCDEF",
@@ -557,7 +556,6 @@ namespace EventManagementSystem.Controllers
                 email = u.email,
                 username = u.username,
                 password = u.password,
-                organizer = u.organizer,
                 role = (Role)Enum.Parse(typeof(Role), u.role),
                 photoURL = u.photo,
             };
@@ -569,7 +567,7 @@ namespace EventManagementSystem.Controllers
         public ActionResult EditUser(UserEditVM model)
         {
             var u = db.Users.Find(model.Id);
-          
+
             if (model == null)
             {
                 return RedirectToAction("Index", "Admin");
@@ -580,8 +578,7 @@ namespace EventManagementSystem.Controllers
                 u.name = model.name;
                 u.contact_no = model.contact_no.Trim();
                 u.email = model.email;
-                u.organizer = model.organizer;
-                if(model.newPassword == null)
+                if (model.newPassword == null)
                 {
                     u.password = u.password;
                 }
@@ -589,7 +586,7 @@ namespace EventManagementSystem.Controllers
                 {
                     u.password = HashPassword(model.newPassword);
                 }
-               
+
                 u.role = model.role.ToString();
                 if (model.Photo != null)
                 {
@@ -598,11 +595,25 @@ namespace EventManagementSystem.Controllers
 
                 }
                 db.SaveChanges();
-            
+
                 TempData["info"] = "User record updated successfully";
                 return RedirectToAction("DisplayUser", "Admin");
             }
             return View(model);
+        }
+        [Authorize(Roles = "Admin")]
+        public ActionResult RestoreUser(int id)
+        {
+            var u = db.Users.Find(id);
+            if (u != null)
+            {
+                u.status = true;
+                db.SaveChanges();
+                TempData["info"] = "User record deleleted successfully";
+            }
+
+            var url = Request.UrlReferrer?.AbsolutePath ?? "/";
+            return Redirect(url);
         }
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayOrganizerApproval(string searchName = "", string rep = "", string position = "", string sort = "", int page = 1)
@@ -640,9 +651,11 @@ namespace EventManagementSystem.Controllers
         public ActionResult ApproveOrganizer(int id)
         {
             var e = db.Organisers.Find(id);
+            var user = db.Users.Find(id);
             if (e != null)
             {
                 e.status = true;
+                user.role = "Organizer";
                 db.SaveChanges();
                 TempData["info"] = "Request Approved!";
             }
@@ -790,7 +803,7 @@ namespace EventManagementSystem.Controllers
                     startTime = model.startTime,
                     endTime = model.endTime,
                     status = true,
-                    userId = id,    
+                    userId = id,
                     photoURL = SavePhoto(model.Photo)
                 };
                 // TempData["Info"] = "Event record added successfully!";
@@ -859,7 +872,7 @@ namespace EventManagementSystem.Controllers
             {
                 a.name = model.name;
                 a.des = model.des;
-                a.charge = model.charge;               
+                a.charge = model.charge;
                 a.startDate = model.startDate;
                 a.endDate = model.endDate;
                 a.startTime = model.startTime;
@@ -875,8 +888,8 @@ namespace EventManagementSystem.Controllers
             }
             return View(model);
         }
-         [Authorize(Roles = "Admin")]
-       public ActionResult DeleteAdvert(int id)
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteAdvert(int id)
         {
             var a = db.Advertisements.Find(id);
             if (a != null)
@@ -889,8 +902,5 @@ namespace EventManagementSystem.Controllers
             var url = Request.UrlReferrer?.AbsolutePath ?? "/";
             return Redirect(url);
         }
-            
-             
     }
-
 }

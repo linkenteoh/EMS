@@ -11,9 +11,9 @@
 <div class="container" style="overflow-x:hidden">
     <h2>Event details</h2>
     <hr />
-    <div class="col-md-3" style="border:1px blue ; padding-left:0px;">
+    <div class="col-md-3" style="padding-left:0px;">
         <div class="panel">
-            <div class="panel-heading" style="border:1px #c3c3c3 solid; background: #007a77;">
+            <div class="panel-heading bg-secondary" style="border:1px #c3c3c3 solid;">
                 <b style="color:white">Event Organiser</b>
             </div>
             <div class="panel-body" style="border:1px #c3c3c3 solid;">
@@ -32,76 +32,94 @@
         {
             <hr />
             <h4>Interested in this event?</h4>
-            <a class="btn btn-primary" href="~/Event/RegisterEvent?eventId=@Model.Id&d=@DateTime.Now.ToString("dd-MM-yyyy")" onclick="return confirm('Are you sure?')" style="width:100%; padding:10px; background:#148603">Register now!</a>
+            <a class="btn btn-secondary" href="~/Event/RegisterEvent?eventId=@Model.Id&d=@DateTime.Now.ToString("dd-MM-yyyy")" onclick="return confirm('Are you sure?')" style="width:100%; padding:10px;">Register now!</a>
         }
 
         <hr />
-        <div class="panel-heading" style="border:1px #c3c3c3 solid; background: #007a77;">
-            <b style="color:white">Event</b>
-        </div>
-        <div class="list-group">
 
-            <button type="button" id="Details" class="list-group-item list-group-item-action activelink">
-                Details
-            </button>
-            <button type="button" id="Participants" class="list-group-item list-group-item-action">Participants (@Model.availability / @Model.participants)</button>
-            <button type="button" id="Chat" class="list-group-item list-group-item-action">Chat</button>
+        @{ 
+            int no = Model.participants - Model.availability;
+        }
+
+        <div>
+            <ul class="nav nav-pills flex-column">
+                <li class="active"><a data-toggle="pill" href="#detail">Detail</a></li>
+                <li><a data-toggle="pill" href="#participants">Participants (@no/@Model.participants)</a></li>
+                <li><a data-toggle="pill" href="#registration">Chat</a></li>
+            </ul>
         </div>
         <hr />
     </div>
 
-    <div class="col-md-9 partial" style="overflow-y:hidden">
-        <div class="outerDiv">
-            <div class="head" style="display:inline-block">
+    <div class="col-md-9 tab-content" style="overflow-y:hidden">
+        <div id="detail" class="tab-pane fade in active">
+            <div class="outerDiv">
+                <div class="head" style="display:inline-block">
+                    <div>
+                        <h3 style="margin:0;padding-bottom:10px;">@Model.name organised by @Model.Organiser.represent</h3>
+                    </div>
+                </div>
+                <div class="images" style="border:0px red solid; overflow-x:hidden">
+                    <div class="row">
+                        <div class="col-md-8" style="border:0px red solid; padding:0px; margin-left:15px;">
+                            <img src="~/Photo/@Model.photoURL" style="width:500px; height:500px; margin-bottom:5px; border:1px solid #c3c3c3;" />
+                        </div>
+                    </div>
+                </div>
+
                 <div>
-                    <h3 style="margin:0;padding-bottom:10px;">@Model.name organised by @Model.Organiser.represent</h3>
+                    <table class="table">
+                        <tr>
+                            <th>Name</th>
+                            <td>: @Model.name</td>
+                        </tr>
+                        <tr>
+                            <th>Description</th>
+                            <td>: @Model.des</td>
+                        </tr>
+                        <tr>
+                            <th>Event date</th>
+                            <td>: @Model.date.ToString("dd-MM-yyy")</td>
+                        </tr>
+                        <tr>
+                            <th>Start time</th>
+                            <td>: @Model.startTime</td>
+                        </tr>
+                        <tr>
+                            <th>End time</th>
+                            <td>: @Model.endTime</td>
+                        </tr>
+                        <tr>
+                            <th>Registration fees (RM)</th>
+                            <td>: @Model.price</td>
+                        </tr>
+
+                    </table>
                 </div>
             </div>
-            <div class="images" style="border:1px red solid; overflow-x:hidden">
-                <div class="row">
-                    <div class="col-md-8" style="border:1px red solid; padding:0px; margin:0px;">
-                        <img src="~/Photo/@Model.photoURL" style="width:500px; height:500px" />
-                    </div>
-                    <div class="col-md-4">
-                        <div class="row" style="border:1px red solid;">
-                            <p style="width:250px;height:250px">Another image</p>
-                        </div>
-                        <div class="row" style="border:1px red solid;">
-                            <p style="width:250px;height:250px">Another image</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        </div>
 
-            <div>
-                <table class="table">
-                    <tr>
-                        <th>Name</th>
-                        <td>: @Model.name</td>
-                    </tr>
-                    <tr>
-                        <th>Description</th>
-                        <td>: @Model.des</td>
-                    </tr>
-                    <tr>
-                        <th>Event date</th>
-                        <td>: @Model.date.ToString("dd-MM-yyy")</td>
-                    </tr>
-                    <tr>
-                        <th>Start time</th>
-                        <td>: @Model.startTime</td>
-                    </tr>
-                    <tr>
-                        <th>End time</th>
-                        <td>: @Model.endTime</td>
-                    </tr>
-                    <tr>
-                        <th>Registration fees (RM)</th>
-                        <td>: @Model.price</td>
-                    </tr>
-
-                </table>
-            </div>
+        <div id="participants" class="tab-pane fade in active">
+            <h3>Participants (@ViewBag.ParticipantsCount)</h3>
+            @{
+                if (ViewBag.ParticipantsCount == 0)
+                {
+                    <p>No participant(s) yet.</p>
+                }
+                else
+                {
+                    foreach (var item in ViewBag.Registrations)
+                    {
+                        if (item.Payment.status == true)
+                        {
+                            <div>
+                                <img src="~/Photo/@item.User.photo" />
+                            </div>
+                            <p>@item.User.username</p>
+                        }
+                    }
+                }
+            }
         </div>
     </div>
 </div>

@@ -2,19 +2,26 @@
 @using PagedList.Mvc
 @model IPagedList<Event>
 
+<span id="countModel" style="text-align:left;margin-left:0px;">@Model.Count() of @Model.TotalItemCount record(s) | Page @Model.PageNumber of @Model.PageCount</span>
 @if (@Model.Count() > 0)
 {
-
-    <span id="countModel">@Model.Count() of @Model.TotalItemCount record(s) | Page @Model.PageNumber of @Model.PageCount</span>
     foreach (var e in Model)
     {
         <div class="panel" style="width: 25rem; border:1px #c3c3c3 solid; overflow:auto; display:inline-block; margin-right:20px;">
             <img class="panel-heading text-center" src="~/Photo/@e.photoURL" alt="Card image cap" style="object-fit:cover; width:245px; height:245px;" />
             <hr style="margin:0px;padding:0px;" />
             <div class="panel-body" style="">
-                <h5 class="panel-title">@e.name</h5>
-                <p class="card-text">@e.des</p>
-                <a class="btn btn-primary" href="/Event/EventDetail?id=@e.Id">View Event</a>
+                <h5 class="panel-title"><b>@e.name</b></h5>
+                <p class="card-text">@e.date.ToString("dd-MM-yy") | @e.startTime - @e.endTime</p>
+                @if (e.venueId != null)
+                {
+                    <p class="card-text">@e.Venue.name</p>
+                }
+                else
+                {
+                    <p>Venue to be booked</p>
+                }
+                @Html.ActionLink("View Event", "EventDetail", "Event", new { id = e.Id }, new { @class = "btn btn-primary" })
             </div>
         </div>
     }

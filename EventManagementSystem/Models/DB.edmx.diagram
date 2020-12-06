@@ -5,142 +5,20 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="41ed6b36fb9c4deaa67df0ad533950c2" Name="Diagram1" ZoomLevel="80">
-        <<<<<<< HEAD
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        <EntityTypeShape EntityType="DBModel.Advertisement" Width="1.5" PointX="1.9197665834425792" PointY="24.506799828497133" />
-        <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="0.096277199730406132" PointY="7.6558019852525563" />
-        <EntityTypeShape EntityType="DBModel.Organiser" Width="1.5" PointX="4.0290417447821429" PointY="16.355651356445463" />
-        <EntityTypeShape EntityType="DBModel.Payment" Width="1.5" PointX="2.1508124201329482" PointY="6.7849670829181408" />
-        <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="2.316979968136633" PointY="24.207978408880521" />
-        <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="3.9023365433804393" PointY="9.5536071702621914" />
-        <EntityTypeShape EntityType="DBModel.Venue" Width="1.5" PointX="4.551726671192668" PointY="18.397140228374461" />
+        <EntityTypeShape EntityType="DBModel.Advertisement" Width="1.5" PointX="4.176541430957867" PointY="8.8195290308536638" />
+        <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="2.3963216051442182" PointY="18.806403362567725" />
+        <EntityTypeShape EntityType="DBModel.Organiser" Width="1.5" PointX="5.8338291970239151" PointY="29.11523279413359" />
+        <EntityTypeShape EntityType="DBModel.Payment" Width="1.5" PointX="10.308618786888484" PointY="11.836677899508121" />
+        <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="8.2134793867419837" PointY="15.641238532793354" />
+        <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="1.0122139272336912" PointY="28.625712959387204" />
+        <EntityTypeShape EntityType="DBModel.Venue" Width="1.5" PointX="6.0797523083536653" PointY="18.860279285749552" />
         <AssociationConnector Association="DBModel.FK_Table_User" />
         <AssociationConnector Association="DBModel.FK_Event_Organiser" />
         <AssociationConnector Association="DBModel.FK_Event_Venue" />
         <AssociationConnector Association="DBModel.FK_Registration_Event" />
         <AssociationConnector Association="DBModel.FK_Organiser_User" />
         <AssociationConnector Association="DBModel.FK_Payment_Registration" />
-        <AssociationConnector Association="DBModel.FK_Registration_User" />&gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
-        
-        
-        
-        
-        
-        
-        
-      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
-        
-        
-        
-        
-        
-        
-        
-      
-=======
-        
-&gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
-        
-        
-        
-        
-        
-        
-        
-      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
-        
-        
-        
-        
-        
-        
-        
-      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
-        
-        
-        
-        
-        
-        
-        
-      
-=======
-        
-&gt;&gt;&gt;&gt;&gt;&gt;&gt; 4278d18b1c885d74c44fe7b55f60efd6977b01e6
-        
-        
-        
-        
-        
-        
-        
+        <AssociationConnector Association="DBModel.FK_Registration_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

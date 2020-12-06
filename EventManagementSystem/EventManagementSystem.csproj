@@ -299,6 +299,8 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.signalR-2.4.1.js" />
     <Content Include="Scripts\jquery.signalR-2.4.1.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -354,14 +356,18 @@
     <Content Include="Views\Admin\DisplayOrganizerApproval.cshtml" />
     <Content Include="Views\User\RegOrganisera.cshtml" />
     <Content Include="Views\Account\DisplayQR.cshtml" />
+
     <Content Include="Views\Admin\_AdsList.cshtml" />
     <Content Include="Views\Admin\_EventApproveList.cshtml" />
     <Content Include="Views\Admin\_EventListAdmin.cshtml" />
     <Content Include="Views\Admin\_OrganiserApproveList.cshtml" />
     <Content Include="Views\Admin\_UserList.cshtml" />
-    <Content Include="Views\Home\_BrowseEvent.cshtml" />
-    <Content Include="Views\User\Payment.cshtml" />
     <Content Include="Views\User\_ProposedList.cshtml" />
+    <Content Include="Views\Home\_BrowseEvent.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPass.cshtml" />
+    <Content Include="Views\Account\AwaitResetPassword.cshtml" />
+    <Content Include="Views\User\Payment.cshtml" />
     <Content Include="Views\User\_BillingList.cshtml" />
     <Content Include="Views\User\AdvertisementSelect.cshtml" />
   </ItemGroup>

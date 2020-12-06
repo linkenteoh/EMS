@@ -10,6 +10,9 @@ using EventManagementSystem.reCAPTCHA;
 using System.Text.RegularExpressions;
 using System.Web.Helpers;
 using PagedList;
+using Microsoft.AspNet.Identity;
+using System.Data.Entity.Validation;
+
 using QRCoder;
 using System.Drawing;
 using System.Net.Mail;
@@ -20,6 +23,12 @@ namespace EventManagementSystem.Controllers
     public class UserController : Controller
     {
         DBEntities db = new DBEntities();
+        PasswordHasher ph = new PasswordHasher();
+
+        private string HashPassword(string password)
+        {
+            return ph.HashPassword(password);
+        }
 
         // GET: User
         public ActionResult Index()
@@ -43,17 +52,18 @@ namespace EventManagementSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                var id = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
+                var user = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
 
                 var oragniser = new Organiser
                 {
-                    Id = id,
+                    Id = user,
                     represent = model.represent,
                     position = model.position,
                     status = null
                 };
-
+                
                 db.Organisers.Add(oragniser);
+
                 db.SaveChanges();
                 TempData["Info"] = "You've registered successfully. Please wait until it is accepted by an admin.";
             }
@@ -117,13 +127,9 @@ namespace EventManagementSystem.Controllers
         // Edit users
         public ActionResult Edit()
         {
-            var name = User.Identity.Name;
-            var u = db.Users.Where(x => x.username == name).FirstOrDefault();
-            if(u == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            var Model = new EditProfileVM
+            var u = db.Users.FirstOrDefault(x => x.username == User.Identity.Name);
+
+            var model = new EditProfileVM
             {
                 Id = u.Id,
                 username = u.username,
@@ -132,7 +138,7 @@ namespace EventManagementSystem.Controllers
                 email = u.email,
                 PhotoUrl = u.photo
             };
-            return View(Model);
+            return View(model);
         }
 
         // POST : Edit User
@@ -140,10 +146,10 @@ namespace EventManagementSystem.Controllers
         public ActionResult Edit(EditProfileVM model)
         {
             var u = db.Users.Find(model.Id);
-
             if (u == null)
             {
-                return RedirectToAction("Edit");
+                TempData["info"] = model.Id;
+                return RedirectToAction("Edit", "User");
             }
 
             if (ModelState.IsValid)
@@ -152,7 +158,10 @@ namespace EventManagementSystem.Controllers
                 u.username = model.username;
                 u.email = model.email;
                 u.contact_no = model.contact_no;
-                u.password = model.password;
+                if(model.newPassword != null)
+                {
+                    u.password = HashPassword(model.newPassword);
+                }
 
                 if (model.Photo != null)
                 {
@@ -160,11 +169,29 @@ namespace EventManagementSystem.Controllers
                     u.photo = SavePhoto(model.Photo);
                 }
 
-                db.SaveChanges();
+                if (model.webPhoto != null)
+                {
+                    u.photo = model.webPhoto;
+                }
+
+
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbEntityValidationException dbEx)
+                {
+                    foreach (var validationErrors in dbEx.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
+                        }
+                    }
+                }
                 TempData["Info"] = "Profile edited successfully!";
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Edit", "User");
             }
-            model.PhotoUrl = u.photo;
             return View(model);
         }
 
@@ -265,14 +292,14 @@ namespace EventManagementSystem.Controllers
                 return PartialView("_EventResults", events);
             return View(events);
         }
-
+        [Authorize(Roles = "Organizer")]
         // GET: User/ProposeEvent
         public ActionResult ProposeEvent()
         {
             ViewBag.OrganizerList = new SelectList(db.Organisers.Where(o => o.status == true), "Id", "represent");
             return View();
         }
-
+        [Authorize(Roles = "Organizer")]
         // POST: User/ProposeEvent
         [HttpPost]
         public ActionResult ProposeEvent(EventProposeVM model)
@@ -416,7 +443,7 @@ namespace EventManagementSystem.Controllers
                 return PartialView("_EventApproveList", events);
             return View(events);
         }
-
+        [Authorize(Roles = "Organizer")]
         // GET: Event/ManageEventProposed
         public ActionResult ManageEventProposed(int Id)
         {
@@ -454,7 +481,7 @@ namespace EventManagementSystem.Controllers
             ViewBag.PaymentsCount = db.Payments.Where(p => p.Registration.eventId == Id).Count();
             return View(model);
         }
-
+        [Authorize(Roles = "Organizer")]
         // POST: Event/ManageEventProposed
         [HttpPost]
         public ActionResult ManageEventProposed(OrgEditEventVM model)
@@ -635,7 +662,6 @@ namespace EventManagementSystem.Controllers
                 TempData["Info"] = "Payment successful! You will receive an email! ";
                 return RedirectToAction("Billing", "User");
             }
-          
             return View();
         }
 

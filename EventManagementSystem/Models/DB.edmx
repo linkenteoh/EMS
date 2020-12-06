@@ -56,8 +56,8 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="paymentdate" Type="date" />
-          <Property Name="addCharge" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="commision" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="addCharge" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="status" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Registration">
@@ -87,7 +87,7 @@
           <Property Name="activationCode" Type="varchar" MaxLength="50" />
           <Property Name="photo" Type="varchar(max)" />
           <Property Name="activated" Type="bit" Nullable="false" />
-          <Property Name="lockoutValue" Type="int" Nullable="false" />
+          <Property Name="lockoutValue" Type="int" />
         </EntityType>
         <EntityType Name="Venue">
           <Key>
@@ -319,8 +319,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="paymentdate" Type="DateTime" Precision="0" />
-          <Property Name="addCharge" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="commision" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="addCharge" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="status" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Registration" Relationship="DBModel.FK_Payment_Registration" FromRole="Payment" ToRole="Registration" />
         </EntityType>
@@ -354,7 +354,7 @@
           <Property Name="activationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="activated" Type="Boolean" Nullable="false" />
-          <Property Name="lockoutValue" Type="Int32" Nullable="false" />
+          <Property Name="lockoutValue" Type="Int32" />
           <NavigationProperty Name="Advertisements" Relationship="DBModel.FK_Table_User" FromRole="User" ToRole="Advertisement" />
           <NavigationProperty Name="Organiser" Relationship="DBModel.FK_Organiser_User" FromRole="User" ToRole="Organiser" />
           <NavigationProperty Name="Registrations" Relationship="DBModel.FK_Registration_User" FromRole="User" ToRole="Registration" />
@@ -512,8 +512,8 @@
             <EntityTypeMapping TypeName="DBModel.Payment">
               <MappingFragment StoreEntitySet="Payment">
                 <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="commision" ColumnName="commision" />
                 <ScalarProperty Name="addCharge" ColumnName="addCharge" />
+                <ScalarProperty Name="commision" ColumnName="commision" />
                 <ScalarProperty Name="paymentdate" ColumnName="paymentdate" />
                 <ScalarProperty Name="price" ColumnName="price" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

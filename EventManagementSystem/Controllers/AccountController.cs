@@ -36,10 +36,14 @@ namespace EventManagementSystem.Controllers
         public JsonResult IsUserNameAvailable(RegisterVM model)
         {
             return Json(!db.Users.Any(u => u.username == model.username), JsonRequestBehavior.AllowGet);
-        }
-
-
-
+        }        
+        
+        // Check if username is registered
+        public JsonResult IsUserNameRegistered(PassRecoverVM model)
+        {
+            return Json(db.Users.Any(u => u.username == model.username), JsonRequestBehavior.AllowGet);
+        }        
+       
         private void SignIn(string username, string role, bool rememberMe)
         {
             // TODO(1): Identity and claims
@@ -194,13 +198,15 @@ namespace EventManagementSystem.Controllers
                     email = model.email,
                     username = model.username,
                     password = HashPassword(model.password),
-                    role = model.role,
+                    role = model.role,    
+                    
                     status = true,
                     activated = false,
                     recoveryCode = null,
                     activationCode = Guid.NewGuid().ToString(),
                     photo = photoUrl,
-                    lockoutValue  = 0
+                    lockoutValue = 0
+
                 };
 
                 try
@@ -278,7 +284,7 @@ namespace EventManagementSystem.Controllers
            
             user.lockoutValue = user.lockoutValue +1;
             db.SaveChanges();
-            int count = user.lockoutValue;
+            int count = user.lockoutValue.Value;
 
             if (getCookie == null)
             {
@@ -345,7 +351,82 @@ namespace EventManagementSystem.Controllers
             TempData["Info"] = "You have successfully logged out.";
             return RedirectToAction("Index", "Home");
         }
-       
+
+        // GET: Account/ResetPassword
+        public ActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        // POST: Account/ResetPassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateGoogleCaptcha]
+        public ActionResult ResetPassword(PassRecoverVM model)
+        {
+            var user = db.Users.FirstOrDefault(u => u.username == model.username);
+            if(user.email != model.email)
+            {
+                ModelState.AddModelError("email", "This username is not registered using this email");
+            }
+
+            if (ModelState.IsValid)
+            {
+                //Assign a random string to recoveryCode column, compare after
+                user.recoveryCode = Guid.NewGuid().ToString();
+                db.SaveChanges();
+
+                string link = "https://localhost:44302/Account/ResetPass?recoveryCode=" + user.recoveryCode + "&userid=" + user.Id;
+                string mail = @"";
+
+                MailMessage m = new MailMessage();
+                m.To.Add(model.email);
+                m.Subject = "Password Recovery";
+                m.Body = link;
+                m.IsBodyHtml = true; //Can send HTML FORMATTED Mail
+                new SmtpClient().Send(m);
+                return RedirectToAction("AwaitResetPassword", "Account", new { email = model.email });
+            }
+            return View(model);
+        }
+
+        public ActionResult AwaitResetPassword(string email)
+        {
+            ViewBag.Email = email;
+            return View();
+        }
+
+        public ActionResult ResetPass(string recoveryCode, int userid)
+        {
+            var user = db.Users.Find(userid);
+
+            //Handle if parameter in the link is not correct (recoveryCode)
+            if(recoveryCode != user.recoveryCode)
+            {
+                TempData["Info"] = "Some error occured! Please try again.";
+                return RedirectToAction("ResetPassword", "Account");
+            }
+
+            var model = new SetNewPassVM
+            {
+                userId = userid
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult ResetPass(SetNewPassVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = db.Users.Find(model.userId);
+                user.password = HashPassword(model.password);
+                db.SaveChanges();
+                TempData["info"] = "Password updated successfully.";
+                return RedirectToAction("Login", "Account");
+            }
+            return View(model);
+        }
 
 
     }

@@ -27,6 +27,8 @@ namespace EventManagementSystem.Controllers
         public ActionResult EventDetail(int id)
         {
             var model = db.Events.Find(id);
+            ViewBag.Registrations = db.Registrations.Where(r => r.eventId == id);
+            ViewBag.ParticipantsCount = db.Registrations.Where(r => r.eventId == id && r.Payment.status == true).Count();
             return View(model);
         }
 
@@ -35,6 +37,8 @@ namespace EventManagementSystem.Controllers
             return PartialView("~/Views/Event/_EventDetails.cshtml", eve);
         }
 
+        [Authorize]
+        
         // Register Event
         public ActionResult RegisterEvent(int eventId, DateTime d)
         {

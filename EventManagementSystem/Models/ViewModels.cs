@@ -51,7 +51,7 @@ namespace EventManagementSystem.Models
         [Required]
         public decimal price { get; set; }
         public int availability { get; set; }
-        public int participants { get; set; }   
+        public int participants { get; set; }
         [Required]
         public DateTime date { get; set; }
         [Required]
@@ -72,35 +72,7 @@ namespace EventManagementSystem.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Registration> Registrations { get; set; }
     }
-    public class EventProposeVM
-    {
-        public string Id { get; set; }
-        [Required]
-        [StringLength(100)]
-        [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only")]
-        public string name { get; set; }
-        [Required]
-        [StringLength(100)]
-        public string des { get; set; }
-        [Required]
-        public decimal price { get; set; }
-        [Required]
-        public int participants { get; set; }
-        public int availability { get; set; }
-        [Required]
-        public DateTime date { get; set; }
-        [Required]
-        public TimeSpan startTime { get; set; }
-        [Required]
-        public TimeSpan endTime { get; set; }
-        public bool approvalStat { get; set; }
-        [Required(ErrorMessage = "The organized by field is required!")]
-        public int OrgId { get; set; }
-        public bool status { get; set; }
-        public int? venueId { get; set; }
-        public HttpPostedFileBase Photo { get; set; }
 
-    }
     public class OrgEditEventVM
     {
         public int Id { get; set; }
@@ -161,13 +133,41 @@ namespace EventManagementSystem.Models
         public HttpPostedFileBase Photo { get; set; }
         public Role role { get; set; }
         [Required(ErrorMessage = "Please choose the option!")]
-        public Nullable<bool> organizer { get; set; }
+        public string memberRole { get; set; }
         public int status { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
 
     }
-  
+    public class EventProposeVM
+    {
+        public string Id { get; set; }
+        [Required]
+        [StringLength(100)]
+        [RegularExpression(@"[A-Za-z ]+", ErrorMessage = "Name should contain alphabets only")]
+        public string name { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string des { get; set; }
+        [Required]
+        public decimal price { get; set; }
+        [Required]
+        public int participants { get; set; }
+        public int availability { get; set; }
+        [Required]
+        public DateTime date { get; set; }
+        [Required]
+        public TimeSpan startTime { get; set; }
+        [Required]
+        public TimeSpan endTime { get; set; }
+        public bool approvalStat { get; set; }
+        [Required(ErrorMessage = "The organized by field is required!")]
+        public int OrgId { get; set; }
+        public bool status { get; set; }
+        public int? venueId { get; set; }
+        public HttpPostedFileBase Photo { get; set; }
+
+    }
 
     public class QRCodeModel
     {
@@ -193,7 +193,7 @@ namespace EventManagementSystem.Models
         Admin,
         Outsider
     }
-   
+
     public class UserEditVM
     {
 
@@ -203,20 +203,21 @@ namespace EventManagementSystem.Models
         public string name { get; set; }
         [Required(ErrorMessage = "The contact number field is required")]
         [RegularExpression(@"(\+?6?01)[0-46-9]-*[0-9]{7,8}", ErrorMessage = "Invalid format")]
+
         public string contact_no { get; set; }
         [Required]
         [EmailAddress(ErrorMessage = "Invalid format")]
         public string email { get; set; }
         public string username { get; set; }
-        public string password { get; set; }        
-        public string newPassword { get;  set; }
+        public string password { get; set; }
+        public string newPassword { get; set; }
         [System.ComponentModel.DataAnnotations.Compare("newPassword", ErrorMessage = "Password not matched")]
         public string newConfirmPassword { get; set; }
         public HttpPostedFileBase Photo { get; set; }
         public string photoURL { get; set; }
         public Role role { get; set; }
-        [Required(ErrorMessage = "Please choose the option!")]
-        public Nullable<bool> organizer { get; set; }
+
+        public string memberRole { get; set; }
         public bool status { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
@@ -246,12 +247,10 @@ namespace EventManagementSystem.Models
         public HttpPostedFileBase Photo { get; set; }
         public string webPhoto { get; set; }
         public string role { get; set; }
-
-        public Nullable<bool> organizer { get; set; }
+        public string memberRole { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
     }
-
     public class EditProfileVM
     {
         public int Id { get; set; }
@@ -264,24 +263,20 @@ namespace EventManagementSystem.Models
         [Required]
         [EmailAddress(ErrorMessage = "Invalid format")]
         public string email { get; set; }
-        [Required]
-        [MinLength(5, ErrorMessage = "5 minimum length")]
-        [MaxLength(15, ErrorMessage = "15 maximum length")]
         public string username { get; set; }
-        [Required]
         public string password { get; set; }
-        [System.ComponentModel.DataAnnotations.Compare("password", ErrorMessage = "Password not matched")]
+        public string newPassword { get; set; }
+        [System.ComponentModel.DataAnnotations.Compare("newPassword", ErrorMessage = "Password not matched")]
         public string confirmPassword { get; set; }
-        //[Required]
         public HttpPostedFileBase Photo { get; set; }
+        public string webPhoto { get; set; }
         public string PhotoUrl { get; set; }
         public string role { get; set; }
-        public Nullable<bool> organizer { get; set; }
+        public string memberRole { get; set; }
         public Nullable<bool> status { get; set; }
         public string recoveryCode { get; set; }
         public string activationCode { get; set; }
     }
-
     public class LoginVM
     {
         [Required]
@@ -291,6 +286,27 @@ namespace EventManagementSystem.Models
         public string Password { get; set; }
 
         public bool RememberMe { get; set; }
+    }
+
+    public class PassRecoverVM
+    {
+        [Required(ErrorMessage = "Please enter your username")]
+        [Remote("IsUserNameRegistered", "Account", ErrorMessage = "Username does not exists")]
+        public string username { get; set; }
+        [Required(ErrorMessage = "Please enter your registered email")]
+        [EmailAddress]
+        public string email { get; set; }
+    }
+
+    public class SetNewPassVM
+    {
+        [Required]
+        public string password { get; set; }
+        [Required]
+        [System.ComponentModel.DataAnnotations.Compare("password", ErrorMessage = "Password not matched")]
+        public string confirmPassword { get; set; }
+        public int userId { get; set; }
+
     }
 
 
@@ -318,7 +334,7 @@ namespace EventManagementSystem.Models
         public int? userId { get; set; }
         public HttpPostedFileBase Photo { get; set; }
         public string photoURL { get; set; }
-      
+
     }
     public class RegOrgVM
     {
@@ -361,5 +377,7 @@ namespace EventManagementSystem.Models
         public virtual Registration Registration { get; set; }
 
     }
+
+
 
 }
