@@ -40,55 +40,54 @@
 <hr />
 @using (Ajax.BeginForm("Events", "Home", results, attr))
 {
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Filter
-        </button>
-        <span>@Html.DropDownList("sort", ViewBag.SortList as SelectList, "Sort By", new { @class = "btn btn-secondary", onChange = "sortData(this);" })</span>
-        <span>
-            @Html.TextBox("searchName", null, new
-            {
-                data_upper = "",
-                autofocus = "",
-                @class = "form-control",
-                style = "display:inline;",
-                placeholder = "Search..."
-            })
-        </span><i class="fa fa-search"></i>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="padding: 15px; width:600px;">
-            <div style="padding: 15px; width:500px;">
-                <div style="padding-left: 10px; ">
-                    <h3>Filters</h3>
-                    <div class="form-group row">
-                        @Html.Label("name", "Event Name", new { @class = "control-label col-sm-3" })
-                        @Html.TextBox("name", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control" })
+<div class="dropdown">
+    <span class="btn btn-secondary dropdown-toggle searchButton">Filter</span>
+    <span>@Html.DropDownList("sort", ViewBag.SortList as SelectList, "Sort By", new { @class = "btn btn-secondary", onChange = "sortData(this);" })</span>
+    <span>
+        @Html.TextBox("searchName", null, new
+        {
+            data_upper = "",
+            autofocus = "",
+            @class = "form-control",
+            style = "display:inline;",
+            placeholder = "Search..."
+        })
+    </span><i class="fa fa-search"></i>
+    <div class="parent">
+        <div class="searchCont" style="display:none;position:absolute; width:100%; background:white; opacity:0.98">
+            <div style="padding-left: 10px;">
+                <h3>Filters</h3>
+                <div class="form-group row">
+                    @Html.Label("name", "Event Name", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("name", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.Label("startDate", "Date From", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("startDate", null, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-2" })
+                    @Html.Label("endDate", "To", new { @class = "control-label col-sm-1" })
+                    @Html.TextBox("endDate", null, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-2" })
+                </div>
+                <div class="form-group">
+                    @Html.Label("startTime", "Time From", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("startTime", null, "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
+                    @Html.Label("endTime", "To", new { @class = "control-label col-sm-1" })
+                    @Html.TextBox("endTime", null, "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
+                </div>
+                <div class="form-group">
+                    @Html.Label("venue", "Venue", new { @class = "control-label col-sm-2" })
+                    @Html.DropDownList("venue", ViewBag.VenueList as SelectList, "- Select One -", new { @class = "control-label col-sm-2 btn btn-secondary form-control" })
+                    <div class="col-sm-offset-1 col-sm-1">
+                        <input type="submit" class="btn btn-primary searchBtn" name="Search" value="Search" />
                     </div>
-                    <div class="form-group">
-                        @Html.Label("startDate", "Date From", new { @class = "control-label col-sm-3" })
-                        @Html.TextBox("startDate", "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-4" })
-                        @Html.Label("endDate", "To", new { @class = "control-label col-sm-1" })
-                        @Html.TextBox("endDate", "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-4" })
-                    </div>
-                    <div class="form-group">
-                        @Html.Label("startTime", "Time From", new { @class = "control-label col-sm-3" })
-                        @Html.TextBox("startTime", "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-4" })
-                        @Html.Label("endTime", "To", new { @class = "control-label col-sm-1" })
-                        @Html.TextBox("endTime", "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-4" })
-                    </div>
-                    <div class="form-group">
-                        @Html.Label("venue", "Venue", new { @class = "control-label col-sm-3" })
-                        @Html.DropDownList("venue", ViewBag.VenueList as SelectList, "- Select One -", new { @class = "control-label col-sm-4 btn btn-secondary form-control" })
-                        <div class="col-sm-offset-1 col-sm-2">
-                            <input type="submit" class="btn btn-primary searchBtn" name="Search" value="Search" />
-                        </div>
-                        <div class="col-sm-2">
-                            <input type="reset" class="btn btn-primary " name="Reset" value="Reset" onclick="resetData();" />
-                        </div>
+                    <div class="col-sm-1">
+                        <input type="reset" class="btn btn-primary " name="Reset" value="Reset" onclick="resetData();" />
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+</div>
 }
 <div id="eventTable">
     <div id="loader"><img src="~/Images/loader.gif"></div>

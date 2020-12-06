@@ -41,14 +41,14 @@
     <hr />
     @using (Ajax.BeginForm("EventSearchIndex", "User", results, attr))
     {
-        <span class="btn btn-secondary dropdown-toggle searchButton">Filter</span>
+        <span class="btn btn-secondary dropdown-toggle searchButton" style="margin-left:10px;">Filter</span>
         <span>@Html.DropDownList("sort", ViewBag.SortList as SelectList, "Sort By", new { @class = "btn btn-secondary", onChange = "sortData(this);" })</span>
         <span>@Html.TextBox("searchName", null, new { data_upper = "", autofocus = "",
             @class = "form-control", style = "display:inline;", placeholder = "Search..." })
         </span>
         <i class="fa fa-search"></i>
         <div class="parent">
-            <div class="searchCont" style="display:none">
+            <div class="searchCont" style="display:none;position:absolute; width:100%; background:white; opacity:0.98">
                 <div style="padding-left: 10px;">
                     <h3>Filters</h3>
                     <div class="form-group row">
@@ -81,7 +81,7 @@
             </div>
         </div>
     }
-    <div id="eventTable">
+    <div id="eventTable" style="margin-top:10px;">
         <div id="loader"><img src="~/Images/loader.gif"></div>
         @Html.Partial("_EventResults")
     </div>

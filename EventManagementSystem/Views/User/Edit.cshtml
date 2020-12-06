@@ -12,10 +12,17 @@
         }
 
         .radio input {
-            display: none;
+            position: absolute;
+            display: block;
+            left: 99%;
+            bottom: 90%;
+        }
+
+        .radio :checked {
         }
 
         .radio {
+            position: relative;
             border-radius: 10px;
             width: 49%;
             padding-top: 13vh;
@@ -70,87 +77,85 @@
     </style>
 }
 <div class="outerDiv">
-    <h3>@ViewBag.Title</h3>
+    <h2>User profile settings</h2>
     <hr />
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" id="myForm" name="myForm" class="myForm">
+        <div id="second">
+            <h3><b>Change your details</b></h3>
 
-        <div id="second" style="display:block;">
-            <!--First step: Edit the details-->
-            <p onclick="bckFunc()" id="bckBtn" class="btn btn-primary" style="font-weight: bold"><</p>
-
-            <h2><b>Fill in your details</b></h2>
+            @Html.AntiForgeryToken()
 
             <div class="form-row">
 
             </div>
-
-
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <div id="cameraDiv" style="display:none">
+                    <div id="cameraDiv" style="display:none;text-align:center">
                         <div id="Camera" style="border-radius:50%;"></div>
                         <input type="button" class="btn btn-warning" value="Capture" onclick="webcam.capture();" />
                     </div>
 
                     <div id="optDiv" style="text-align:center;display: block">
-                        <img id="blah" src="~/Photo/@Model.PhotoUrl" alt="your image" style="width:250px; height: 250px; border-radius:50%; object-fit:cover" />
-                        <label class="custom-file-upload">
-                            @Html.TextBoxFor(m => m.Photo, new
-                               {
-                                   type = "file",
-                                   accept = "image/jpeg,image/png",
-                                   id = "imgInp"
-                               })
-                            <i class="fa fa-upload" style="font-size:48px;color:darkcyan"></i>
-                        </label>
+                        <label class="upload custom-file-upload">
+                            @Html.TextBoxFor(m => m.Photo, new { type = "file", accept = "image/jpeg,image/png", hidden = "", id = "photoInput" })
+                            <img id="blah" src="~/Photo/@Model.PhotoUrl" alt="your image" style="width:250px; height: 250px; border-radius:50%; object-fit:cover" />
+                        </label><br />
+                        @Html.ValidationMessageFor(m => m.Photo, "", new { @class = "text-danger" })<br />
                         <i class="fa fa-camera" style="font-size:48px;color:darkslateblue;cursor:pointer" aria-hidden="true" onclick="toggleCamera()"></i>
+
                     </div>
                 </div>
-                @Html.HiddenFor(m => m.Id)
+
                 <div class="form-group col-md-8">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-6" style="padding-left:0px">
+
                         @Html.LabelFor(m => m.name, "Name")
+                        @Html.ValidationMessageFor(m => m.name, "", new { @class = "text-danger" })
                         @Html.TextBoxFor(m => m.name, new { @class = "form-control", placeholder = "Your name" })
-                        @Html.ValidationMessageFor(m => m.name)
+                        @Html.TextBoxFor(m => m.Id, new { @class = "form-control", placeholder = "Your name", value = Model.Id, style = "display:none;" })
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-6" style="padding-left:0px">
                         @Html.LabelFor(m => m.username, "Username")
-                        @Html.TextBoxFor(m => m.username, new { @class = "form-control", placeholder = "Username", disabled="" })
-                        @Html.HiddenFor(m => m.username)
-                        @Html.ValidationMessageFor(m => m.username)
+                        <span style="width:90%;" name=@Model.username id=@Model.username class="form-control" disabled>@Model.username</span>
+                        @Html.TextBoxFor(m => m.username, new { @class = "form-control", placeholder = "Your name", style="display:none;" })
+
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             @Html.LabelFor(m => m.email, "Email")
+                            @Html.ValidationMessageFor(m => m.email, "", new { @class = "text-danger" })
                             @Html.TextBoxFor(m => m.email, new { @class = "form-control", placeholder = "Email" })
-                            @Html.ValidationMessageFor(m => m.email)
                         </div>
                         <div class="form-group col-md-6">
                             @Html.LabelFor(m => m.contact_no, "Contact")
-                            @Html.TextBoxFor(m => m.contact_no, new { @class = "form-control", placeholder = "01XXXXXXXX" })
-                            @Html.ValidationMessageFor(m => m.contact_no)
+                            @Html.ValidationMessageFor(m => m.contact_no, "", new { @class = "text-danger" })
+                            @Html.TextBoxFor(m => m.contact_no, new { @class = "form-control", placeholder = "0123456789" })
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            @Html.LabelFor(m => m.password, "Password")
-                            @Html.TextBoxFor(m => m.password, new { @class = "form-control", placeholder = "Password" })
-                            @Html.ValidationMessageFor(m => m.password)
+                            @Html.LabelFor(m => m.newPassword, "New Password")
+                            @Html.ValidationMessageFor(m => m.newPassword, "", new { @class = "text-danger" })
+                            @Html.TextBoxFor(m => m.newPassword, new { @class = "form-control", placeholder = "Password", type = "password" })
                         </div>
                         <div class="form-group col-md-6">
-                            @Html.LabelFor(m => m.password, "Confirm password")
-                            @Html.TextBoxFor(m => m.confirmPassword, new { @class = "form-control", placeholder = "Confirm password" })
-                            @Html.ValidationMessageFor(m => m.confirmPassword)
+                            @Html.LabelFor(m => m.confirmPassword, "Confirm new password")
+                            @Html.ValidationMessageFor(m => m.confirmPassword, "", new { @class = "text-danger" })
+                            @Html.TextBoxFor(m => m.confirmPassword, "", new { @class = "form-control", placeholder = "Confirm password", type = "password" })
+
                         </div>
                     </div>
+                    @Html.TextBoxFor(m => m.webPhoto, new { style = "display:none" })
 
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <hr />
+                            <small>*Photo uploaded should not larger than 1mb and JPG/PNG allowed only.</small>
                         </div>
                     </div>
+
 
                     <div class="form-row">
                         <div class="form-group col-md-10">
@@ -173,38 +178,65 @@
 @section foot{
     <script src="@Url.Content("~/Scripts/jquery.webcam.js")">
     </script>
+
     <script>
+        $('#photoInput').validate({
+            ignore: [],
+            // any other options and/or rules
+        });
+
         function toggleCamera() {
             $("#cameraDiv").css('display', 'block');
             $("#optDiv").css('display', 'none');
         }
 
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
+        $('body').on('click', 'input[type="radio"]', function () {
+            $("#first").css('display', 'none');
+            $("#second").css('display', 'block');
+        });
 
-                reader.onload = function (e) {
-                    $('#blah').attr('src', e.target.result);
-                }
-
-                reader.readAsDataURL(input.files[0]); // convert to base64 string
-            }
+        function isPostBack() {
+            return document.referrer.indexOf(document.location.href) > -1;
         }
 
-        $("#imgInp").change(function () {
-            readURL(this);
+        if (isPostBack()) {
+            $("#first").css('display', 'none');
+            $("#second").css('display', 'block');
+        }
+
+        function validatePhoto(f) {
+            let reType = /^image\/(jpeg|png)$/i;
+            let reName = /^.+\.(jpg|jpeg|png)$/i;
+
+            return f &&
+                f.size <= 1 * 1024 * 1024 &&
+                reType.test(f.type) &&
+                reName.test(f.name);
+        }
+
+        let src = null;
+
+        $('.upload input').change(e => {
+            let f = e.target.files[0];
+            let img = $(e.target).siblings('img')[0];
+
+            if (!src) src = img.src;
+
+            if (validatePhoto(f)) {
+                img.src = URL.createObjectURL(f);
+            }
+            else {
+                img.src = src;
+                e.target.value = '';
+            }
+
+            $(e.target).valid();
         });
 
         function bckFunc() {
-           // $("#first").css('display', 'block');
-           // $("#second").css('display', 'block');
-            location.href = '@Url.Action("Index", "Home")';
-        }
+            $("#first").css('display', 'block');
+            $("#second").css('display', 'none');        }
 
-        @*$('body').on('click', 'input[type="radio"]', function () {
-            $("#first").css('display', 'none');
-            $("#second").css('display', 'block');
-        });*@
 
         $("#Camera").webcam({
              width: 320,
@@ -215,16 +247,27 @@
             onSave: function () {
                 $("#cameraDiv").css('display', 'none');
                 $("#optDiv").css('display', 'block');
+                $.ajax({
+                    url: '/Account/GetTempName',
+                    type: 'POST',
+                    success: function (temp) {
+                        alert('Captured successfull.');
+                        $('#blah').attr("src", "../Photo/" + temp);
+                        $('#webPhoto').val(temp);
+                    },
+                    error: function () {
+                        alert("Some error occured!");
+                    }
+                });
              },
-             onCapture: function () {
-                 webcam.save("@Url.Content("~/User/Capture")/");
-
+            onCapture: function () {
+                webcam.save("@Url.Content("~/Account/Capture")/");
 
              },
              debug: function () { },
             onLoad: function () {
 
             }
-         });
+        });
     </script>
 }

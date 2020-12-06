@@ -264,16 +264,12 @@ namespace EventManagementSystem.Models
         [Required]
         [EmailAddress(ErrorMessage = "Invalid format")]
         public string email { get; set; }
-        [Required]
-        [MinLength(5, ErrorMessage = "5 minimum length")]
-        [MaxLength(15, ErrorMessage = "15 maximum length")]
         public string username { get; set; }
-        [Required]
-        public string password { get; set; }
-        [System.ComponentModel.DataAnnotations.Compare("password", ErrorMessage = "Password not matched")]
+        public string newPassword { get; set; }
+        [System.ComponentModel.DataAnnotations.Compare("newPassword", ErrorMessage = "Password not matched")]
         public string confirmPassword { get; set; }
-        //[Required]
         public HttpPostedFileBase Photo { get; set; }
+        public string webPhoto { get; set; }
         public string PhotoUrl { get; set; }
         public string role { get; set; }
         public Nullable<bool> organizer { get; set; }
@@ -285,13 +281,33 @@ namespace EventManagementSystem.Models
     public class LoginVM
     {
         [Required]
-        []
         public string Username { get; set; }
 
         [Required]
         public string Password { get; set; }
 
         public bool RememberMe { get; set; }
+    }
+
+    public class PassRecoverVM
+    {
+        [Required(ErrorMessage ="Please enter your username")]
+        [Remote("IsUserNameRegistered", "Account", ErrorMessage = "Username does not exists")]
+        public string username { get; set; }
+        [Required(ErrorMessage ="Please enter your registered email")]
+        [EmailAddress]
+        public string email { get; set; }
+    }
+
+    public class SetNewPassVM
+    {
+        [Required]
+        public string password { get; set; }
+        [Required]
+        [System.ComponentModel.DataAnnotations.Compare("password", ErrorMessage = "Password not matched")]
+        public string confirmPassword { get; set; }
+        public int userId { get; set; }
+
     }
 
 
@@ -362,5 +378,7 @@ namespace EventManagementSystem.Models
         public virtual Registration Registration { get; set; }
 
     }
+
+
 
 }
