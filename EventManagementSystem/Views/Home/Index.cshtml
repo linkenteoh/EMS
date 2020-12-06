@@ -3,16 +3,20 @@
 @{
     ViewBag.Title = "Index";
     int count = 0;
+    int indCount = 0;
 }
 
 <div class="whole">
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
-  @*      <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
-        </ol>*@
+        <ol class="carousel-indicators">
+            @foreach (var a in Model)
+            {
+                <li data-target="#myCarousel" data-slide-to="@indCount" class="active"></li>
+                indCount++;
+            }
+        </ol>
+
 
         <!-- Wrapper for slides -->
         <div class="carousel-inner">
@@ -21,48 +25,20 @@
                 if (a.status == true)
                 {
                     count++;
-                    <ol class="carousel-indicators">
-                        @if (count == 1)
-                        {
-                            <li data-target="#myCarousel" data-slide-to="@count" class="active"></li>
-                        }
-                        else
-                        {
-                            <li data-target="#myCarousel" data-slide-to="@count"></li>
-                        }
-
-                    </ol>
-
                     if (count == 1)
                     {
-
                         <div class="item active" id="advertisement">
-                            <a href="FFF"><img src="~/Photo/@a.photoURL" alt="Los Angeles"></a>
+                            <a href="@count"><img src="~/Photo/@a.photoURL" style="width:100%;" alt="@a.name"></a>
                         </div>
-
                     }
                     else
                     {
                         <div class="item" id="advertisement">
-                            <a href="FFF"><img src="~/Photo/@a.photoURL" alt="Los Angeles"></a>
+                            <a href="@count"><img src="~/Photo/@a.photoURL" style="width:100%;" alt="@a.name"></a>
                         </div>
-
                     }
-
                 }
-
             }
-            @*<div class="item active">
-            <a href="FFF"><img src="~/1.jpg" alt="Los Angeles"></a>
-        </div>
-
-        <div class="item " >
-            <img src="~/Images/WeChat Image_20201202023139.jpg" alt="Chicago">
-        </div>
-
-        <div class="item">
-            <img src="ny.jpg" alt="New York">
-        </div>*@
         </div>
 
         <!-- Left and right controls -->

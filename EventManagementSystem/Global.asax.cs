@@ -10,7 +10,8 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Helpers;
 using System.Security.Claims;
-
+using System.Data.SqlClient;
+using System.Configuration;
 
 namespace EventManagementSystem
 {
@@ -25,6 +26,11 @@ namespace EventManagementSystem
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Name;
         }
+
+
+      
+
+
 
         /*        protected void Session_Start()
                 {

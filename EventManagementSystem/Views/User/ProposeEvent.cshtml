@@ -60,14 +60,13 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col-md-6">
-                        @Html.LabelFor(e => e.startDate, "Start Date")@Html.TextBoxFor(e => e.startDate, "{0: yyyy-MM-dd}", new { type = "date", min, max, @class = "form-control" })
+                        @Html.LabelFor(e => e.date, "Date")@Html.TextBoxFor(e => e.date, "{0:yyyy-MM-dd}", new { type = "date", min, max, @class = "form-control" })
                         @*<small>(@min to @max )</small>*@
-                        @Html.ValidationMessageFor(e => e.startDate)
+                        @Html.ValidationMessageFor(e => e.date)
                     </div>
-
                     <div class="col-md-6">
-                        @Html.LabelFor(e => e.endDate, "End Date")@Html.TextBoxFor(e => e.endDate, "{0: yyyy-MM-dd}", new { type = "date", min, max, @class = "form-control" })
-                        @Html.ValidationMessageFor(e => e.endDate)
+                        @Html.LabelFor(e => e.participants, "Participants")@Html.TextBoxFor(e => e.participants, new { type = "number", @class = "form-control", placeholder = "20", min = "20" })
+                        @Html.ValidationMessageFor(e => e.participants)
                     </div>
                 </div>
                 <div class="row mt-4">
@@ -81,10 +80,10 @@
                     </div>
                 </div>
                 <div class="row mt-6">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         @Html.LabelFor(e => e.des, "Description")@Html.TextAreaFor(e => e.des, new
 {
-style = "width: 600px; height: 200px; resize: none",
+style = "width: 100%; height: 200px; resize: none",
 @class = "form-control",
 autofocus = "",
 placeholder = "Description"
@@ -92,10 +91,7 @@ placeholder = "Description"
                         @Html.ValidationMessageFor(e => e.des)
 
                     </div>
-                    <div class="col-md-6">
-                        @Html.LabelFor(e => e.participants, "Participants")@Html.TextBoxFor(e => e.participants, new { type = "number", @class = "form-control", placeholder = "20", min = "20" })
-                        @Html.ValidationMessageFor(e => e.participants)
-                    </div>
+
                 </div>
                 <div class="mt-12" style="margin-top:15px"><section><button class="btn btn-primary profile-button">Propose Event</button></section></div>
             </div>

@@ -28,9 +28,12 @@
             </div>
         </div>
 
-        <hr />
-        <h4>Interested in this event?</h4>
-        <a class="btn btn-primary" href="~/Event/RegisterEvent?username=@User.Identity.Name&eventId=@Model.Id&d=@DateTime.Now.ToString("dd-MM-yyyy")" onclick="return confirm('Are you sure?')" style="width:100%; padding:10px; background:#148603">Register now!</a>
+        @if (Model.Organiser.User.username != User.Identity.Name)
+        {
+            <hr />
+            <h4>Interested in this event?</h4>
+            <a class="btn btn-primary" href="~/Event/RegisterEvent?eventId=@Model.Id&d=@DateTime.Now.ToString("dd-MM-yyyy")" onclick="return confirm('Are you sure?')" style="width:100%; padding:10px; background:#148603">Register now!</a>
+        }
 
         <hr />
         <div class="panel-heading" style="border:1px #c3c3c3 solid; background: #007a77;">
@@ -81,12 +84,8 @@
                         <td>: @Model.des</td>
                     </tr>
                     <tr>
-                        <th>Start date</th>
-                        <td>: @Model.startDate.ToString("dd-MM-yyy")</td>
-                    </tr>
-                    <tr>
-                        <th>End date</th>
-                        <td>: @Model.endDate.ToString("dd-MM-yyy")</td>
+                        <th>Event date</th>
+                        <td>: @Model.date.ToString("dd-MM-yyy")</td>
                     </tr>
                     <tr>
                         <th>Start time</th>
@@ -106,20 +105,5 @@
         </div>
     </div>
 </div>
-
-
-@section foot{
-    <script>
-        $('#Details').click(function () {
-
-        });
-        $('#Participants').click(function () {
-
-        });
-        $('#Chat').click(function () {
-
-        });
-    </script>
-    }
 
 

@@ -26,8 +26,7 @@ namespace EventManagementSystem.Models
         public decimal price { get; set; }
         public int availability { get; set; }
         public int participants { get; set; }
-        public System.DateTime startDate { get; set; }
-        public System.DateTime endDate { get; set; }
+        public System.DateTime date { get; set; }
         public System.TimeSpan startTime { get; set; }
         public System.TimeSpan endTime { get; set; }
         public Nullable<bool> approvalStat { get; set; }

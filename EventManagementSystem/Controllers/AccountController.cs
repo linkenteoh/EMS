@@ -13,7 +13,7 @@ using EventManagementSystem.reCAPTCHA;
 using System.Security.Claims;
 using Microsoft.Owin.Security;
 using Microsoft.AspNet.Identity;
-
+using Microsoft.Owin;
 
 namespace EventManagementSystem.Controllers
 {
@@ -51,6 +51,7 @@ namespace EventManagementSystem.Controllers
             var prop = new AuthenticationProperties
             {
                 IsPersistent = rememberMe //Remember
+                
             };
 
             // TODO(3): Sign in
@@ -141,7 +142,6 @@ namespace EventManagementSystem.Controllers
         // GET: Account/Register
         public ActionResult Register()
         {
-
             return View();
         }
 
@@ -194,13 +194,14 @@ namespace EventManagementSystem.Controllers
                     email = model.email,
                     username = model.username,
                     password = HashPassword(model.password),
-                    role = "Member",
-                    memberRole = model.role,
+                    role = model.role,    
+     
                     status = true,
                     activated = false,
                     recoveryCode = null,
                     activationCode = Guid.NewGuid().ToString(),
-                    photo = photoUrl
+                    photo = photoUrl,
+                    lockoutValue  = 0
                 };
 
                 try
@@ -263,48 +264,78 @@ namespace EventManagementSystem.Controllers
         {
             return View();
         }
-
+ 
         // POST: Account/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateGoogleCaptcha]
         public ActionResult Login(LoginVM model, string returnUrl = "")
         {
-            if (ModelState.IsValid)
+            
+            var user = db.Users.FirstOrDefault(u => u.username == model.Username);      
+            
+            HttpCookie blockCookie = new HttpCookie("block");
+            HttpCookie getCookie = HttpContext.Request.Cookies.Get("block");
+           
+            user.lockoutValue = user.lockoutValue +1;
+            db.SaveChanges();
+            int count = user.lockoutValue;
+
+            if (getCookie == null)
             {
-                //Get user record based on username
-                var user = db.Users.FirstOrDefault(u => u.username == model.Username);
-
-                //Check pass
-                if(user!=null && VerifyPassword(user.password, model.Password))
+                if (ModelState.IsValid)
                 {
-                    if (!user.activated)
+                    //Get user record based on username
+
+                    //Check pass
+                    if (user != null && VerifyPassword(user.password, model.Password))
                     {
-                        return RedirectToAction("Awaitactivation", "Account", new { email = user.email });
+                        if (!user.activated)
+                        {
+                            return RedirectToAction("Awaitactivation", "Account", new { email = user.email });
+                        }
+
+                        SignIn(user.username, user.role, model.RememberMe);
+                        Session["PhotoURL"] = user.photo;
+
+                        //Handle return url
+                        if (returnUrl == "")
+                        {
+                            TempData["Info"] = "You have successfully logged in.";
+                            if (user.role == "Student")
+                                return RedirectToAction("Index", "Home");
+                            else if (user.role == "Admin")
+                                return RedirectToAction("Index", "Admin");
+     
+                            user.lockoutValue = 0;
+                            db.SaveChanges();
+                        }
+
+                    }
+                    else if (count > 3)
+                    {
+                        
+                        blockCookie.Value = "IAMDONE";
+                        blockCookie.Expires = DateTime.Now.AddMinutes(1);
+                        Response.Cookies.Set(blockCookie);
+                        ModelState.AddModelError("Password", "Please login after 1 mintue!");
+                        user.lockoutValue = 0;
+                        db.SaveChanges();
+
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Password", "Username and password not matched.");
+
                     }
 
-                    SignIn(user.username, user.role, model.RememberMe);
-                    Session["PhotoURL"] = user.photo;
 
-                    //Handle return url
-                    if (returnUrl == "")
-                    {
-                        TempData["Info"] = "You have successfully logged in.";
-                        if( user.role =="Student")
-                        return RedirectToAction("Index", "Home");
-                        else if(user.role == "Admin")
-                        return RedirectToAction("Index", "Admin");
-                    }
                 }
-                else
-                {
-                    ModelState.AddModelError("Password", "Username and password not matched.");
-                }
-
-
             }
+           
             return View(model);
         }
+
 
         // GET: Account/Logout
         public ActionResult Logout()
@@ -315,5 +346,8 @@ namespace EventManagementSystem.Controllers
             TempData["Info"] = "You have successfully logged out.";
             return RedirectToAction("Index", "Home");
         }
+       
+
+
     }
 }

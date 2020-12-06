@@ -4,105 +4,105 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Alias="Self" Namespace="DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012">
+    <Schema Namespace="DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Advertisement">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="name" Nullable="false" MaxLength="50" Type="varchar" />
-          <Property Name="des" Nullable="false" MaxLength="50" Type="varchar" />
-          <Property Name="startDate" Nullable="false" Type="date" />
-          <Property Name="endDate" Nullable="false" Type="date" />
-          <Property Name="startTime" Nullable="false" Precision="7" Type="time" />
-          <Property Name="endTime" Nullable="false" Precision="7" Type="time" />
-          <Property Name="charge" Nullable="false" Precision="18" Scale="2" Type="decimal" />
-          <Property Name="photoURL" MaxLength="100" Type="varchar" />
-          <Property Name="status" Nullable="false" Type="bit" />
-          <Property Name="userId" Nullable="false" Type="int" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="des" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="startDate" Type="date" Nullable="false" />
+          <Property Name="endDate" Type="date" Nullable="false" />
+          <Property Name="startTime" Type="time" Precision="7" Nullable="false" />
+          <Property Name="endTime" Type="time" Precision="7" Nullable="false" />
+          <Property Name="charge" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="photoURL" Type="varchar" MaxLength="100" />
+          <Property Name="status" Type="bit" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="name" Nullable="false" MaxLength="50" Type="varchar" />
-          <Property Name="des" Nullable="false" MaxLength="50" Type="varchar" />
-          <Property Name="price" Nullable="false" Precision="18" Scale="2" Type="decimal" />
-          <Property Name="availability" Nullable="false" Type="int" />
-          <Property Name="participants" Nullable="false" Type="int" />
-          <Property Name="startDate" Nullable="false" Type="date" />
-          <Property Name="endDate" Nullable="false" Type="date" />
-          <Property Name="startTime" Nullable="false" Precision="7" Type="time" />
-          <Property Name="endTime" Nullable="false" Precision="7" Type="time" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="des" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="availability" Type="int" Nullable="false" />
+          <Property Name="participants" Type="int" Nullable="false" />
+          <Property Name="date" Type="date" Nullable="false" />
+          <Property Name="startTime" Type="time" Precision="7" Nullable="false" />
+          <Property Name="endTime" Type="time" Precision="7" Nullable="false" />
           <Property Name="approvalStat" Type="bit" />
-          <Property Name="status" Nullable="false" Type="bit" />
+          <Property Name="status" Type="bit" Nullable="false" />
           <Property Name="venueId" Type="int" />
-          <Property Name="photoURL" MaxLength="100" Type="varchar" />
-          <Property Name="OrgId" Nullable="false" Type="int" />
+          <Property Name="photoURL" Type="varchar" MaxLength="100" />
+          <Property Name="OrgId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Organiser">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" Type="int" />
-          <Property Name="represent" Nullable="false" MaxLength="50" Type="varchar" />
-          <Property Name="position" Nullable="false" MaxLength="50" Type="varchar" />
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="represent" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="position" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="status" Type="bit" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" Type="int" />
-          <Property Name="price" Nullable="false" Precision="18" Scale="2" Type="decimal" />
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="paymentdate" Type="date" />
-          <Property Name="duedate" Type="date" />
-          <Property Name="gst" Nullable="false" Precision="18" Scale="2" Type="decimal" />
-          <Property Name="status" Nullable="false" Type="bit" />
+          <Property Name="addCharge" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="commision" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="status" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Registration">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" Type="int" />
-          <Property Name="eventId" Nullable="false" Type="int" />
-          <Property Name="userId" Nullable="false" Type="int" />
-          <Property Name="status" Nullable="false" Type="bit" />
-          <Property Name="date" Nullable="false" Type="date" />
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="eventId" Type="int" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="status" Type="bit" Nullable="false" />
+          <Property Name="date" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" Type="int" />
-          <Property Name="name" Nullable="false" MaxLength="50" Type="varchar" />
-          <Property Name="contact_no" Nullable="false" MaxLength="12" Type="char" />
-          <Property Name="email" Nullable="false" MaxLength="50" Type="varchar" />
-          <Property Name="username" Nullable="false" MaxLength="50" Type="varchar" />
-          <Property Name="password" Nullable="false" Type="varchar(max)" />
-          <Property Name="role" Nullable="false" MaxLength="50" Type="varchar" />
-          <Property Name="organizer" Type="bit" />
-          <Property Name="status" Nullable="false" Type="bit" />
-          <Property Name="recoveryCode" MaxLength="50" Type="varchar" />
-          <Property Name="activationCode" MaxLength="50" Type="varchar" />
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="contact_no" Type="char" MaxLength="12" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar(max)" Nullable="false" />
+          <Property Name="role" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="memberRole" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="bit" Nullable="false" />
+          <Property Name="recoveryCode" Type="varchar" MaxLength="50" />
+          <Property Name="activationCode" Type="varchar" MaxLength="50" />
           <Property Name="photo" Type="varchar(max)" />
-          <Property Name="activated" Nullable="false" Type="bit" />
+          <Property Name="activated" Type="bit" Nullable="false" />
+          <Property Name="lockoutValue" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Venue">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="name" Nullable="false" MaxLength="50" Type="varchar" />
-          <Property Name="location" Nullable="false" Type="varchar(max)" />
-          <Property Name="equipment" Nullable="false" MaxLength="50" Type="varchar" />
-          <Property Name="capacity" Nullable="false" Type="int" />
-          <Property Name="photoURL" Nullable="false" MaxLength="100" Type="varchar" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="location" Type="varchar(max)" Nullable="false" />
+          <Property Name="equipment" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="capacity" Type="int" Nullable="false" />
+          <Property Name="photoURL" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <Association Name="FK_Event_Organiser">
-          <End Type="Self.Organiser" Multiplicity="1" Role="Organiser" />
-          <End Type="Self.Event" Multiplicity="*" Role="Event" />
+          <End Role="Organiser" Type="Self.Organiser" Multiplicity="1" />
+          <End Role="Event" Type="Self.Event" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Organiser">
               <PropertyRef Name="Id" />
@@ -113,8 +113,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Event_Venue">
-          <End Type="Self.Venue" Multiplicity="0..1" Role="Venue" />
-          <End Type="Self.Event" Multiplicity="*" Role="Event" />
+          <End Role="Venue" Type="Self.Venue" Multiplicity="0..1" />
+          <End Role="Event" Type="Self.Event" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Venue">
               <PropertyRef Name="Id" />
@@ -125,8 +125,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Organiser_User">
-          <End Type="Self.User" Multiplicity="1" Role="User" />
-          <End Type="Self.Organiser" Multiplicity="0..1" Role="Organiser" />
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Organiser" Type="Self.Organiser" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
@@ -137,8 +137,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Payment_Registration">
-          <End Type="Self.Registration" Multiplicity="1" Role="Registration" />
-          <End Type="Self.Payment" Multiplicity="0..1" Role="Payment" />
+          <End Role="Registration" Type="Self.Registration" Multiplicity="1" />
+          <End Role="Payment" Type="Self.Payment" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Registration">
               <PropertyRef Name="Id" />
@@ -149,8 +149,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Registration_Event">
-          <End Type="Self.Event" Multiplicity="1" Role="Event" />
-          <End Type="Self.Registration" Multiplicity="*" Role="Registration" />
+          <End Role="Event" Type="Self.Event" Multiplicity="1" />
+          <End Role="Registration" Type="Self.Registration" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Event">
               <PropertyRef Name="Id" />
@@ -161,8 +161,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Registration_User">
-          <End Type="Self.User" Multiplicity="1" Role="User" />
-          <End Type="Self.Registration" Multiplicity="*" Role="Registration" />
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Registration" Type="Self.Registration" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
@@ -173,8 +173,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Table_User">
-          <End Type="Self.User" Multiplicity="1" Role="User" />
-          <End Type="Self.Advertisement" Multiplicity="*" Role="Advertisement" />
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Advertisement" Type="Self.Advertisement" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
@@ -193,32 +193,32 @@
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Venue" EntityType="Self.Venue" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Event_Organiser" Association="Self.FK_Event_Organiser">
-            <End EntitySet="Organiser" Role="Organiser" />
-            <End EntitySet="Event" Role="Event" />
+            <End Role="Organiser" EntitySet="Organiser" />
+            <End Role="Event" EntitySet="Event" />
           </AssociationSet>
           <AssociationSet Name="FK_Event_Venue" Association="Self.FK_Event_Venue">
-            <End EntitySet="Venue" Role="Venue" />
-            <End EntitySet="Event" Role="Event" />
+            <End Role="Venue" EntitySet="Venue" />
+            <End Role="Event" EntitySet="Event" />
           </AssociationSet>
           <AssociationSet Name="FK_Organiser_User" Association="Self.FK_Organiser_User">
-            <End EntitySet="User" Role="User" />
-            <End EntitySet="Organiser" Role="Organiser" />
+            <End Role="User" EntitySet="User" />
+            <End Role="Organiser" EntitySet="Organiser" />
           </AssociationSet>
           <AssociationSet Name="FK_Payment_Registration" Association="Self.FK_Payment_Registration">
-            <End EntitySet="Registration" Role="Registration" />
-            <End EntitySet="Payment" Role="Payment" />
+            <End Role="Registration" EntitySet="Registration" />
+            <End Role="Payment" EntitySet="Payment" />
           </AssociationSet>
           <AssociationSet Name="FK_Registration_Event" Association="Self.FK_Registration_Event">
-            <End EntitySet="Event" Role="Event" />
-            <End EntitySet="Registration" Role="Registration" />
+            <End Role="Event" EntitySet="Event" />
+            <End Role="Registration" EntitySet="Registration" />
           </AssociationSet>
           <AssociationSet Name="FK_Registration_User" Association="Self.FK_Registration_User">
-            <End EntitySet="User" Role="User" />
-            <End EntitySet="Registration" Role="Registration" />
+            <End Role="User" EntitySet="User" />
+            <End Role="Registration" EntitySet="Registration" />
           </AssociationSet>
           <AssociationSet Name="FK_Table_User" Association="Self.FK_Table_User">
-            <End EntitySet="User" Role="User" />
-            <End EntitySet="Advertisement" Role="Advertisement" />
+            <End Role="User" EntitySet="User" />
+            <End Role="Advertisement" EntitySet="Advertisement" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -234,70 +234,69 @@
           <EntitySet Name="Users" EntityType="DBModel.User" />
           <EntitySet Name="Venues" EntityType="DBModel.Venue" />
           <AssociationSet Name="FK_Table_User" Association="DBModel.FK_Table_User">
-            <End EntitySet="Users" Role="User" />
-            <End EntitySet="Advertisements" Role="Advertisement" />
+            <End Role="User" EntitySet="Users" />
+            <End Role="Advertisement" EntitySet="Advertisements" />
           </AssociationSet>
           <AssociationSet Name="FK_Event_Organiser" Association="DBModel.FK_Event_Organiser">
-            <End EntitySet="Organisers" Role="Organiser" />
-            <End EntitySet="Events" Role="Event" />
+            <End Role="Organiser" EntitySet="Organisers" />
+            <End Role="Event" EntitySet="Events" />
           </AssociationSet>
           <AssociationSet Name="FK_Event_Venue" Association="DBModel.FK_Event_Venue">
-            <End EntitySet="Venues" Role="Venue" />
-            <End EntitySet="Events" Role="Event" />
+            <End Role="Venue" EntitySet="Venues" />
+            <End Role="Event" EntitySet="Events" />
           </AssociationSet>
           <AssociationSet Name="FK_Registration_Event" Association="DBModel.FK_Registration_Event">
-            <End EntitySet="Events" Role="Event" />
-            <End EntitySet="Registrations" Role="Registration" />
+            <End Role="Event" EntitySet="Events" />
+            <End Role="Registration" EntitySet="Registrations" />
           </AssociationSet>
           <AssociationSet Name="FK_Organiser_User" Association="DBModel.FK_Organiser_User">
-            <End EntitySet="Users" Role="User" />
-            <End EntitySet="Organisers" Role="Organiser" />
+            <End Role="User" EntitySet="Users" />
+            <End Role="Organiser" EntitySet="Organisers" />
           </AssociationSet>
           <AssociationSet Name="FK_Payment_Registration" Association="DBModel.FK_Payment_Registration">
-            <End EntitySet="Registrations" Role="Registration" />
-            <End EntitySet="Payments" Role="Payment" />
+            <End Role="Registration" EntitySet="Registrations" />
+            <End Role="Payment" EntitySet="Payments" />
           </AssociationSet>
           <AssociationSet Name="FK_Registration_User" Association="DBModel.FK_Registration_User">
-            <End EntitySet="Users" Role="User" />
-            <End EntitySet="Registrations" Role="Registration" />
+            <End Role="User" EntitySet="Users" />
+            <End Role="Registration" EntitySet="Registrations" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Advertisement">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
-          <Property Name="name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="des" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="startDate" Nullable="false" Precision="0" Type="DateTime" />
-          <Property Name="endDate" Nullable="false" Precision="0" Type="DateTime" />
-          <Property Name="startTime" Nullable="false" Precision="7" Type="Time" />
-          <Property Name="endTime" Nullable="false" Precision="7" Type="Time" />
-          <Property Name="charge" Nullable="false" Precision="18" Scale="2" Type="Decimal" />
-          <Property Name="photoURL" MaxLength="100" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="status" Nullable="false" Type="Boolean" />
-          <Property Name="userId" Nullable="false" Type="Int32" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="des" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="startDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="endDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="startTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="endTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="charge" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="photoURL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="Boolean" Nullable="false" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="User" Relationship="DBModel.FK_Table_User" FromRole="Advertisement" ToRole="User" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
-          <Property Name="name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="des" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="price" Nullable="false" Precision="18" Scale="2" Type="Decimal" />
-          <Property Name="availability" Nullable="false" Type="Int32" />
-          <Property Name="participants" Nullable="false" Type="Int32" />
-          <Property Name="startDate" Nullable="false" Precision="0" Type="DateTime" />
-          <Property Name="endDate" Nullable="false" Precision="0" Type="DateTime" />
-          <Property Name="startTime" Nullable="false" Precision="7" Type="Time" />
-          <Property Name="endTime" Nullable="false" Precision="7" Type="Time" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="des" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="availability" Type="Int32" Nullable="false" />
+          <Property Name="participants" Type="Int32" Nullable="false" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="startTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="endTime" Type="Time" Nullable="false" Precision="7" />
           <Property Name="approvalStat" Type="Boolean" />
-          <Property Name="status" Nullable="false" Type="Boolean" />
+          <Property Name="status" Type="Boolean" Nullable="false" />
           <Property Name="venueId" Type="Int32" />
-          <Property Name="photoURL" MaxLength="100" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="OrgId" Nullable="false" Type="Int32" />
+          <Property Name="photoURL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="OrgId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Organiser" Relationship="DBModel.FK_Event_Organiser" FromRole="Event" ToRole="Organiser" />
           <NavigationProperty Name="Venue" Relationship="DBModel.FK_Event_Venue" FromRole="Event" ToRole="Venue" />
           <NavigationProperty Name="Registrations" Relationship="DBModel.FK_Registration_Event" FromRole="Event" ToRole="Registration" />
@@ -306,9 +305,9 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" Type="Int32" />
-          <Property Name="represent" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="position" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="represent" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="position" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="status" Type="Boolean" />
           <NavigationProperty Name="Events" Relationship="DBModel.FK_Event_Organiser" FromRole="Organiser" ToRole="Event" />
           <NavigationProperty Name="User" Relationship="DBModel.FK_Organiser_User" FromRole="Organiser" ToRole="User" />
@@ -317,23 +316,23 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" Type="Int32" />
-          <Property Name="price" Nullable="false" Precision="18" Scale="2" Type="Decimal" />
-          <Property Name="paymentdate" Precision="0" Type="DateTime" />
-          <Property Name="duedate" Precision="0" Type="DateTime" />
-          <Property Name="gst" Nullable="false" Precision="18" Scale="2" Type="Decimal" />
-          <Property Name="status" Nullable="false" Type="Boolean" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="paymentdate" Type="DateTime" Precision="0" />
+          <Property Name="addCharge" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="commision" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="status" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Registration" Relationship="DBModel.FK_Payment_Registration" FromRole="Payment" ToRole="Registration" />
         </EntityType>
         <EntityType Name="Registration">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" Type="Int32" />
-          <Property Name="eventId" Nullable="false" Type="Int32" />
-          <Property Name="userId" Nullable="false" Type="Int32" />
-          <Property Name="status" Nullable="false" Type="Boolean" />
-          <Property Name="date" Nullable="false" Precision="0" Type="DateTime" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="eventId" Type="Int32" Nullable="false" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="status" Type="Boolean" Nullable="false" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="Event" Relationship="DBModel.FK_Registration_Event" FromRole="Registration" ToRole="Event" />
           <NavigationProperty Name="Payment" Relationship="DBModel.FK_Payment_Registration" FromRole="Registration" ToRole="Payment" />
           <NavigationProperty Name="User" Relationship="DBModel.FK_Registration_User" FromRole="Registration" ToRole="User" />
@@ -342,19 +341,20 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" Type="Int32" />
-          <Property Name="name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="contact_no" Nullable="false" MaxLength="12" FixedLength="true" Unicode="false" Type="String" />
-          <Property Name="email" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="username" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="password" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="role" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="organizer" Type="Boolean" />
-          <Property Name="status" Nullable="false" Type="Boolean" />
-          <Property Name="recoveryCode" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="activationCode" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="photo" MaxLength="Max" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="activated" Nullable="false" Type="Boolean" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="contact_no" Type="String" Nullable="false" MaxLength="12" FixedLength="true" Unicode="false" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="role" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="memberRole" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="Boolean" Nullable="false" />
+          <Property Name="recoveryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="activationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="activated" Type="Boolean" Nullable="false" />
+          <Property Name="lockoutValue" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Advertisements" Relationship="DBModel.FK_Table_User" FromRole="User" ToRole="Advertisement" />
           <NavigationProperty Name="Organiser" Relationship="DBModel.FK_Organiser_User" FromRole="User" ToRole="Organiser" />
           <NavigationProperty Name="Registrations" Relationship="DBModel.FK_Registration_User" FromRole="User" ToRole="Registration" />
@@ -363,17 +363,17 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
-          <Property Name="name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="location" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="equipment" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
-          <Property Name="capacity" Nullable="false" Type="Int32" />
-          <Property Name="photoURL" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="equipment" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="capacity" Type="Int32" Nullable="false" />
+          <Property Name="photoURL" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Events" Relationship="DBModel.FK_Event_Venue" FromRole="Venue" ToRole="Event" />
         </EntityType>
         <Association Name="FK_Table_User">
-          <End Type="DBModel.User" Multiplicity="1" Role="User" />
-          <End Type="DBModel.Advertisement" Multiplicity="*" Role="Advertisement" />
+          <End Type="DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="DBModel.Advertisement" Role="Advertisement" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
@@ -384,8 +384,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Event_Organiser">
-          <End Type="DBModel.Organiser" Multiplicity="1" Role="Organiser" />
-          <End Type="DBModel.Event" Multiplicity="*" Role="Event" />
+          <End Type="DBModel.Organiser" Role="Organiser" Multiplicity="1" />
+          <End Type="DBModel.Event" Role="Event" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Organiser">
               <PropertyRef Name="Id" />
@@ -396,8 +396,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Event_Venue">
-          <End Type="DBModel.Venue" Multiplicity="0..1" Role="Venue" />
-          <End Type="DBModel.Event" Multiplicity="*" Role="Event" />
+          <End Type="DBModel.Venue" Role="Venue" Multiplicity="0..1" />
+          <End Type="DBModel.Event" Role="Event" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Venue">
               <PropertyRef Name="Id" />
@@ -408,8 +408,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Registration_Event">
-          <End Type="DBModel.Event" Multiplicity="1" Role="Event" />
-          <End Type="DBModel.Registration" Multiplicity="*" Role="Registration" />
+          <End Type="DBModel.Event" Role="Event" Multiplicity="1" />
+          <End Type="DBModel.Registration" Role="Registration" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Event">
               <PropertyRef Name="Id" />
@@ -420,8 +420,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Organiser_User">
-          <End Type="DBModel.User" Multiplicity="1" Role="User" />
-          <End Type="DBModel.Organiser" Multiplicity="0..1" Role="Organiser" />
+          <End Type="DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="DBModel.Organiser" Role="Organiser" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
@@ -432,8 +432,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Payment_Registration">
-          <End Type="DBModel.Registration" Multiplicity="1" Role="Registration" />
-          <End Type="DBModel.Payment" Multiplicity="0..1" Role="Payment" />
+          <End Type="DBModel.Registration" Role="Registration" Multiplicity="1" />
+          <End Type="DBModel.Payment" Role="Payment" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Registration">
               <PropertyRef Name="Id" />
@@ -444,8 +444,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Registration_User">
-          <End Type="DBModel.User" Multiplicity="1" Role="User" />
-          <End Type="DBModel.Registration" Multiplicity="*" Role="Registration" />
+          <End Type="DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="DBModel.Registration" Role="Registration" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
@@ -488,8 +488,7 @@
                 <ScalarProperty Name="approvalStat" ColumnName="approvalStat" />
                 <ScalarProperty Name="endTime" ColumnName="endTime" />
                 <ScalarProperty Name="startTime" ColumnName="startTime" />
-                <ScalarProperty Name="endDate" ColumnName="endDate" />
-                <ScalarProperty Name="startDate" ColumnName="startDate" />
+                <ScalarProperty Name="date" ColumnName="date" />
                 <ScalarProperty Name="participants" ColumnName="participants" />
                 <ScalarProperty Name="availability" ColumnName="availability" />
                 <ScalarProperty Name="price" ColumnName="price" />
@@ -513,8 +512,8 @@
             <EntityTypeMapping TypeName="DBModel.Payment">
               <MappingFragment StoreEntitySet="Payment">
                 <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="gst" ColumnName="gst" />
-                <ScalarProperty Name="duedate" ColumnName="duedate" />
+                <ScalarProperty Name="commision" ColumnName="commision" />
+                <ScalarProperty Name="addCharge" ColumnName="addCharge" />
                 <ScalarProperty Name="paymentdate" ColumnName="paymentdate" />
                 <ScalarProperty Name="price" ColumnName="price" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -535,12 +534,13 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="DBModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="lockoutValue" ColumnName="lockoutValue" />
                 <ScalarProperty Name="activated" ColumnName="activated" />
                 <ScalarProperty Name="photo" ColumnName="photo" />
                 <ScalarProperty Name="activationCode" ColumnName="activationCode" />
                 <ScalarProperty Name="recoveryCode" ColumnName="recoveryCode" />
                 <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="organizer" ColumnName="organizer" />
+                <ScalarProperty Name="memberRole" ColumnName="memberRole" />
                 <ScalarProperty Name="role" ColumnName="role" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="username" ColumnName="username" />

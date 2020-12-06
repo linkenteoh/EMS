@@ -1,0 +1,58 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<Event>
+
+@if (Model.Count() > 0)
+{
+<div id="countModel"><span>@Model.Where(e => e.status == true && e.approvalStat == null).Count() record(s) in approval list</span></div>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Price(RM)</th>
+                <th scope="col">Date</th>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
+                <th scope="col">Organized by</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var s in Model)
+            {
+                    <tr>
+                        <td scope="row">@s.Id</td>
+                        <td scope="row">@s.name</td>
+                        <td scope="row">@s.des</td>
+                        <td scope="row">@s.price</td>
+                        <td scope="row">@s.date.ToString("dd/MM/yyyy")</td>
+                        <td scope="row">@s.startTime</td>
+                        <td scope="row">@s.endTime</td>
+                        <td scope="row">@s.Organiser.represent </td>
+                        <td>
+                            <a class="btn btn-primary" href="/Admin/ApproveProposal?id=@s.Id">Approve</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-danger" href="/Admin/DeclineProposal?id=@s.Id">Decline</a>
+                        </td>
+                    </tr>
+            }
+        </tbody>
+    </table>
+
+    <div id="paged">
+        @Html.PagedListPager(
+            Model,
+            p => "?page=" + p,
+            PagedListRenderOptions.Classic
+        )
+    </div>
+}
+else
+{
+    <div style=" text-align: center; margin-top:50px;"><span style="font-size: 16pt; text-align:center;">No Records Founded.</span></div>
+}

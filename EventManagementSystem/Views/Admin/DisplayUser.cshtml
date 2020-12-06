@@ -4,61 +4,118 @@
 @{
     ViewBag.Title = "User List";
     Layout = "~/Views/Shared/_Dashboard.cshtml";
+    var results = new AjaxOptions
+    {
+        Url = "/Admin/DisplayUser",
+        HttpMethod = "get",
+        LoadingElementId = "loader",
+        UpdateTargetId = "userTable",
+    };
+    var attr = new
+    {
+        @class = "form-horizontal",
+    };
 }
+<style>
+    #loader {
+        text-align: center;
+        display: none;
+    }
 
+    #paged, #countModel {
+        margin: 10px;
+        text-align: center;
+        display: block;
+    }
+</style>
 <h1>User List</h1>
 
 <input class="btn btn-primary" data-get="/Admin/InsertUser" type="button" value="Add User">
 
-<p>@Model.Where(u => u.status == true).Count() record(s) in user list</p>
-<table class="table table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Contact Number</th>
-            <th scope="col">Email</th>
-            <th scope="col">Username</th>
-            <th scope="col">Role</th>
-            <th scope="col">Organizer</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var u in Model)
+@using (Ajax.BeginForm("DisplayUser", "Admin", results, attr))
+{
+    <span class="btn btn-secondary dropdown-toggle searchButton">Filter</span>
+    <span>@Html.DropDownList("sort", ViewBag.SortList as SelectList, "Sort By", new { @class = "btn btn-secondary", onChange = "sortData(this);" })</span>
+    <span>
+        @Html.TextBox("searchName", null, new
         {
-            if (u.status == true)
-            {
+            data_upper = "",
+            autofocus = "",
+            @class = "form-control",
+            style = "display:inline; width:600px;",
+            placeholder = "Search..."
+        })
+    </span>
+    <i class="fa fa-search fa-2x"></i>
+    <div class="parent">
+        <div class="searchCont" style="display:none">
+            <div style="padding-left: 10px;">
+                <h3 style="padding-top: 10px; padding-bottom: 10px;">Filters</h3>
+                <div class="form-group row">
+                    @Html.Label("name", "Name", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("name", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control col-sm-2" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("username", "Username", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("username", null, new { type = "search", @class = "form-control col-sm-2" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("email", "Email", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("email", null, new { type = "email", placeholder = "example@gmail.com", @class = "form-control timepicker col-sm-2" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("role", "Role", new { @class = "control-label col-sm-2" })
+                    @Html.DropDownList("role", ViewBag.RoleList as SelectList, "- Select One -", new { @class = "control-label col-sm-2 btn btn-secondary form-control" })
+                    <div class="col-sm-offset-1 col-sm-1">
+                        <input type="submit" class="btn btn-primary searchBtn" name="Search" value="Search" />
+                    </div>
+                    <div class="col-sm-1">
+                        <input type="reset" class="btn btn-primary " name="Reset" value="Reset" onclick="resetData();" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div id="userTable">
+    <div id="loader"><img src="~/Images/loader.gif"></div>
+    @Html.Partial("_UserList")
+</div>
 
-                <tr>
-                    <td scope="row">@u.Id</td>
-                    <td scope="row">@u.name</td>
-                    <td scope="row">@u.contact_no</td>
-                    <td scope="row">@u.email</td>
-                    <td scope="row">@u.username</td>
-                    <td scope="row">@u.role</td>
-                    <td scope="row">@u.organizer</td>
-                    <td>
-                        <input class="btn btn-primary" data-get="/Admin/EditUser?id=@u.Id" type="button" value="Edit">
-                    </td>
-                    <td>
-                        <input class="btn btn-danger" data-get="/Admin/DeleteUser?id=@u.Id" type="button" value="Delete">
-                    </td>
-                </tr>
+@section foot{
+
+    <script>
+        //when search button click
+        jQuery(document).on('click', '.searchButton', function () {
+            if (jQuery('.parent').hasClass('menuActive')) {
+                jQuery('.parent').removeClass('menuActive');
+                jQuery('.parent .menu').slideUp(0);
             }
+            jQuery('.parent').toggleClass('searchActive').children('.searchCont').slideToggle(200);
+        });
+
+        // Search Name
+        let timer = null;
+        $('#searchName').on('input', e => {
+            // when user enter text, it will clear previous execution
+            clearTimeout(timer);
+            timer = setTimeout(() => $(e.target.form).submit(), 1000);
+        });
+
+        // Sort By
+        function sortData(e) {
+            e.form.submit();
         }
 
-    </tbody>
-</table>
+        // reset data filter
+        function resetData() {
+            $("input .form-control").val(0);
+        }
+    </script>
+}
 
 
-@Html.PagedListPager(
-    Model,
-    p => "?page=" + p,
-    PagedListRenderOptions.Classic
-)
+
 
 
 

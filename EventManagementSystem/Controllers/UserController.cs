@@ -10,7 +10,10 @@ using EventManagementSystem.reCAPTCHA;
 using System.Text.RegularExpressions;
 using System.Web.Helpers;
 using PagedList;
-
+using QRCoder;
+using System.Drawing;
+using System.Net.Mail;
+using System.Text;
 
 namespace EventManagementSystem.Controllers
 {
@@ -128,7 +131,6 @@ namespace EventManagementSystem.Controllers
                 name = u.name,
                 contact_no = u.contact_no.Trim(),
                 email = u.email,
-                password = u.password,
                 PhotoUrl = u.photo
             };
             return View(Model);
@@ -167,58 +169,102 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
 
-        public ActionResult EventSearchIndex(string name ="", string startDate ="", string endDate="", 
-            string startTime = "", string endTime = "", int page = 1)
+        public ActionResult EventSearchIndex(string searchName = "", string name = "", string startDate = "", string endDate = "",
+            int priceFrom = 0, int priceTo = 0, string startTime = "", string endTime = "", string venue = "", string sort = "", int page = 1)
         {
+            ViewBag.VenueList = new SelectList(db.Venues, "name", "name");
+            ViewBag.sortList = new SelectList(
+                new List<SortItems> { 
+                    new SortItems { Id = "name", name = "Name"}, 
+                    new SortItems { Id = "price", name = "Price"}, 
+                    new SortItems { Id = "date", name = "Date"},
+                    new SortItems { Id = "startTime", name = "Start Time"},
+                    new SortItems { Id = "endTime", name = "End Time"},
+                    new SortItems { Id = "venue", name = "Venue"} 
+                },"Id", "name") ;
             var username = User.Identity.Name;
             var u = db.Users.Where(x => x.username == username).FirstOrDefault();
             // Get userID in registration
             var reg = db.Registrations.Where(r => u.Id.Equals(r.userId)).Select(r => r.eventId).ToArray();
             // Get EventID in registration that contains the userID
-            var model = db.Events.Where(m => reg.Contains(m.Id)).AsQueryable();
+            var model = db.Events.Where(m => reg.Contains(m.Id));
 
             // Name
             if (!string.IsNullOrEmpty(name))
             {
-                model = db.Events.Where(m => m.name.Contains(name));
+                model = model.Where(m => m.name.Contains(name));
+            }
+            // Venue
+            if (!string.IsNullOrEmpty(venue))
+            {
+                model = model.Where(x => x.Venue.name.Contains(venue));
             }
             // Start Date && End Date
             if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
             {
-                var dtFrom = DateTime.Parse(startDate);
-                var dtTo = DateTime.Parse(endDate);
-                model = db.Events.Where(x => x.startDate >= dtFrom && x.endDate <= dtTo);
-            }else if (!string.IsNullOrEmpty(startDate))
+                var timeFrom = DateTime.Parse(startDate);
+                var timeTo = DateTime.Parse(endDate);
+                model = model.Where(x => x.date >= timeFrom && x.date <= timeTo);
+            }
+            else if (!string.IsNullOrEmpty(startDate))
             {
-                var dtFrom = DateTime.Parse(startDate);
-                model = db.Events.Where(x => x.startDate >= dtFrom);
+                var timeFrom = DateTime.Parse(startDate);
+                model = model.Where(x => x.date >= timeFrom);
             }
             else if (!string.IsNullOrEmpty(endDate))
             {
-                var dtTo = DateTime.Parse(endDate);
-                model = db.Events.Where(x => x.endDate <= dtTo);
+                var timeTo = DateTime.Parse(endDate);
+                model = model.Where(x => x.date <= timeTo);
             }
             // Start Time && End Time
             if (!string.IsNullOrEmpty(startTime) && !string.IsNullOrEmpty(endTime))
             {
                 var timeFrom = TimeSpan.Parse(startTime);
                 var timeTo = TimeSpan.Parse(endTime);
-                model = db.Events.Where(x => x.startTime >= timeFrom && x.endTime <= timeTo);
+                model = model.Where(x => x.startTime >= timeFrom && x.endTime <= timeTo);
             }
             else if (!string.IsNullOrEmpty(startTime))
             {
                 var timeFrom = TimeSpan.Parse(startTime);
-                model = db.Events.Where(x => x.startTime >= timeFrom);
+                model = model.Where(x => x.startTime >= timeFrom);
             }
             else if (!string.IsNullOrEmpty(endTime))
             {
                 var timeTo = TimeSpan.Parse(endTime);
-                model = db.Events.Where(x => x.endTime <= timeTo);
+                model = model.Where(x => x.endTime <= timeTo);
             }
+            // Price Range
+            if (priceFrom != 0 && priceTo != 0)
+            {
+                model = model.Where(x => x.price >= priceFrom && x.price <= priceTo);
+            }
+            else if (priceFrom != 0)
+            {
+                model = model.Where(x => x.price >= priceFrom);
+            }
+            else if (priceTo != 0)
+            {
+                model = model.Where(x => x.price <= priceTo);
+            }
+            // Search name
+            model = model.Where(x => x.name.Contains(searchName) || x.des.Contains(searchName) || x.Venue.name.Contains(searchName));
+            // Sort By
+            Func<Event, object> fn = s => s.Id;
+            switch (sort)
+            {
+                case "name": fn = s => s.name; break;
+                case "price": fn = s => s.price; break;
+                case "date": fn = s => s.date; break;
+                case "startTime": fn = s => s.startTime; break;
+                case "endTime": fn = s => s.endTime; break;
+                case "venue": fn = s => s.venueId; break;
+            }
+            // PagedList
+            var events = model.OrderBy(fn).ToPagedList(page, 10);
 
             if (Request.IsAjaxRequest())
-                return PartialView("_EventResults", model);
-            return View(model);
+                return PartialView("_EventResults", events);
+            return View(events);
         }
         [Authorize(Roles = "Organizer")]
         // GET: User/ProposeEvent
@@ -231,24 +277,7 @@ namespace EventManagementSystem.Controllers
         // POST: User/ProposeEvent
         [HttpPost]
         public ActionResult ProposeEvent(EventProposeVM model)
-        {
-
-            if (ModelState.IsValidField("startDate"))
-            {
-                if (model.startDate > model.endDate)
-                {
-                    ModelState.AddModelError("startDate", "Invalid date!");
-                }
-
-            }
-            if (ModelState.IsValidField("startTime"))
-            {
-                if (model.startTime > model.endTime)
-                {
-                    ModelState.AddModelError("startTime", "start time cannot exceed or equal end time!");
-                }
-            }
-     
+        {     
             string error = ValidatePhoto(model.Photo);
             if (error != null)
             {
@@ -265,8 +294,7 @@ namespace EventManagementSystem.Controllers
                     price = model.price,
                     participants = model.participants,
                     availability = model.participants,
-                    startDate = model.startDate,
-                    endDate = model.endDate,
+                    date = model.date,
                     startTime = model.startTime,
                     endTime = model.endTime,
                     approvalStat = null,
@@ -296,15 +324,98 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
 
-        public ActionResult EventsProposed(int page = 1)
+        public ActionResult EventsProposed(string searchName = "", string name = "", string startDate = "", string endDate = "",
+            string startTime = "", string endTime = "", string status = "", string sort = "", int page = 1)
         {
+            ViewBag.statusList = new SelectList(
+                new List<SortItems> {
+                    new SortItems { Id = "approved", name = "Approved"},
+                    new SortItems { Id = "pending", name = "Pending"},
+                    new SortItems { Id = "rejected", name = "Rejected"},
+                }, "Id", "name");
+            ViewBag.sortList = new SelectList(
+                new List<SortItems> {
+                    new SortItems { Id = "name", name = "Name"},
+                    new SortItems { Id = "date", name = "Date"},
+                    new SortItems { Id = "startTime", name = "Start Time"},
+                    new SortItems { Id = "endTime", name = "End Time"},
+                    new SortItems { Id = "status", name = "Status"}
+                }, "Id", "name");
+            var model = db.Events.Where(u => u.OrgId == db.Users.FirstOrDefault(org => org.username == User.Identity.Name).Id);
+
+            // Name
+            if (!string.IsNullOrEmpty(name))
+            {
+                model = model.Where(m => m.name.Contains(name));
+            }
+            // Status
+            if (!string.IsNullOrEmpty(status))
+            {
+                if (status == "approved")
+                {
+                    model = model.Where(x => x.approvalStat == true);
+                }
+                else if (status == "rejected")
+                {
+                    model = model.Where(x => x.approvalStat == false);
+                }
+                else if (status == "pending")
+                {
+                    model = model.Where(x => x.approvalStat == null);
+                }
+            }
+            // Start Date && End Date
+            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
+            {
+                var timeFrom = DateTime.Parse(startDate);
+                var timeTo = DateTime.Parse(endDate);
+                model = model.Where(x => x.date >= timeFrom && x.date <= timeTo);
+            }
+            else if (!string.IsNullOrEmpty(startDate))
+            {
+                var timeFrom = DateTime.Parse(startDate);
+                model = model.Where(x => x.date >= timeFrom);
+            }
+            else if (!string.IsNullOrEmpty(endDate))
+            {
+                var timeTo = DateTime.Parse(endDate);
+                model = model.Where(x => x.date <= timeTo);
+            }
+            // Start Time && End Time
+            if (!string.IsNullOrEmpty(startTime) && !string.IsNullOrEmpty(endTime))
+            {
+                var timeFrom = TimeSpan.Parse(startTime);
+                var timeTo = TimeSpan.Parse(endTime);
+                model = model.Where(x => x.startTime >= timeFrom && x.endTime <= timeTo);
+            }
+            else if (!string.IsNullOrEmpty(startTime))
+            {
+                var timeFrom = TimeSpan.Parse(startTime);
+                model = model.Where(x => x.startTime >= timeFrom);
+            }
+            else if (!string.IsNullOrEmpty(endTime))
+            {
+                var timeTo = TimeSpan.Parse(endTime);
+                model = model.Where(x => x.endTime <= timeTo);
+            }
+            // Search name
+            model = model.Where(x => x.name.Contains(searchName) || x.des.Contains(searchName) || x.Venue.name.Contains(searchName));
+            // Sort By
             Func<Event, object> fn = s => s.Id;
+            switch (sort)
+            {
+                case "name": fn = s => s.name; break;
+                case "date": fn = s => s.date; break;
+                case "startTime": fn = s => s.startTime; break;
+                case "endTime": fn = s => s.endTime; break;
+                case "status": fn = s => s.approvalStat; break;
+            }
+            // PagedList
+            var events = model.OrderBy(fn).ToPagedList(page, 10);
 
-
-            var events = db.Events.OrderBy(fn).Where(u => u.OrgId == db.Users.FirstOrDefault(org => org.username == User.Identity.Name).Id);
-            var model = events.ToPagedList(page, 5);
-
-            return View(model);
+            if (Request.IsAjaxRequest())
+                return PartialView("_EventApproveList", events);
+            return View(events);
         }
         [Authorize(Roles = "Organizer")]
         // GET: Event/ManageEventProposed
@@ -316,15 +427,15 @@ namespace EventManagementSystem.Controllers
                 return RedirectToAction("EventsProposed", "User");
             }
 
-            var model = new EventEditVM
+
+            var model = new OrgEditEventVM
             {
                 Id = Id,
                 name = e.name,
                 des = e.des,
                 price = e.price,
                 participants = e.participants,
-                startDate = e.startDate,
-                endDate = e.endDate,
+                date = e.date,
                 startTime = e.startTime,
                 endTime = e.endTime,
                 availability = e.availability,
@@ -333,7 +444,8 @@ namespace EventManagementSystem.Controllers
                 OrgId = e.OrgId,
                 venueId = e.venueId,
                 Organiser = e.Organiser,
-                Venue = e.Venue
+                Venue = e.Venue,
+                Registrations = e.Registrations
             };
 
             ViewBag.Registrations = db.Registrations.Where(r => r.eventId == Id);
@@ -346,12 +458,12 @@ namespace EventManagementSystem.Controllers
         [Authorize(Roles = "Organizer")]
         // POST: Event/ManageEventProposed
         [HttpPost]
-        public ActionResult ManageEventProposed(EventEditVM model)
+        public ActionResult ManageEventProposed(OrgEditEventVM model)
         {
             var e = db.Events.Find(model.Id);
             if (model == null)
             {
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("EventsProposed", "User");
             }
             if (ModelState.IsValid)
             {
@@ -360,11 +472,9 @@ namespace EventManagementSystem.Controllers
                 e.price = model.price;
                 e.availability = e.availability;
                 e.participants = model.participants;
-                e.startDate = model.startDate;
-                e.endDate = model.endDate;
+                e.date = model.date;
                 e.startTime = model.startTime;
                 e.endTime = model.endTime;
-                e.approvalStat = true;
                 if (model.Photo != null)
                 {
                     DeletePhoto(e.photoURL);
@@ -372,16 +482,179 @@ namespace EventManagementSystem.Controllers
                 }
                 db.SaveChanges();
                 TempData["info"] = "Event record updated successfully";
-                return RedirectToAction("ManageEventProposed", "User", new { id=model.Id });
+                return RedirectToAction("ManageEventProposed", "User", new { id = model.Id });
             }
             return View(model);
         }
 
-        public ActionResult Billing()
+        public ActionResult Billing(string searchName = "", string name = "", string startDate = "", string  endDate ="",
+            int priceFrom = 0, int priceTo = 0, string status = "", string sort = "", int page = 1)
         {
+            ViewBag.statusList = new SelectList(
+                new List<SortItems> {
+                    new SortItems { Id = "paid", name = "Paid"},
+                    new SortItems { Id = "unpaid", name = "Unpaid"},
+                }, "Id", "name");
+            ViewBag.sortList = new SelectList(
+                new List<SortItems> {
+                    new SortItems { Id = "name", name = "Name"},
+                    new SortItems { Id = "price", name = "Price"},
+                    new SortItems { Id = "date", name = "Date"},
+                    new SortItems { Id = "status", name = "Status"}
+                }, "Id", "name");
             int uId = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
-            var bill = db.Payments.ToList().Where(p => p.Registration.userId == uId);
+            var model = db.Payments.Where(p => p.Registration.userId == uId);
+
+            // Event Name
+            if (!string.IsNullOrEmpty(name))
+            {
+                model = model.Where(x => x.Registration.Event.name.Contains(name));
+            }
+            // Date Range
+            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
+            {
+                var timeFrom = DateTime.Parse(startDate);
+                var timeTo = DateTime.Parse(endDate);
+                model = model.Where(x => x.Registration.Event.date >= timeFrom && x.Registration.Event.date <= timeTo);
+            }
+            else if (!string.IsNullOrEmpty(startDate))
+            {
+                var timeFrom = DateTime.Parse(startDate);
+                model = model.Where(x => x.Registration.Event.date >= timeFrom);
+            }
+            else if (!string.IsNullOrEmpty(endDate))
+            {
+                var timeTo = DateTime.Parse(endDate);
+                model = model.Where(x => x.Registration.Event.date <= timeTo);
+            }
+            // Price Range
+            if (priceFrom != 0 && priceTo != 0)
+            {
+                model = model.Where(x => x.Registration.Event.price >= priceFrom && x.Registration.Event.price <= priceTo);
+            }
+            else if (priceFrom != 0)
+            {
+                model = model.Where(x => x.Registration.Event.price >= priceFrom);
+            }
+            else if (priceTo != 0)
+            {
+                model = model.Where(x => x.Registration.Event.price <= priceTo);
+            }
+            // Status
+            if (!string.IsNullOrEmpty(status))
+            {
+                if(status == "paid")
+                {
+                    model = model.Where(x => x.status == true);
+                }
+                else if(status == "unpaid")
+                {
+                    model = model.Where(x => x.status == false);
+                }
+            }
+
+            // Search name
+            model = model.Where(x => x.Registration.Event.name.Contains(searchName));
+            // Sort By
+            Func<Payment, object> fn = s => s.Id;
+            switch (sort)
+            {
+                case "name": fn = s => s.Registration.Event.name; break;
+                case "price": fn = s => s.price; break;
+                case "date": fn = s => s.Registration.Event.date; break;
+                case "status": fn = s => s.status; break;
+            }
+
+            // PagedList
+            var bill = model.OrderBy(fn).ToPagedList(page, 10);
+
+            if (Request.IsAjaxRequest())
+                return PartialView("_BillingList", bill);
             return View(bill);
+        }
+
+        // GET: User/Payment
+        public ActionResult Payment(int id)
+        {
+            var payment = db.Payments.Find(id);
+
+            var model = new PaymentVM
+            {
+                price = payment.price,
+                addCharge = payment.addCharge,
+                Registration = payment.Registration
+            };
+
+            return View(model);
+        }
+
+        // POST: User/Payment
+        [HttpPost]
+        public ActionResult Payment(PaymentVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var payment = db.Payments.Find(model.Id);
+                payment.status = true;
+                db.SaveChanges();
+                var user = db.Users.FirstOrDefault(u => u.username == User.Identity.Name);
+                int eventId = db.Registrations.FirstOrDefault(r => r.Id == model.Id).eventId;
+                string link = "https://localhost:44302/Event/EventDetail?id=" + eventId;
+                QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode(link, QRCodeGenerator.ECCLevel.Q);
+                QRCode qrCode = new QRCode(qrCodeData);
+
+                string base64String = null;
+                using (Bitmap bitMap = qrCode.GetGraphic(20))
+                {
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        bitMap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                        byte[] imageByte = ms.ToArray();
+                        base64String = Convert.ToBase64String(imageByte);
+                        SaveImage(base64String, "QR");
+                        
+                    }
+                }    
+
+                string path = Server.MapPath("~/Photo/QR.jpg");
+                var att = new Attachment(path);
+                MailMessage m = new MailMessage();
+                m.Attachments.Add(att);
+                string mail = @"";
+               
+                m.To.Add(user.email);
+                m.Subject = "Event Details";
+                m.Body = link;
+                m.IsBodyHtml = true; //Can send HTML FORMATTED Mail
+                new SmtpClient().Send(m);
+                TempData["Info"] = "Payment successful! You will receive an email! ";
+                return RedirectToAction("Billing", "User");
+            }
+          
+            return View();
+        }
+
+        public bool SaveImage(string base64String, string ImgName)
+        {
+            String path = Server.MapPath("~/Photo/"); //Path
+
+            //Check if directory exist
+            if (!System.IO.Directory.Exists(path))
+            {
+                System.IO.Directory.CreateDirectory(path); //Create directory if it doesn't exist
+            }
+
+            string imageName = ImgName + ".jpg";
+
+            //set the image path
+            string imgPath = Path.Combine(path, imageName);
+
+            byte[] imageBytes = Convert.FromBase64String(base64String);
+
+            System.IO.File.WriteAllBytes(imgPath, imageBytes);
+
+            return true;
         }
 
     }

@@ -1,0 +1,58 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<Advertisement>
+
+@if (@Model.Count() > 0)
+{
+    <span id="countModel">@Model.Where(a => a.status == true).Count() record(s) in advertisement list</span>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Charge</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model)
+            {
+                if (a.status == true)
+                {
+
+                    <tr>
+                        <td scope="row">@a.Id</td>
+                        <td scope="row">@a.name</td>
+                        <td scope="row">@a.des</td>
+                        <td scope="row">@a.charge</td>
+                        <td scope="row">@a.startDate.ToString("dd/MM/yyyy") @a.startTime </td>
+                        <td scope="row">@a.endDate.ToString("dd/MM/yyyy") @a.endTime </td>
+                        <td>
+                            <a class="btn btn-primary" href="/Admin/EditAdvert?id=@a.Id">Edit</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-danger" href="/Admin/DeleteAdvert?id=@a.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+
+    <div id="paged">
+        @Html.PagedListPager(
+            Model,
+            p => "?page=" + p,
+            PagedListRenderOptions.Classic
+        )
+    </div>
+}
+else
+{
+    <div style=" text-align: center; margin-top:50px;"><span style="font-size: 16pt; text-align:center;">No Records Found.</span></div>
+}

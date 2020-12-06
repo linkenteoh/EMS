@@ -2,54 +2,119 @@
 @using PagedList.Mvc
 @model IPagedList<Event>
 @{
-    ViewBag.Title = "EventsProposed";
+    ViewBag.Title = "Events Proposed";
+    var results = new AjaxOptions
+    {
+        Url = "/User/EventsProposed",
+        HttpMethod = "get",
+        LoadingElementId = "loader",
+        UpdateTargetId = "eventTable",
+    };
+    var attr = new
+    {
+        @class = "form-horizontal",
+    };
 }
+
+<style>
+    #loader {
+        text-align: center;
+        display: none;
+    }
+
+    #paged, #countModel {
+        margin: 10px;
+        text-align: center;
+        display: block;
+    }
+</style>
 
 <h2>Events Proposed</h2>
 <hr />
-<p>@Model.Count() of @Model.TotalItemCount record(s) | Page @Model.PageNumber of @Model.PageCount</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var e in Model)
+@using (Ajax.BeginForm("EventsProposed", "User", results, attr))
+{
+    <span class="btn btn-secondary dropdown-toggle searchButton">Filter</span>
+    <span>@Html.DropDownList("sort", ViewBag.SortList as SelectList, "Sort By", new { @class = "btn btn-secondary", onChange = "sortData(this);" })</span>
+    <span>
+        @Html.TextBox("searchName", null, new
         {
-            <tr>
-                <th scope="row">@e.Id</th>
-                <td>@e.name</td>
-                <td>@e.startDate.ToString("dd-MM-yyyy")</td>
-                <td>@e.endDate.ToString("dd-MM-yyyy")</td>
-                @{
-                    if (e.approvalStat == null)
-                    {
-                        <td><b>Pending</b></td>
-                    }
-                    else if (e.approvalStat == true)
-                    {
-                        <td><b>Accepted</b></td>
-                    }
-                    else if (e.approvalStat == false)
-                    {
-                        <td><b>Denied</b></td>
-                    }
-                }
-                <td><a href="~/User/ManageEventProposed?id=@e.Id" class="btn btn-danger">Manage</a></td>
-            </tr>
-        }
-    </tbody>
-</table>
+            data_upper = "",
+            autofocus = "",
+            @class = "form-control",
+            style = "display:inline;",
+            placeholder = "Search..."
+        })
+    </span>
+    <i class="fa fa-search fa-2x"></i>
+    <div class="parent">
+        <div class="searchCont" style="display:none">
+            <div style="padding-left: 10px;">
+                <h3>Filters</h3>
+                <div class="form-group row">
+                    @Html.Label("name", "Event Name", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("name", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("startDate", "Date From", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("startDate", null, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-2" })
+                    @Html.Label("endDate", "To", new { @class = "control-label col-sm-1" })
+                    @Html.TextBox("endDate", null, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-2" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("startTime", "Time From", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("startTime", null, "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
+                    @Html.Label("endTime", "To", new { @class = "control-label col-sm-1" })
+                    @Html.TextBox("endTime", null, "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("status", "Status", new { @class = "control-label col-sm-2" })
+                    @Html.DropDownList("status", ViewBag.statusList as SelectList, "- Select One -", new { @class = "control-label col-sm-2 btn btn-secondary form-control" })
+                    <div class="col-sm-offset-1 col-sm-1">
+                        <input type="submit" class="btn btn-primary searchBtn" name="Search" value="Search" />
+                    </div>
+                    <div class="col-sm-1">
+                        <input type="reset" class="btn btn-primary " name="Reset" value="Reset" onclick="resetData();" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div id="eventTable">
+    <div id="loader"><img src="~/Images/loader.gif"></div>
+    @Html.Partial("_ProposedList")
+</div>
 
-@Html.PagedListPager(
-    Model,
-    p => "?page=" + p,
-    PagedListRenderOptions.Classic
-    )
+@section foot{
+
+    <script>
+        //when search button click
+        jQuery(document).on('click', '.searchButton', function () {
+            if (jQuery('.parent').hasClass('menuActive')) {
+                jQuery('.parent').removeClass('menuActive');
+                jQuery('.parent .menu').slideUp(0);
+            }
+            jQuery('.parent').toggleClass('searchActive').children('.searchCont').slideToggle(200);
+        });
+
+        // Search Name
+        let timer = null;
+        $('#searchName').on('input', e => {
+            // when user enter text, it will clear previous execution
+            clearTimeout(timer);
+            timer = setTimeout(() => $(e.target.form).submit(), 1000);
+        });
+
+        // Sort By
+        function sortData(e) {
+            e.form.submit();
+        }
+
+        // reset data filter
+        function resetData() {
+            $("input .form-control").val(0);
+        }
+    </script>
+}
+
 

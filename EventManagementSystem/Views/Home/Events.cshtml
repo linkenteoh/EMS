@@ -4,64 +4,124 @@
 
 @{
     ViewBag.Title = "Events";
-    @*    IEnumerable<Event> events = ViewBag.Events;*@
-
+    var results = new AjaxOptions
+    {
+        Url = "/Home/Events",
+        HttpMethod = "get",
+        LoadingElementId = "loader",
+        UpdateTargetId = "eventTable",
+    };
+    var attr = new
+    {
+        @class = "form-horizontal",
+    };
 }
 
 @section head{
-<style>
-    .searchCont {
-        display: none;
-    }
+    <style>
+        #loader {
+            text-align: center;
+            display: none;
+        }
 
-
-</style>    
+        #paged, #countModel {
+            margin: 10px;
+            text-align: center;
+            display: block;
+        }
+    </style>
 }
-
 
 <h2>Events</h2>
 <hr />
-<p>@Model.Count() of @Model.TotalItemCount record(s) | Page @Model.PageNumber of @Model.PageCount</p>
-
-<div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Filter
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <div style="padding: 15px;">
-            @Html.Label("name", "Event Name", new { @class = "control-label col-sm-2" })
-            @Html.TextBox("name", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control" })
-            @Html.Label("startDate", "Date From", new { @class = "control-label col-sm-2" })
-            @Html.TextBox("startDate", "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-4" })
-            @Html.Label("endDate", "To", new { @class = "control-label col-sm-1" })
-            @Html.TextBox("endDate", "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-4" })
-            @Html.Label("startTime", "Time From", new { @class = "control-label col-sm-2" })
-            @Html.TextBox("startTime", "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-4" })
-            @Html.Label("endTime", "To", new { @class = "control-label col-sm-1" })
-            @Html.TextBox("endTime", "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-4" })
-            <input type="submit" class="btn btn-primary searchBtn" name="Search" value="search" />
-            <input type="reset" class="btn btn-primary " name="Reset" value="reset" />
-        </div>
-
-    </div>
-</div>
-
-@foreach (var e in Model)
+@using (Ajax.BeginForm("Events", "Home", results, attr))
 {
-    <div class="panel" style="width: 25rem; border:1px #c3c3c3 solid; overflow:auto; display:inline-block; margin-right:20px;">
-        <img class="panel-heading text-center" src="~/Photo/@e.photoURL" alt="Card image cap" style="object-fit:cover; width:245px; height:245px;" />
-        <hr style="margin:0px;padding:0px;" />
-        <div class="panel-body" style="">
-            <h5 class="panel-title">@e.name</h5>
-            <p class="card-text">@e.des</p>
-            @Html.ActionLink("View Event", "EventDetail", "Event", new { id = e.Id }, new { @class = "btn btn-primary" })
+    <span class="btn btn-secondary dropdown-toggle searchButton">Filter</span>
+    <span>@Html.DropDownList("sort", ViewBag.SortList as SelectList, "Sort By", new { @class = "btn btn-secondary", onChange = "sortData(this);" })</span>
+    <span>
+        @Html.TextBox("searchName", null, new
+        {
+            data_upper = "",
+            autofocus = "",
+            @class = "form-control",
+            style = "display:inline;",
+            placeholder = "Search..."
+        })
+    </span><i class="fa fa-search fa-2x"></i>
+    <div class="parent">
+        <div class="searchCont" style="display:none">
+            <div style="padding-left: 10px;">
+                <h3>Filters</h3>
+                <div class="form-group row">
+                    @Html.Label("name", "Event Name", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("name", null, new { maxlength = "10", data_upper = "", autofocus = "", type = "search", @class = "form-control" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("startDate", "Date From", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("startDate", null, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-2" })
+                    @Html.Label("endDate", "To", new { @class = "control-label col-sm-1" })
+                    @Html.TextBox("endDate", null, "{0: yyyy-MM-dd}", new { type = "date", @class = "form-control col-sm-2" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("startTime", "Time From", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("startTime", null, "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
+                    @Html.Label("endTime", "To", new { @class = "control-label col-sm-1" })
+                    @Html.TextBox("endTime", null, "{0: HH:mm}", new { type = "time", @class = "form-control timepicker col-sm-2" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("priceFrom", "Price(RM) From", new { @class = "control-label col-sm-2" })
+                    @Html.TextBox("priceFrom", null, new { type = "number", @class = "form-control col-sm-2", placeholder = "0.00", min = "0" })
+                    @Html.Label("priceTo", "To", new { @class = "control-label col-sm-1" })
+                    @Html.TextBox("priceTo", null, new { type = "number", @class = "form-control col-sm-2", placeholder = "0.00", min = "0" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("venue", "Venue", new { @class = "control-label col-sm-2" })
+                    @Html.DropDownList("venue", ViewBag.VenueList as SelectList, "- Select One -", new { @class = "control-label col-sm-2 btn btn-secondary form-control" })
+                    <div class="col-sm-offset-1 col-sm-1">
+                        <input type="submit" class="btn btn-primary searchBtn" name="Search" value="Search" />
+                    </div>
+                    <div class="col-sm-1">
+                        <input type="reset" class="btn btn-primary " name="Reset" value="Reset" onclick="resetData();" />
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 }
+<div id="eventTable">
+    <div id="loader"><img src="~/Images/loader.gif"></div>
+    @Html.Partial("_BrowseEvent")
+</div>
 
+@section foot{
 
-@Html.PagedListPager(
-    Model,
-    p => "?page=" + p,
-    PagedListRenderOptions.Classic
-    )
+    <script>
+        //when search button click
+        jQuery(document).on('click', '.searchButton', function () {
+            if (jQuery('.parent').hasClass('menuActive')) {
+                jQuery('.parent').removeClass('menuActive');
+                jQuery('.parent .menu').slideUp(0);
+            }
+            jQuery('.parent').toggleClass('searchActive').children('.searchCont').slideToggle(200);
+        });
+
+        // Search Name
+        let timer = null;
+        $('#searchName').on('input', e => {
+            // when user enter text, it will clear previous execution
+            clearTimeout(timer);
+            timer = setTimeout(() => $(e.target.form).submit(), 1000);
+        });
+
+        // Sort By
+        function sortData(e) {
+            e.form.submit();
+        }
+
+        // reset data filter
+        function resetData() {
+            $("input .form-control").val(0);
+        }
+    </script>
+}
+

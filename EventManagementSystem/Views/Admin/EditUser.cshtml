@@ -3,6 +3,8 @@
 
 @{
     ViewBag.Title = "Edit User";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+
 }
 
 @section head{
@@ -74,7 +76,7 @@
                         @Html.ValidationMessageFor(u => u.newPassword)
                     </div>
                     <div class="col-md-6">
-                        @Html.LabelFor(u => u.newConfirmPassword, "New Confirm Password")@Html.TextBoxFor(u => u.newConfirmPassword, new { type = "password", @class = "form-control" })
+                        @Html.LabelFor(u => u.newConfirmPassword, "New Confirm Password(Optional)")@Html.TextBoxFor(u => u.newConfirmPassword, new { type = "password", @class = "form-control" })
                         @Html.ValidationMessageFor(u => u.newConfirmPassword)
                     </div>
                 </div>
@@ -86,20 +88,23 @@
                         </div>
                         @Html.ValidationMessageFor(u => u.role)
                     </div>
-                    <div class="col-md-6">
-                        @Html.LabelFor(u => u.organizer, "Organizer")
-                        <div class="form-check">
-                            @Html.RadioButtonFor(u => u.organizer, true, new { @class = "form-check-input", id = "materialChecked", name = "materialExampleRadios" })&nbsp;&nbsp;&nbsp;
-                            <label class="form-check-label" for="materialChecked">Yes</label>
-                        </div>
-                        <div class="form-check">
-                            @Html.RadioButtonFor(u => u.organizer, false, new { @class = "form-check-input", id = "materialUnchecked", name = "materialExampleRadios" })&nbsp;&nbsp;&nbsp;
-                            <label class="form-check-label" for="materialUnchecked">No</label>
-                        </div>
-                        @Html.ValidationMessageFor(u => u.role)
-                    </div>
                 </div>
-                <div class="mt-12" style="margin-top:15px"><section><button class="btn btn-primary profile-button">Edit</button></section></div>
+                <div class="mt-12" style="margin-top:15px">
+                    <section><button class="btn btn-primary profile-button">Edit</button></section>
+                </div>
+                <div>
+                    @if (@Model.status == true)
+                    {
+                        <section> <a class="btn btn-danger" href="/Admin/DeleteUser?id=@Model.Id">Delete</a></section>
+                    }
+                    else if (@Model.status == false)
+                    {
+                        <section> <a class="btn btn-success" href="/Admin/RestoreUser?id=@Model.Id">Restore</a></section>
+                    }
+                </div>
+
+
+
             </div>
         </div>
     </div>

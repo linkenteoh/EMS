@@ -137,7 +137,7 @@
                         </tr>
                         <tr>
                             <td>Date </td>
-                            <td>: @ViewBag.eventCurrent.startDate.ToString("dd/MM/yyyy") - @ViewBag.eventCurrent.endDate.ToString("dd/MM/yyyy")</td>
+                            <td>: @ViewBag.eventCurrent.date.ToString("dd/MM/yyyy")</td>
                         </tr>
                         <tr>
                             <td>Time</td>
@@ -208,6 +208,7 @@
             $(".dragDefault").hide();
             $('.venue').each(function () {
                 if ($(this).find('i').length) {
+                    $('#dragIcon').css("color", "white");
                     let targetBox = "#" + this.id;
                     $(targetBox).addClass("venueSelected");
                 }
@@ -217,15 +218,18 @@
         function resetDrag(e) {
             e.preventDefault();
             $(".venue").removeClass("venueSelected");
+            $('#dragIcon').css("color", "red");
             $(".dragDefault").show();
             $(".dragDefault").append($("#dragIcon").detach());
-            console.log();
         }
 
         $('[data-post]').click(e => {
+            if ($(".dragDefault").find('i').length) {
+                alert("No Venue Booked.");
+            }
             $('.venue').each(function () {
                 if ($(this).find('i').length) {
-                    if (this.id != "" && this.id != null){
+                    if (this.id != 0) {
                         e.preventDefault();
                         let url = $(e.target).data('post') + "&venueID=" + this.id;
                         let f = $('<form>')[0];
@@ -233,9 +237,7 @@
                         f.action = url || location;
                         $(document.body).append(f);
                         f.submit();
-                    } else {
-                        alert("No Venue Booked");
-                    }
+                    } 
                 }
             });
         });
