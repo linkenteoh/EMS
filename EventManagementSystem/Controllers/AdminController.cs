@@ -458,7 +458,7 @@ namespace EventManagementSystem.Controllers
 
             ViewBag.RoleList = new SelectList(
                 new List<SortItems> {
-                    new SortItems { Id = "Student", name = "Admin"},
+                    new SortItems { Id = "Student", name = "Student"},
                     new SortItems { Id = "Admin", name = "Admin"},
                     new SortItems { Id = "Staff", name = "Staff"},
                 }, "Id", "name");
@@ -520,11 +520,13 @@ namespace EventManagementSystem.Controllers
                     username = model.username,
                     password = HashPassword(model.password),
                     role = model.role.ToString(),
+                    memberRole = model.memberRole.ToString(),
                     status = true,
-                    recoveryCode = "ABCDEF",
-                    activationCode = "ABCDEF",
+                    recoveryCode = null,
+                    activationCode = null,
                     photo = SavePhoto(model.Photo),
-                    activated = true
+                    activated = true,
+                    lockoutValue = 0
                 };
 
                 db.Users.Add(u);
@@ -546,17 +548,17 @@ namespace EventManagementSystem.Controllers
             if (u == null)
             {
                 return RedirectToAction("Index", "Admin");
-            }
+            }       
 
             var model = new UserEditVM
             {
-                Id = id,
                 name = u.name,
                 contact_no = u.contact_no.Trim(),
                 email = u.email,
                 username = u.username,
                 password = u.password,
                 role = (Role)Enum.Parse(typeof(Role), u.role),
+                memberRole = (MemberRole)Enum.Parse(typeof(MemberRole), u.memberRole),
                 photoURL = u.photo,
             };
             return View(model);
@@ -588,6 +590,7 @@ namespace EventManagementSystem.Controllers
                 }
 
                 u.role = model.role.ToString();
+                u.memberRole = model.memberRole.ToString();
                 if (model.Photo != null)
                 {
                     DeletePhoto(u.photo);
@@ -601,20 +604,7 @@ namespace EventManagementSystem.Controllers
             }
             return View(model);
         }
-        [Authorize(Roles = "Admin")]
-        public ActionResult RestoreUser(int id)
-        {
-            var u = db.Users.Find(id);
-            if (u != null)
-            {
-                u.status = true;
-                db.SaveChanges();
-                TempData["info"] = "User record deleleted successfully";
-            }
 
-            var url = Request.UrlReferrer?.AbsolutePath ?? "/";
-            return Redirect(url);
-        }
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayOrganizerApproval(string searchName = "", string rep = "", string position = "", string sort = "", int page = 1)
         {

@@ -14,7 +14,7 @@
                 <th scope="col">Email</th>
                 <th scope="col">Username</th>
                 <th scope="col">Role</th>
-                <th scope="col">Organizer</th>
+                <th scope="col">Position</th>
                 <th scope="col">Status</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
@@ -24,9 +24,6 @@
         <tbody>
             @foreach (var u in Model)
             {
-                if (u.status == true)
-                {
-
                     <tr>
                         <td scope="row">@u.Id</td>
                         <td scope="row">@u.name</td>
@@ -34,13 +31,13 @@
                         <td scope="row">@u.email</td>
                         <td scope="row">@u.username</td>
                         <td scope="row">@u.role</td>
-                        <td scope="row">@u.status</td>
+                        <td scope="row">@u.memberRole</td>
                         <td scope="row"></td>
                         <td>
                             <a class="btn btn-primary" href="/Admin/EditUser?id=@u.Id">Edit</a>
+                            <a class="btn btn-danger" href="/Admin/DeleteUser?id=@u.Id">Delete</a>
                         </td>
-                    </tr>
-                }
+                    </tr>               
             }
 
         </tbody>

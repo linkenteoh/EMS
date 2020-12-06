@@ -82,25 +82,21 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col-md-6">
-                        @Html.LabelFor(u => u.role, "Role") 
+                        @Html.LabelFor(u => u.role, "Role")
                         <div>
                             @Html.DropDownListFor(u => u.role, new SelectList(Enum.GetValues(typeof(Role))), "-Choose One-", new { @class = "btn btn-secondary dropdown-toggle" })
                         </div>
                         @Html.ValidationMessageFor(u => u.role)
                     </div>
                     <div class="col-md-6">
-                        @Html.LabelFor(u => u.organizer, "Organizer")
-                        <div class="form-check">
-                            @Html.RadioButtonFor(u => u.organizer, true, new { @class = "form-check-input", id = "materialChecked", name = "materialExampleRadios" })&nbsp;&nbsp;&nbsp;
-                            <label class="form-check-label" for="materialChecked">Yes</label>
+                        @Html.LabelFor(u => u.memberRole, "Position")
+                        <div>
+                            @Html.DropDownListFor(u => u.memberRole, new SelectList(Enum.GetValues(typeof(MemberRole))), "-Choose One-", new { @class = "btn btn-secondary dropdown-toggle" })
                         </div>
-                        <div class="form-check">
-                            @Html.RadioButtonFor(u => u.organizer, false, new { @class = "form-check-input", id = "materialUnchecked", name = "materialExampleRadios" })&nbsp;&nbsp;&nbsp;
-                            <label class="form-check-label" for="materialUnchecked">No</label>
-                        </div>
-                        @Html.ValidationMessageFor(u => u.organizer)
+                        @Html.ValidationMessageFor(u => u.memberRole)
                     </div>
                 </div>
+
                 <div class="mt-12" style="margin-top:15px"><section><button class="btn btn-primary profile-button">Add</button></section></div>
             </div>
         </div>
