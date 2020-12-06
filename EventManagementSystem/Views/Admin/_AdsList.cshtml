@@ -32,10 +32,10 @@
                         <td scope="row">@a.startDate.ToString("dd/MM/yyyy") @a.startTime </td>
                         <td scope="row">@a.endDate.ToString("dd/MM/yyyy") @a.endTime </td>
                         <td>
-                            <input class="btn btn-primary" data-get="/Admin/EditAdvert?id=@a.Id" type="button" value="Edit">
+                            <a class="btn btn-primary" href="/Admin/EditAdvert?id=@a.Id">Edit</a>
                         </td>
                         <td>
-                            <input class="btn btn-danger" data-get="/Admin/DeleteAdvert?id=@a.Id" type="button" value="Delete">
+                            <a class="btn btn-danger" href="/Admin/DeleteAdvert?id=@a.Id">Delete</a>
                         </td>
                     </tr>
                 }
@@ -54,6 +54,5 @@
 }
 else
 {
-    <div style=" text-align: center; margin-top:50px;"><span style="font-size: 16pt; text-align:center;">No Records Founded.</span></div>
+    <div style=" text-align: center; margin-top:50px;"><span style="font-size: 16pt; text-align:center;">No Records Found.</span></div>
 }
-

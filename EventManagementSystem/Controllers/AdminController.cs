@@ -87,8 +87,7 @@ namespace EventManagementSystem.Controllers
         }
         [Authorize(Roles = "Admin")]
         public ActionResult Index()
-        {
-           
+        {           
             return View();
         }
         [Authorize(Roles = "Admin")]
@@ -104,7 +103,8 @@ namespace EventManagementSystem.Controllers
                     new SortItems { Id = "date", name = "Date"},
                     new SortItems { Id = "venue", name = "Venue"}
                 }, "Id", "name");
-            var model = db.Events.Where(u => u.OrgId == db.Users.FirstOrDefault(org => org.username == User.Identity.Name).Id);
+
+            var model = db.Events.Where(u => u.approvalStat == null && u.status == true);
 
             //// Name
             if (!string.IsNullOrEmpty(name))
@@ -213,12 +213,8 @@ namespace EventManagementSystem.Controllers
                     new SortItems { Id = "date", name = "Date"},
                     new SortItems { Id = "Venue.name", name = "Venue"}
                 }, "Id", "name");
-            var username = User.Identity.Name;
-            var u = db.Users.Where(x => x.username == username).FirstOrDefault();
-            // Get userID in registration
-            var reg = db.Registrations.Where(r => u.Id.Equals(r.userId)).Select(r => r.eventId).ToArray();
-            // Get EventID in registration that contains the userID
-            var model = db.Events.Where(m => reg.Contains(m.Id));
+    
+            var model = db.Events.Where(e => e.status == true && e.venueId != null);
 
             //// Name
             if (!string.IsNullOrEmpty(name))

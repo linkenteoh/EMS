@@ -17,7 +17,7 @@
                 <th scope="col"></th>
                 <th scope="col">Position Held</th>
                 <th scope="col"></th>
-
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -35,8 +35,10 @@
                         <td scope="row"></td>
                         <td scope="row">@o.position</td>
                         <td>
-                            <input class="btn btn-primary" data-get="/Admin/ApproveOrganizer?id=@o.Id" type="button" value="Approve">
-                            <input class="btn btn-danger" data-get="/Admin/DeclineOrganizer?id=@o.Id" type="button" value="Decline">
+                            <a class="btn btn-primary" href="/Admin/ApproveOrganizer?id=@o.Id">Approve</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-danger" href="/Admin/DeclineOrganizer?id=@o.Id">Decline</a>
                         </td>
 
                     </tr>

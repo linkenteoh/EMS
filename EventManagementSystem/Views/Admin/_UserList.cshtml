@@ -35,10 +35,10 @@
                         <td scope="row">@u.role</td>
                         <td scope="row">@u.organizer</td>
                         <td>
-                            <input class="btn btn-primary" data-get="/Admin/EditUser?id=@u.Id" type="button" value="Edit">
+                            <a class="btn btn-primary" href="/Admin/EditUser?id=@u.Id">Edit</a>
                         </td>
                         <td>
-                            <input class="btn btn-danger" data-get="/Admin/DeleteUser?id=@u.Id" type="button" value="Delete">
+                            <a class="btn btn-danger" href="/Admin/DeleteUser?id=@u.Id">Delete</a>
                         </td>
                     </tr>
                 }
