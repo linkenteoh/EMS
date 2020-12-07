@@ -1,0 +1,43 @@
+﻿@*@using PagedList
+    @using PagedList.Mvc*@
+@model IEnumerable<Event>
+
+@{
+    ViewBag.Title = "Yearly report";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+<h1>Total Student and Outsider organized events in year 2020 </h1>
+<hr />
+<div id="countModel"><span>Total @Model.Where(ev => ev.Organiser.User.memberRole == "Student").Count() Student  and @Model.Where(ev => ev.OrgId == ev.Organiser.User.Id && ev.Organiser.User.memberRole == "Outsider").Count() orginized event in this year!</span></div>
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Event ID</th>
+            <th scope="col">Event Name</th>
+            <th scope="col">User Name</th>
+            <th scope="col">Position</th>
+            <th scope="col">Date</th>
+            <th scope="col">Venue</th>
+            <th scope="col">Organized by</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var e in Model)
+        {
+            <tr>
+                <td scope="row">@e.Id</td>
+                <td scope="row">@e.name</td>
+                <td scope="row">@e.Organiser.User.name</td>
+                <td scope="row">@e.Organiser.User.memberRole</td>
+                <td scope="row">@e.date.ToString("dd/MM/yyyy")</td>
+                <td scope="row">@e.Venue.name</td>
+                <td scope="row">@e.Organiser.represent</td>
+            </tr>
+
+        }
+
+    </tbody>
+</table>

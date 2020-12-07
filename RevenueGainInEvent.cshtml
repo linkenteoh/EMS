@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "RevenueGainInEvent";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+<h2>Revenue Gain In Event</h2>
+
+<div id="chart" style="width: 600px; height: 400px"></div>
+
+<p>
+    <a href="#" id="reload">Reload</a>
+</p>
+
+@section foot {
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(init);
+
+        let dt, opt, cht;
+
+        function init() {
+            dt = new google.visualization.DataTable();
+            // Data table columns:
+            dt.addColumn('string', 'name');
+            dt.addColumn('number', 'Revenue');
+
+
+            let style = { bold: true, italic: false, fontSize: 20, color: 'purple' };
+
+            opt = {
+                title: 'Revenue Gained In Event',
+                fontName: 'Calibri',
+                fontSize: 16,
+                titleTextStyle: { fontSize: 20 },
+                chartArea: { width: '65%', height: '70%', top: 60, left: 80 },
+                legend: 'none',
+                vAxis: { title: 'Revenue (RM)', titleTextStyle: style },
+                hAxis: { title: 'Events', titleTextStyle: style },
+                animation: { duration: 500, startup: true },
+                // Options --> colors, isStacked, focusTarget
+                colors: ['red', 'blue'],
+                focusTarget: 'datum',
+                pattern: '0.00'
+            };
+
+            cht = new google.visualization.ColumnChart($('#chart')[0]);
+
+            $('#reload').click();
+        }
+
+        $('#reload').click(e => {
+            e.preventDefault();
+
+            let url = '/Admin/RevenueGainInEventData';
+            let param = {};
+
+            $.getJSON(url, param, json => {
+                dt.removeRows(0, dt.getNumberOfRows());
+                dt.addRows(json);
+                cht.draw(dt, opt);
+            });
+
+
+        });
+
+        cht.draw(dt, opt);
+
+    </script>
+}

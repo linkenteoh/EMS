@@ -370,6 +370,14 @@
     <Content Include="Views\User\Payment.cshtml" />
     <Content Include="Views\User\_BillingList.cshtml" />
     <Content Include="Views\User\AdvertisementSelect.cshtml" />
+    <Content Include="Views\Admin\CommissionData.cshtml" />
+    <Content Include="Views\Admin\CommissionsReport.cshtml" />
+    <Content Include="Views\Admin\Dashboard.cshtml" />
+    <Content Include="Views\Admin\Dashboard2.cshtml" />
+    <Content Include="Views\Admin\MostBookedVenueReport.cshtml" />
+    <Content Include="Views\Admin\RegistrationsReport.cshtml" />
+    <Content Include="Views\Admin\RevenueGainInEvent.cshtml" />
+    <Content Include="Views\Admin\RoleCount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\DisplayUser.cshtml" />

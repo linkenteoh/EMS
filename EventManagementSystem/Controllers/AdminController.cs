@@ -96,7 +96,7 @@ namespace EventManagementSystem.Controllers
         public ActionResult OrganizerData()
         {
 
-           var dt = db.Registrations.Where(a => a.userId == a.User.Id).GroupBy(o => o.Event.Organiser.represent).ToList().Select(g => new object[] {
+            var dt = db.Registrations.Where(a => a.userId == a.User.Id).GroupBy(o => o.Event.Organiser.represent).ToList().Select(g => new object[] {
 
              g.Key,
                 g.Count(s => s.User.memberRole == "Student"),
@@ -108,10 +108,10 @@ namespace EventManagementSystem.Controllers
         }
         public ActionResult Dashboard2()
         {
-/*            Func<Event, object> fn = s => s.Id;*/
+            /*           Func<Event, object> fn = s => s.Id;*/
 
             var model = db.Events.Where(ev => ev.OrgId == ev.Organiser.User.Id);
-/*            var e = model.OrderBy(fn).ToPagedList(page, 10);*/
+            /*            var e = model.OrderBy(fn).ToPagedList(page, 10);*/
             return View(model);
         }
 
@@ -127,9 +127,207 @@ namespace EventManagementSystem.Controllers
             return Json(dt, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult RoleCount()
+        {
+            return View();
+        }
+
+        public ActionResult RoleCountData()
+        {
+            var dt = db.Users
+                .GroupBy(e => e.role)
+                .ToList()
+                .Select(g => new object[] {
+                    g.Key,
+                    g.Count()
+                });
+            return Json(dt, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult RevenueGainInEvent()
+        {
+
+            return View();
+        }
+
+        public ActionResult RevenueGainInEventData()
+        {
+
+            var dt = db.Events
+                .GroupBy(e => e.name)
+                .ToList()
+                .Select(g => new object[] {
+                    g.Key.ToString(),
+                    g.Sum(e => e.price * e.availability)
+
+                });
+            return Json(dt, JsonRequestBehavior.AllowGet);
+        }
+
+        // Wen Jun Report
+        public ActionResult MostBookedVenueReport()
+        {
+            // Get Year
+            int min = DateTime.Today.Year;
+            int max = DateTime.Today.Year;
+
+            if (db.Events.Count() > 0)
+            {
+                min = db.Events.Min(e => e.date).Year;
+                max = db.Events.Max(e => e.date).Year;
+            }
+            ViewBag.YearList = GetYearList(min, max);
+            return View();
+        }
+
+        private SelectList GetMonthList()
+        {
+            var items = new List<object>();
+            for (int n = 1; n <= 12; n++)
+            {
+                items.Add(new { Id = n, Name = new DateTime(1, n, 1).ToString("MMMM") });
+            }
+            return new SelectList(items, "Id", "Name");
+        }
+
+        // Return select list for years
+        private SelectList GetYearList(int min, int max, bool reverse = false)
+        {
+            var items = new List<int>();
+            for (int n = min; n <= max; n++)
+            {
+                items.Add(n);
+            }
+            if (reverse) items.Reverse();
+            return new SelectList(items);
+        }
+        private string GetMonthAbbr(int n)
+        {
+            return new DateTime(1, n, 1).ToString("MMM");
+        }
+
+        public ActionResult DataSet2(int year = 0, int month = 0)
+        {
+            var dt = db.Events
+                .Where(e => e.venueId != null && e.date.Year == year &&
+                e.date.Month == month)
+                .GroupBy(e => e.date)
+                .ToList()
+                .Select(g => new object[] {
+                    g.Key.ToString("yyyy-MM-dd"),
+                    g.Count()
+                });
+
+            return Json(dt, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult VBMonthYearReport()
+        {
+            // Return available years
+            int min = DateTime.Today.Year;
+            int max = DateTime.Today.Year;
+            if (db.Events.Count() > 0)
+            {
+                min = db.Events.Min(e => e.date).Year;
+                max = db.Events.Max(e => e.date).Year;
+                // retrieve largest month and year from DB
+                ViewBag.Year = db.Events.Max(e => e.date).Year;
+                ViewBag.Month = db.Events.Max(e => e.date).Month;
+            }
+            ViewBag.YearList = GetYearList(min, max);
+            // Return months
+            ViewBag.MonthList = GetMonthList();
+            // TODO: Default selections (largest year and month)
+
+            return View();
+        }
+        public ActionResult RegistrationsReport()
+        {
+            // Return available years
+            int min = DateTime.Today.Year;
+            int max = DateTime.Today.Year;
+            if (db.Registrations.Count() > 0)
+            {
+                min = db.Registrations.Min(o => o.date).Year;
+                max = db.Registrations.Max(o => o.date).Year;
+
+                ViewBag.Year = db.Registrations.Max(o => o.date).Year;
+                ViewBag.Month = db.Registrations.Max(o => o.date).Month;
+            }
+            ViewBag.YearList = GetYearList(min, max);
+
+            // Return months
+            ViewBag.MonthList = GetMonthList();
+
+            return View();
+        }
+
+        public ActionResult CommissionsReport()
+        {
+            // Return available years
+            int min = DateTime.Today.Year;
+            int max = DateTime.Today.Year;
+            if (db.Registrations.Count() > 0)
+            {
+                min = db.Payments.Min(o => o.paymentdate).Value.Year;
+                max = db.Payments.Max(o => o.paymentdate).Value.Year;
+
+                ViewBag.Year = db.Registrations.Max(o => o.date).Year;
+                ViewBag.Month = db.Registrations.Max(o => o.date).Month;
+            }
+            ViewBag.YearList = GetYearList(min, max);
+
+            // Return months
+            ViewBag.MonthList = GetMonthList();
+
+            return View();
+        }
+
+        public ActionResult CommissionData(int year = 0, int month = 0)
+        {
+            var dict = new Dictionary<string, decimal>
+            {
+                ["Jan"] = 0m,
+                ["Feb"] = 0m,
+                ["Mar"] = 0m,
+                ["Apr"] = 0m,
+                ["May"] = 0m,
+                ["Jun"] = 0m,
+                ["Jul"] = 0m,
+                ["Aug"] = 0m,
+                ["Sep"] = 0m,
+                ["Oct"] = 0m,
+                ["Nov"] = 0m,
+                ["Dec"] = 0m,
+            };
+
+            db.Payments
+                .Where(p => p.paymentdate.Value.Year == year)
+                .GroupBy(p => p.paymentdate.Value.Month)
+                .ToList()
+                .ForEach(p => dict[GetMonthAbbr(p.Key)] = p.Sum(pay => pay.commision));
 
 
+            var dt = dict.Select(i => new object[] {
+                            i.Key,
+                            i.Value
+                        });
+            return Json(dt, JsonRequestBehavior.AllowGet);
+        }
 
+        public ActionResult RegistrationData(int year = 0, int month = 0)
+        {
+            var dt = db.Registrations
+                    .Where(r => r.date.Year == year && r.date.Month == month)
+                    .GroupBy(r => r.date)
+                    .ToList()
+                    .Select(g => new object[] {
+                        g.Key.ToString("dd-MM-yyyy"),
+                        g.Count()
+                    });
+
+            return Json(dt, JsonRequestBehavior.AllowGet);
+        }
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayProposalApporval(string searchName = "", string name = "", string startDate = "", string endDate = "",
             string startTime = "", string endTime = "", string venue = "", string sort = "", int page = 1)
@@ -252,7 +450,7 @@ namespace EventManagementSystem.Controllers
                     new SortItems { Id = "date", name = "Date"},
                     new SortItems { Id = "Venue.name", name = "Venue"}
                 }, "Id", "name");
-    
+
             var model = db.Events.Where(e => e.status == true && e.venueId != null);
 
             //// Name
@@ -587,7 +785,7 @@ namespace EventManagementSystem.Controllers
             if (u == null)
             {
                 return RedirectToAction("Index", "Admin");
-            }       
+            }
 
             var model = new UserEditVM
             {
@@ -728,7 +926,7 @@ namespace EventManagementSystem.Controllers
 
              return View();
          }*/
-       
+
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAdvert(string searchName = "", string name = "", string desc = "",
             string startDate = "", string endDate = "", string sort = "", int page = 1)
@@ -796,7 +994,7 @@ namespace EventManagementSystem.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult InsertAdvert(AdvertManageVM model)
         {
-            
+
             if (ModelState.IsValidField("startDate"))
             {
                 if (model.startDate > model.endDate)
@@ -806,7 +1004,7 @@ namespace EventManagementSystem.Controllers
 
             }
             var adv = db.Advertisements.Find(model.Id);
-            if(adv != null )
+            if (adv != null)
             {
                 ModelState.AddModelError("Id", "This event had been promoted! Please choose other options!");
             }

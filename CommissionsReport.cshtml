@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Commission";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+<h2>Commission</h2>
+<p>
+    @Html.DropDownList("year", (SelectList)ViewBag.YearList, new { @class = "form-control" })
+
+    <span id="loader">
+        <img src="~/Images/loader-16.gif">
+        Loading...
+    </span>
+</p>
+
+<div id="chart" style="width: 800px; height: 400px"></div>
+
+@section foot {
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+                google.charts.load('current', { packages: ['corechart'] });
+                google.charts.setOnLoadCallback(init);
+
+                let dt, opt, cht;
+
+                function init() {
+                    dt = new google.visualization.DataTable();
+                    dt.addColumn('string', 'Month');
+                    dt.addColumn('number', 'Commissions');
+
+                    let style = { bold: true, italic: false, fontSize: 20, color: 'slateblue' };
+
+                    opt = {
+                        title: '--TODO--',
+                        fontName: 'Calibri',
+                        fontSize: 16,
+                        titleTextStyle: { fontSize: 20 },
+                        chartArea: { width: '85%', height: '70%', top: 60, left: 80 },
+                        legend: 'none',
+                        hAxis: { title: 'Month', titleTextStyle: style },
+                        vAxis: { title: 'Commission accumulated', titleTextStyle: style },
+                        animation: { duration: 500, startup: true },
+                        colors: ['slateblue']
+                    };
+
+                    cht = new google.visualization.ColumnChart($('#chart')[0]);
+
+                    $('#year').change();
+                }
+
+                $('#year').change(e => {
+                    e.preventDefault();
+
+                    let url = '/Admin/ComisssionData';
+                    let param = { year: $('#year').val() };
+
+                    $('#loader').show();
+
+                    $.getJSON(url, param, json => {
+                        opt.title = 'Monthly Commission Accumulated - ' + param.year;
+
+                        dt.removeRows(0, dt.getNumberOfRows());
+                        dt.addRows(json);
+
+
+                        cht.draw(dt, opt);
+
+                        $('#loader').hide();
+                    });
+                });
+    </script>
+}
