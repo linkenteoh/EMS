@@ -55,7 +55,10 @@ namespace EventManagementSystem.Controllers
         public ActionResult RegOrganiser(RegOrgVM model)
         {
             int id = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
-            if (db.Organisers.Any(o=> o.Id == id))
+
+            var Org = db.Organisers.Find(id);
+
+            if (Org != null)
             {
                 TempData["Info"] = "You've already registered, please wait for your request to be accepted.";
                 return RedirectToAction("RegOrganiser", "User");

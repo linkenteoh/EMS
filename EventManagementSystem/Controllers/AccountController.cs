@@ -287,7 +287,7 @@ namespace EventManagementSystem.Controllers
             HttpCookie blockCookie = new HttpCookie("block");
             HttpCookie getCookie = HttpContext.Request.Cookies.Get("block");
 
-            int count = user.lockoutValue.Value;
+            int count = user.lockoutValue;
 
             if (getCookie == null)
             {

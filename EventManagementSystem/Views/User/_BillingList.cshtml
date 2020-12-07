@@ -30,7 +30,10 @@
                     <td scope="row">@(item.status == true ? "Paid" :"Unpaid")</td>
                     <td scope="row">@item.Registration.Event.date.ToString("dd-MM-yyyy")</td>
                     <td style="text-align:center">
-                        <a class="btn btn-secondary" href="~/User/Payment?id=@item.Id">Make payment</a>
+                        @if (item.status == false)
+                        {
+                            <a class="btn btn-secondary" href="~/User/Payment?id=@item.Id">Make payment</a>
+                        }
                     </td>
                 </tr>
             }

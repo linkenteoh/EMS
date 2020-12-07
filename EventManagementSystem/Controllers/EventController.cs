@@ -45,7 +45,9 @@ namespace EventManagementSystem.Controllers
 
             var user = db.Users.FirstOrDefault(u => u.username == User.Identity.Name);
 
-            if (db.Registrations.Any(r => r.eventId == eventId && r.userId == user.Id))
+            var existing = db.Registrations.FirstOrDefault(m => m.eventId == eventId && m.userId == user.Id);
+
+            if (existing != null)
             {
                 TempData["Info"] = "You've registered this event already!";
                 return RedirectToAction("EventDetail", new { id = eventId });
