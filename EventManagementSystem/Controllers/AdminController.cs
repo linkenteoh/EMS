@@ -89,6 +89,45 @@ namespace EventManagementSystem.Controllers
 
             return View();
         }
+        public ActionResult Dashboard()
+        {
+            return View();
+        }
+        public ActionResult OrganizerData()
+        {
+
+           var dt = db.Registrations.Where(a => a.userId == a.User.Id).GroupBy(o => o.Event.Organiser.represent).ToList().Select(g => new object[] {
+
+             g.Key,
+                g.Count(s => s.User.memberRole == "Student"),
+                g.Count(s => s.User.memberRole == "Outsider")
+
+            });
+
+            return Json(dt, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Dashboard2()
+        {
+/*            Func<Event, object> fn = s => s.Id;*/
+
+            var model = db.Events.Where(ev => ev.OrgId == ev.Organiser.User.Id);
+/*            var e = model.OrderBy(fn).ToPagedList(page, 10);*/
+            return View(model);
+        }
+
+        public ActionResult OrganizerData2()
+        {
+            var dt = db.Users.Where(u => u.Id == u.Organiser.Id).GroupBy(u => u.memberRole).ToList().Select(g => new object[] {
+                g.Key,
+                g.Count(s => s.Organiser.Events.Any())
+
+            });
+
+
+            return Json(dt, JsonRequestBehavior.AllowGet);
+        }
+
+
 
 
         [Authorize(Roles = "Admin")]
