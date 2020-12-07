@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewBag.Title = "Venue Booking Report Based on Month and Year";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@section head{
+    <style>
+        table {
+            border-collapse: separate;
+            border-spacing: 10px;
+        }
+
+            table th, table td {
+                padding: 5px;
+            }
+    </style>
+}
+<h2>@ViewBag.Title</h2>
+<hr />
+<p>
+    <table>
+        <tr>
+            <td colspan="2">@Html.Label("timeRange", "Filter by Month and Year")</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>@Html.Label("year", "Year")</td>
+            <td>@Html.DropDownList("year", (SelectList)ViewBag.YearList, new { @class = "form-control btn btn-secondary" })</td>
+            <td>@Html.Label("month", "Month")</td>
+            <td>@Html.DropDownList("month", (SelectList)ViewBag.MonthList, new { @class = "form-control btn btn-secondary" })</td>
+            <td><button class="btn btn-primary" id="showReport">Filter</button></td>
+            <td>
+                <span id="loader" style="display:none;">
+                    <img src="~/Images/loader.gif">
+                    Loading...
+                </span>
+            </td>
+            <td><i class="fa fa-search fa-2x"></i></td>
+        </tr>
+    </table>
+</p>
+<div id="chart" style="width: 1000px; height: 500px"></div>
+
+@section foot {
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(init);
+
+        let dt, opt, cht;
+
+        function init() {
+            dt = new google.visualization.DataTable();
+            // TODO: Data table columns
+            dt.addColumn('string', 'Venue');
+            dt.addColumn('number', 'Number of bookings made');
+
+            let style = { bold: true, italic: false, fontSize: 20, color: 'black' };
+
+            opt = {
+                title: 'Venue Booking Report based on month & year',
+                fontName: 'Calibri',
+                fontSize: 16,
+                titleTextStyle: { fontSize: 20 },
+                chartArea: { width: '85%', height: '70%', top: 60, left: 80 },
+                legend: 'none',
+                hAxis: { title: 'Venue', titleTextStyle: style, maxTextLines: 1 },
+                vAxis: { title: 'Number of bookings made', titleTextStyle: style, format: '#' },
+                animation: { duration: 500, startup: true },
+                colors: ['#3D6EC9'],
+                crosshair: {
+                    trigger: 'focus',
+                    color: 'lightblue',
+                    opacity: 0.5,
+                    orientation: 'both'
+                }
+            };
+            cht = new google.visualization.LineChart($('#chart')[0]);
+        }
+
+        $('#showReport').click(e => {
+            e.preventDefault();
+            // TODO: Set param
+            let url = '/Admin/DataSet2';
+            let param = { year: $('#year').val(), month: $('#month').val() };
+
+            // TODO: Show loader
+            $('#loader').show();
+
+            $.getJSON(url, param, json => {
+                // TODO: Append year
+                opt.title = 'Venue Booking Report By Day - ' + param.year + ', ' + $('#month option:selected').text();;
+
+                dt.removeRows(0, dt.getNumberOfRows());
+                dt.addRows(json);
+
+                // TODO: Format day (column 0) --> tooltip
+                new google.visualization.DateFormat({
+                    pattern: 'dd MMMM yyyy'
+                }).format(dt, 0);
+
+                if (dt.getNumberOfRows() > 0) {
+                    cht.draw(dt, opt);
+                } else {
+                    alert("No Records Founded.");
+                    cht.clearChart();
+                }
+                // TODO: Hide loader
+                $('#loader').hide();
+            });
+
+        });
+    </script>
+}

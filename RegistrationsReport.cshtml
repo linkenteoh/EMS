@@ -1,0 +1,116 @@
+﻿
+@{
+    ViewBag.Title = "Registrations";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+<h2>Registrations</h2>
+<hr />
+<p>
+    @Html.DropDownList("year", (SelectList)ViewBag.YearList, new { @class = "form-control" })
+    @Html.DropDownList("month", (SelectList)ViewBag.MonthList, new { @class = "form-control" })
+
+    <span id="loader">
+        <img src="~/Images/loader-16.gif">
+        Loading...
+    </span>
+</p>
+
+<div id="chart" style="width: 800px; height: 400px"></div>
+
+
+@section foot {
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(init);
+
+        let dt, opt, cht;
+
+        function init() {
+            dt = new google.visualization.DataTable();
+            // TODO: Data table columns
+            dt.addColumn('date', 'Day');
+            dt.addColumn('number', 'Records');
+
+            let style = { bold: true, italic: false, fontSize: 20, color: 'darkorange' };
+
+            opt = {
+                title: 'Overall Event Registrations',
+                fontName: 'Calibri',
+                fontSize: 16,
+                titleTextStyle: { fontSize: 20 },
+                chartArea: { width: '85%', height: '70%', top: 60, left: 80 },
+                legend: 'none',
+                hAxis: { title: 'Day', titleTextStyle: style, maxTextLines: 1, format: 'dd MMMM' },
+                // TODO: Format
+                vAxis: { title: 'Records', titleTextStyle: style },
+                animation: { duration: 500, startup: true },
+                colors: ['darkorange'],
+                // TODO: Other options (crosshair)
+                crosshair: {
+                    trigger: 'focus',
+                    color: 'red',
+                    opacity: 0.5,
+                    orientation: 'both'
+                }
+
+            };
+
+            cht = new google.visualization.LineChart($('#chart')[0]);
+
+            // TODO: Event (ready --> alert if no data)
+            google.visualization.events.addListener(cht, 'ready',
+                e => {
+                    if (dt.getNumberOfRows() == 0) {
+                        alert('No Data');
+                        cht.clearChart();
+                    }
+                });
+
+            $('#year').change();
+        }
+
+        $('#year,#month').change(e => {
+            e.preventDefault();
+
+            // TODO: Set param
+            let url = '/Admin/Data7';
+            let param = {
+                year: $('#year').val(),
+                month: $('#month').val()
+            };
+
+            $('#loader').show();
+
+            $.getJSON(url, param, function (json) {
+                // TODO: Append year and month
+                opt.title = 'Overall Event Registrations By Day - ' + param.year + ' ' + $('#month option:selected').text();
+
+                dt.removeRows(0, dt.getNumberOfRows());
+
+                // TODO: Convert date string to date
+                for (let data of json) {
+                    data[0] = new Date(data[0]);
+                }
+
+                dt.addRows(json);
+
+                // TODO: Format day (column 0) --> tooltip
+                new google.visualization.DateFormat({
+                    pattern: 'dd MMMM yyyy'
+                }).format(dt, 0);
+
+                // TODO: Format sales (column 1) --> tooltip
+                new google.visualization.NumberFormat({
+                    prefix: 'RM'
+                }).format(dt, 1);
+
+                cht.draw(dt, opt);
+
+                $('#loader').hide();
+            });
+        });
+    </script>
+}
+

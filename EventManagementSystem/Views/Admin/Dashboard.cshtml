@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+<div id="chart" style="width: 600px; height: 400px"></div>
+
+<p>
+    <a href="#" id="reload">Reload</a>
+    <label><input type="checkbox" id="stacked">Stacked</label>
+</p>
+
+@section foot {
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(init);
+
+        let dt, opt, cht;
+
+        function init() {
+            dt = new google.visualization.DataTable();
+            dt.addColumn('string', 'Society');
+            dt.addColumn('number', 'Students');
+            dt.addColumn('number', 'Outsiders');
+
+            let style = { bold: true, italic: false, fontSize: 20, color: 'purple' };
+
+            opt = {
+                title: 'Top 5 societies organized events with the most participants by Students and Outsiders.',
+                fontName: 'Calibri',
+                fontSize: 16,
+                titleTextStyle: { fontSize: 20 },
+                chartArea: { width: '65%', height: '70%', top: 60, left: 80 },
+                vAxis: { title: 'Total Participants Count', titleTextStyle: style },
+                hAxis: { title: 'Group Number', titleTextStyle: style },
+                animation: { duration: 500, startup: true },
+
+                colors: ['red', 'blue'],
+                isStacked: false,
+                focusTarget: 'datum',
+            };
+
+            cht = new google.visualization.ColumnChart($('#chart')[0]);
+
+            $('#reload').click();
+        }
+
+        $('#reload').click(e => {
+            e.preventDefault();
+
+            let url = '/Admin/OrganizerData';
+            let param = {};
+
+            $.getJSON(url, param, json => {
+                dt.removeRows(0, dt.getNumberOfRows());
+                dt.addRows(json);
+                cht.draw(dt, opt);
+            });
+        });
+
+        $('#stacked').change(e => {
+            e.preventDefault();
+
+            // Toggle isStacked (false <--> true)
+            // Toggle focusTarget (datum <--> category)
+            opt.isStacked = e.target.checked;
+            opt.focusTarget = e.target.checked ? 'category' : 'datum';
+
+            cht.draw(dt, opt);
+        });
+    </script>
+}

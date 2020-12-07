@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewBag.Title = "The Most Booked Venue of the Year Report";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@section head{
+    <style>
+        table {
+            border-collapse: separate;
+            border-spacing: 10px;
+        }
+
+            table th, table td {
+                padding: 5px;
+            }
+    </style>
+}
+<h2>@ViewBag.Title</h2>
+<hr />
+<p>
+    <table>
+        <tr>
+            <td>@Html.Label("year", "Filter by year")</td>
+            <td>@Html.DropDownList("year", (SelectList)ViewBag.YearList, new { @class = "form-control btn btn-secondary" })</td>
+            <td><i class="fa fa-search fa-2x"></i></td>
+            <td>
+                <span id="loader" style="display:none;">
+                    <img src="~/Images/loader.gif">
+                    Loading...
+                </span>
+            </td>
+        </tr>
+
+    </table>
+</p>
+
+<div id="chart" style="width: 1000px; height: 500px"></div>
+
+@section foot {
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(init);
+
+        let dt, opt, cht;
+
+        function init() {
+            dt = new google.visualization.DataTable();
+            // TODO: Data table columns
+            dt.addColumn('string', 'Venue');
+            dt.addColumn('number', 'Number of bookings made');
+
+            let style = { bold: true, italic: false, fontSize: 20, color: 'black' };
+
+            opt = {
+                title: 'The Most Booked Venue of the Year Report',
+                fontName: 'Calibri',
+                fontSize: 16,
+                titleTextStyle: { fontSize: 20 },
+                chartArea: { width: '85%', height: '70%', top: 60, left: 80 },
+                legend: 'none',
+                hAxis: { title: 'Venue', titleTextStyle: style },
+                vAxis: { title: 'Number of bookings made', titleTextStyle: style, format: '#' },
+                animation: { duration: 500, startup: true },
+                colors: ['#3D6EC9']
+            };
+            cht = new google.visualization.ColumnChart($('#chart')[0]);
+        }
+
+        $('#year').change(e => {
+            e.preventDefault();
+            // TODO: Set param
+            let url   = '/Admin/DataSet1';
+            let param = { year: $('#year').val() };
+
+            // TODO: Show loader
+            $('#loader').show();
+
+            $.getJSON(url, param, json => {
+                // TODO: Append year
+                opt.title = 'The Most Booked Venue of the Year ' + param.year;
+
+                dt.removeRows(0, dt.getNumberOfRows());
+                dt.addRows(json);
+                // TODO: Format sales (column 1) --> tooltip
+                if (dt.getNumberOfRows() > 0) {
+                    cht.draw(dt, opt);
+                } else {
+                    alert("No Records Founded.");
+                    cht.clearChart();
+                }
+                // TODO: Hide loader
+                $('#loader').hide();
+            });
+        });
+    </script>
+}
+
+
