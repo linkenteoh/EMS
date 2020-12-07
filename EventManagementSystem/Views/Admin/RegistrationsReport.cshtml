@@ -75,7 +75,7 @@
             e.preventDefault();
 
             // TODO: Set param
-            let url = '/Admin/Data7';
+            let url = '/Admin/RegistrationData';
             let param = {
                 year: $('#year').val(),
                 month: $('#month').val()
@@ -101,10 +101,7 @@
                     pattern: 'dd MMMM yyyy'
                 }).format(dt, 0);
 
-                // TODO: Format sales (column 1) --> tooltip
-                new google.visualization.NumberFormat({
-                    prefix: 'RM'
-                }).format(dt, 1);
+
 
                 cht.draw(dt, opt);
 

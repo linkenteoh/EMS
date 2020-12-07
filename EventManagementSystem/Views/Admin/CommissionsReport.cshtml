@@ -52,7 +52,7 @@
                 $('#year').change(e => {
                     e.preventDefault();
 
-                    let url = '/Admin/ComisssionData';
+                    let url = '/Admin/CommissionData';
                     let param = { year: $('#year').val() };
 
                     $('#loader').show();
@@ -63,6 +63,9 @@
                         dt.removeRows(0, dt.getNumberOfRows());
                         dt.addRows(json);
 
+                        new google.visualization.NumberFormat({
+                            prefix: 'RM'
+                        }).format(dt, 1);
 
                         cht.draw(dt, opt);
 

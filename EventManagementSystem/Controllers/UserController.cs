@@ -40,11 +40,8 @@ namespace EventManagementSystem.Controllers
         public ActionResult RegOrganiser()
         {
             int id = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
-            if (db.Organisers.FirstOrDefault(o => o.Id == id).status == true)
-            {
-                return RedirectToAction("ProposeEvent", "User");
-            }
-                return View();
+
+            return View();
         }
 
         // POST: User/RegOrganiser
