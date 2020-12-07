@@ -18,6 +18,7 @@ namespace EventManagementSystem.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult Chat()
         {
 

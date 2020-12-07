@@ -24,7 +24,7 @@ textarea {
 }
 
 footer{
-    position: absolute;
+    position: fixed;
     bottom: 0;
 }
 

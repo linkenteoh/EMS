@@ -44,6 +44,8 @@
                 <div class="navbar-nav">
                     <a href="~/Home/Index" class="nav-item nav-link active">Home</a>
                     <a href="~/Home/Events" class="nav-item nav-link">Events</a>
+                    <a href="~/Home/Contact" class="nav-item nav-link">Contact us</a>
+                    <a href="~/Event/Chat" class="nav-item nav-link">Global Chat</a>
                     @{
                         if (User.Identity.IsAuthenticated)
                         {
@@ -87,10 +89,12 @@
 
     <div class="container body-content">
         @RenderBody()
-        @*        <footer>
-                <p>Developed by TARUC &copy; @DateTime.Now.Year </p>
-            </footer>*@
+        <div class="modal-footer">
+            <p>Developed by TARUC &copy; @DateTime.Now.Year </p>
+        </div>
     </div>
+
+
 
     <script src="~/Scripts/jquery-3.5.1.js"></script>
     <script src="~/Scripts/jquery.validate.js"></script>
