@@ -165,6 +165,21 @@ namespace EventManagementSystem.Controllers
         }
 
         // Wen Jun Report
+        public ActionResult DataSet1(int year = 0)
+        {
+            var dt = db.Events
+              .Where(e => e.venueId != null && e.date.Year == year)
+              .GroupBy(e => e.Venue.name)
+              .OrderByDescending(e => e.Count())
+              .ToList()
+              .Select(g => new object[]
+              {
+                g.Key.ToString(),
+                g.Count(),
+              });
+            return Json(dt, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult MostBookedVenueReport()
         {
             // Get Year

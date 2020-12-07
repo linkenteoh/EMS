@@ -378,6 +378,7 @@
     <Content Include="Views\Admin\RegistrationsReport.cshtml" />
     <Content Include="Views\Admin\RevenueGainInEvent.cshtml" />
     <Content Include="Views\Admin\RoleCount.cshtml" />
+    <Content Include="Views\Admin\VBMonthYearReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Admin\DisplayUser.cshtml" />
