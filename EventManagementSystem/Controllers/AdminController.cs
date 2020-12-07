@@ -89,6 +89,45 @@ namespace EventManagementSystem.Controllers
 
             return View();
         }
+        public ActionResult Dashboard()
+        {
+            return View();
+        }
+        public ActionResult OrganizerData()
+        {
+
+           var dt = db.Registrations.Where(a => a.userId == a.User.Id).GroupBy(o => o.Event.Organiser.represent).ToList().Select(g => new object[] {
+
+             g.Key,
+                g.Count(s => s.User.memberRole == "Student"),
+                g.Count(s => s.User.memberRole == "Outsider")
+
+            });
+
+            return Json(dt, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Dashboard2()
+        {
+/*            Func<Event, object> fn = s => s.Id;*/
+
+            var model = db.Events.Where(ev => ev.OrgId == ev.Organiser.User.Id);
+/*            var e = model.OrderBy(fn).ToPagedList(page, 10);*/
+            return View(model);
+        }
+
+        public ActionResult OrganizerData2()
+        {
+            var dt = db.Users.Where(u => u.Id == u.Organiser.Id).GroupBy(u => u.memberRole).ToList().Select(g => new object[] {
+                g.Key,
+                g.Count(s => s.Organiser.Events.Any())
+
+            });
+
+
+            return Json(dt, JsonRequestBehavior.AllowGet);
+        }
+
+
 
 
         [Authorize(Roles = "Admin")]
@@ -458,7 +497,7 @@ namespace EventManagementSystem.Controllers
 
             ViewBag.RoleList = new SelectList(
                 new List<SortItems> {
-                    new SortItems { Id = "Student", name = "Admin"},
+                    new SortItems { Id = "Student", name = "Student"},
                     new SortItems { Id = "Admin", name = "Admin"},
                     new SortItems { Id = "Staff", name = "Staff"},
                 }, "Id", "name");
@@ -520,11 +559,13 @@ namespace EventManagementSystem.Controllers
                     username = model.username,
                     password = HashPassword(model.password),
                     role = model.role.ToString(),
+                    memberRole = model.memberRole.ToString(),
                     status = true,
-                    recoveryCode = "ABCDEF",
-                    activationCode = "ABCDEF",
+                    recoveryCode = null,
+                    activationCode = null,
                     photo = SavePhoto(model.Photo),
-                    activated = true
+                    activated = true,
+                    lockoutValue = 0
                 };
 
                 db.Users.Add(u);
@@ -546,17 +587,17 @@ namespace EventManagementSystem.Controllers
             if (u == null)
             {
                 return RedirectToAction("Index", "Admin");
-            }
+            }       
 
             var model = new UserEditVM
             {
-                Id = id,
                 name = u.name,
                 contact_no = u.contact_no.Trim(),
                 email = u.email,
                 username = u.username,
                 password = u.password,
                 role = (Role)Enum.Parse(typeof(Role), u.role),
+                memberRole = (MemberRole)Enum.Parse(typeof(MemberRole), u.memberRole),
                 photoURL = u.photo,
             };
             return View(model);
@@ -588,6 +629,7 @@ namespace EventManagementSystem.Controllers
                 }
 
                 u.role = model.role.ToString();
+                u.memberRole = model.memberRole.ToString();
                 if (model.Photo != null)
                 {
                     DeletePhoto(u.photo);
@@ -602,12 +644,13 @@ namespace EventManagementSystem.Controllers
             return View(model);
         }
         [Authorize(Roles = "Admin")]
-        public ActionResult RestoreUser(int id)
+        public ActionResult DeleteUser(int id)
         {
+
             var u = db.Users.Find(id);
             if (u != null)
             {
-                u.status = true;
+                u.status = false;
                 db.SaveChanges();
                 TempData["info"] = "User record deleleted successfully";
             }
@@ -685,20 +728,7 @@ namespace EventManagementSystem.Controllers
 
              return View();
          }*/
-        [Authorize(Roles = "Admin")]
-        public ActionResult DeleteUser(int id)
-        {
-            var u = db.Users.Find(id);
-            if (u != null)
-            {
-                u.status = false;
-                db.SaveChanges();
-                TempData["info"] = "User record deleleted successfully";
-            }
-
-            var url = Request.UrlReferrer?.AbsolutePath ?? "/";
-            return Redirect(url);
-        }
+       
         [Authorize(Roles = "Admin")]
         public ActionResult DisplayAdvert(string searchName = "", string name = "", string desc = "",
             string startDate = "", string endDate = "", string sort = "", int page = 1)
@@ -707,7 +737,6 @@ namespace EventManagementSystem.Controllers
                new List<SortItems> {
                     new SortItems { Id = "Id", name = "Id"},
                     new SortItems { Id = "name", name = "Name"},
-                    new SortItems { Id = "charge", name = "Charge"},
                     new SortItems { Id = "startDate", name = "Start Date"},
                     new SortItems { Id = "endDate", name = "End Date"}
                }, "Id", "name");
@@ -717,12 +746,7 @@ namespace EventManagementSystem.Controllers
             // Name
             if (!string.IsNullOrEmpty(name))
             {
-                advertisement = advertisement.Where(m => m.name.Contains(name));
-            }
-            // Venue
-            if (!string.IsNullOrEmpty(desc))
-            {
-                advertisement = advertisement.Where(x => x.des.Contains(desc));
+                advertisement = advertisement.Where(m => m.Event.name.Contains(name));
             }
             // Start Date && End Date
             if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
@@ -742,14 +766,13 @@ namespace EventManagementSystem.Controllers
                 advertisement = advertisement.Where(x => x.endDate <= timeTo);
             }
             // Search name
-            advertisement = advertisement.Where(x => x.name.Contains(searchName) || x.des.Contains(searchName));
+            advertisement = advertisement.Where(x => x.Event.name.Contains(searchName));
             // Sort By
             Func<Advertisement, object> fn = s => s.Id;
             switch (sort)
             {
                 case "Id": fn = s => s.Id; break;
-                case "name": fn = s => s.name; break;
-                case "charge": fn = s => s.charge; break;
+                case "Event Name": fn = s => s.Event.name; break;
                 case "startDate": fn = s => s.startDate; break;
                 case "endDate": fn = s => s.endDate; break;
             }
@@ -764,13 +787,16 @@ namespace EventManagementSystem.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult InsertAdvert()
         {
+            var id = db.Events.FirstOrDefault().Id;
+
+            ViewBag.EventList = new SelectList(db.Events, "Id", "name");
             return View();
         }
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public ActionResult InsertAdvert(AdvertManageVM model)
         {
-            var id = db.Users.FirstOrDefault(u => u.username == User.Identity.Name).Id;
+            
             if (ModelState.IsValidField("startDate"))
             {
                 if (model.startDate > model.endDate)
@@ -779,34 +805,20 @@ namespace EventManagementSystem.Controllers
                 }
 
             }
-            if (ModelState.IsValidField("startTime"))
+            var adv = db.Advertisements.Find(model.Id);
+            if(adv != null )
             {
-                if (model.startTime >= model.endTime)
-                {
-                    ModelState.AddModelError("startTime", "start time cannot exceed or equal end time!");
-                }
-            }
-            string error = ValidatePhoto(model.Photo);
-            if (error != null)
-            {
-                ModelState.AddModelError("Photo", error);
+                ModelState.AddModelError("Id", "This event had been promoted! Please choose other options!");
             }
             if (ModelState.IsValid)
             {
                 var a = new Advertisement
                 {
-                    name = model.name,
-                    des = model.des,
-                    charge = model.charge,
+                    Id = model.Id,
                     startDate = model.startDate,
                     endDate = model.endDate,
-                    startTime = model.startTime,
-                    endTime = model.endTime,
                     status = true,
-                    userId = id,
-                    photoURL = SavePhoto(model.Photo)
                 };
-                // TempData["Info"] = "Event record added successfully!";
                 db.Advertisements.Add(a);
                 db.SaveChanges();
                 TempData["info"] = "Advertisement record inserted successfully";
@@ -817,11 +829,13 @@ namespace EventManagementSystem.Controllers
             {
                 TempData["Error"] = "Error";
             }
+            ViewBag.EventList = new SelectList(db.Events, "Id", "name");
             return View(model);
         }
 
         public ActionResult EditAdvert(int id)
         {
+            ViewBag.EventList = new SelectList(db.Events, "Id", "name");
             var a = db.Advertisements.Find(id);
             if (a == null)
             {
@@ -831,15 +845,8 @@ namespace EventManagementSystem.Controllers
             var model = new AdvertManageVM
             {
                 Id = id,
-                name = a.name,
-                des = a.des,
-                charge = a.charge,
                 startDate = a.startDate,
                 endDate = a.endDate,
-                startTime = a.startTime,
-                endTime = a.endTime,
-                userId = a.userId,
-                photoURL = a.photoURL,
             };
             return View(model);
         }
@@ -848,7 +855,8 @@ namespace EventManagementSystem.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditAdvert(AdvertManageVM model)
         {
-            var a = db.Advertisements.Find(model.Id);
+            var eventID = db.Events.FirstOrDefault(e => e.Id == model.Id).Id;
+            var a = db.Advertisements.FirstOrDefault(o => o.Id == eventID);
             if (ModelState.IsValidField("startDate"))
             {
                 if (model.startDate > model.endDate)
@@ -857,37 +865,23 @@ namespace EventManagementSystem.Controllers
                 }
 
             }
-            if (ModelState.IsValidField("startTime"))
-            {
-                if (model.startTime >= model.endTime)
-                {
-                    ModelState.AddModelError("startTime", "start time cannot exceed or equal end time!");
-                }
-            }
             if (model == null)
             {
                 return RedirectToAction("Index", "Admin");
             }
             if (ModelState.IsValid)
             {
-                a.name = model.name;
-                a.des = model.des;
-                a.charge = model.charge;
+                a.Id = model.Id;
                 a.startDate = model.startDate;
                 a.endDate = model.endDate;
-                a.startTime = model.startTime;
-                a.endTime = model.endTime;
-                if (model.Photo != null)
-                {
-                    DeletePhoto(a.photoURL);
-                    a.photoURL = SavePhoto(model.Photo);
-                }
                 db.SaveChanges();
                 TempData["info"] = "Advertisement record updated successfully";
                 return RedirectToAction("DisplayAdvert", "Admin");
             }
+            ViewBag.EventList = new SelectList(db.Events, "Id", "name");
             return View(model);
         }
+
         [Authorize(Roles = "Admin")]
         public ActionResult DeleteAdvert(int id)
         {

@@ -5,21 +5,23 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="41ed6b36fb9c4deaa67df0ad533950c2" Name="Diagram1" ZoomLevel="80">
-        <EntityTypeShape EntityType="DBModel.Advertisement" Width="1.5" PointX="4.176541430957867" PointY="8.8195290308536638" />
-        <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="2.3963216051442182" PointY="18.806403362567725" />
-        <EntityTypeShape EntityType="DBModel.Organiser" Width="1.5" PointX="5.8338291970239151" PointY="29.11523279413359" />
-        <EntityTypeShape EntityType="DBModel.Payment" Width="1.5" PointX="10.308618786888484" PointY="11.836677899508121" />
-        <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="8.2134793867419837" PointY="15.641238532793354" />
-        <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="1.0122139272336912" PointY="28.625712959387204" />
-        <EntityTypeShape EntityType="DBModel.Venue" Width="1.5" PointX="6.0797523083536653" PointY="18.860279285749552" />
+
         <AssociationConnector Association="DBModel.FK_Table_User" />
+        <EntityTypeShape EntityType="DBModel.Advertisement" Width="1.5" PointX="7.9980952534815746" PointY="16.258489526928631" />
+        <EntityTypeShape EntityType="DBModel.Event" Width="1.5" PointX="3.3586943109327434" PointY="7.6431556528635118" />
+        <EntityTypeShape EntityType="DBModel.Organiser" Width="1.5" PointX="6.6109374904124705" PointY="21.875094915682027" />
+        <EntityTypeShape EntityType="DBModel.Payment" Width="1.5" PointX="8.0244294833505663" PointY="31.136804103449361" />
+        <EntityTypeShape EntityType="DBModel.Registration" Width="1.5" PointX="1.1646331479608234" PointY="26.607201886646077" />
+        <EntityTypeShape EntityType="DBModel.User" Width="1.5" PointX="11.523767251299587" PointY="4.9567126356795024" />
+        <EntityTypeShape EntityType="DBModel.Venue" Width="1.5" PointX="7.81579772746926" PointY="30.482962667235622" />
+        <AssociationConnector Association="DBModel.FK_Advertisement_ToEvent" />
         <AssociationConnector Association="DBModel.FK_Event_Organiser" />
         <AssociationConnector Association="DBModel.FK_Event_Venue" />
         <AssociationConnector Association="DBModel.FK_Registration_Event" />
         <AssociationConnector Association="DBModel.FK_Organiser_User" />
         <AssociationConnector Association="DBModel.FK_Payment_Registration" />
         <AssociationConnector Association="DBModel.FK_Registration_User" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 <AssociationConnector Association="DBModel.FK_Registration_Event" />

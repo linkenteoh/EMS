@@ -50,7 +50,7 @@
 
             <div class="col-md-7 border-right">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="text-right">Add User</h4>
+                    <h4 class="text-right">Edit User</h4>
                 </div>
                 <div class="row mt-4">
                     <div class="col-md-6">
@@ -88,19 +88,16 @@
                         </div>
                         @Html.ValidationMessageFor(u => u.role)
                     </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(u => u.memberRole, "Position")
+                        <div>
+                            @Html.DropDownListFor(u => u.memberRole, new SelectList(Enum.GetValues(typeof(MemberRole))), "-Choose One-", new { @class = "btn btn-secondary dropdown-toggle" })
+                        </div>
+                        @Html.ValidationMessageFor(u => u.memberRole)
+                    </div>
                 </div>
                 <div class="mt-12" style="margin-top:15px">
                     <section><button class="btn btn-primary profile-button">Edit</button></section>
-                </div>
-                <div>
-                    @if (@Model.status == true)
-                    {
-                        <section> <a class="btn btn-danger" href="/Admin/DeleteUser?id=@Model.Id">Delete</a></section>
-                    }
-                    else if (@Model.status == false)
-                    {
-                        <section> <a class="btn btn-success" href="/Admin/RestoreUser?id=@Model.Id">Restore</a></section>
-                    }
                 </div>
 
 

@@ -45,24 +45,33 @@ namespace EventManagementSystem.Controllers
 
             var user = db.Users.FirstOrDefault(u => u.username == User.Identity.Name);
 
-            if (db.Registrations.Any(r => r.eventId == eventId && r.userId == user.Id))
+            var existing = db.Registrations.FirstOrDefault(m => m.eventId == eventId && m.userId == user.Id);
+
+            if (existing != null)
             {
                 TempData["Info"] = "You've registered this event already!";
                 return RedirectToAction("EventDetail", new { id = eventId });
             }
 
             var e = db.Events.Find(eventId);
+            
+            if(user.Id == e.OrgId)
+            {
+                TempData["Info"] = "You can't register you own organised event";
+                return RedirectToAction("EventDetail", "Event", new { id = eventId });
+            }
+
             double price = 0;
             double comission = 0;
             double addCharge = 0;
             double temp = 0;
 
-            if(user.role == "Student")
+            if(user.memberRole == "Student")
             {
                 addCharge = 0;
                 price = (double)e.price;
                 comission = price * 0.1;
-            }else if(user.role == "Outsider")
+            }else if(user.memberRole == "Outsider")
             {
                 addCharge = (double)e.price * 0.1;    //Additional charge
                 price = (double)e.price + addCharge; 

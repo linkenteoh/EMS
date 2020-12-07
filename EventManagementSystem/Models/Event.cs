@@ -35,6 +35,7 @@ namespace EventManagementSystem.Models
         public string photoURL { get; set; }
         public int OrgId { get; set; }
     
+        public virtual Advertisement Advertisement { get; set; }
         public virtual Organiser Organiser { get; set; }
         public virtual Venue Venue { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

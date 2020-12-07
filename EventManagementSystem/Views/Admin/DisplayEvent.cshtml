@@ -35,6 +35,7 @@
 }
 
 <h1>Events List</h1>
+<hr />
 <div style="margin-bottom:20px"></div>
 <input class="btn btn-primary" data-get="/Admin/InsertEvent" type="button" value="Add Event">
 <hr />
@@ -45,14 +46,13 @@
     <span>
         @Html.TextBox("searchName", null, new
         {
-            data_upper = "",
             autofocus = "",
             @class = "form-control",
-            style = "display:inline; width:600px;",
+            style = "display:inline; width:300px;",
             placeholder = "Search..."
         })
     </span>
-    <i class="fa fa-search fa-2x"></i>
+    <i class="fa fa-search fa-1x"></i>
     <div class="parent">
         <div class="searchCont" style="display:none">
             <div style="padding-left: 10px;">

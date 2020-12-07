@@ -194,6 +194,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\TaskHub.cs" />
     <Compile Include="linkEncryption.cs" />
     <Compile Include="Models\Advertisement.cs">
@@ -356,7 +357,6 @@
     <Content Include="Views\Admin\DisplayOrganizerApproval.cshtml" />
     <Content Include="Views\User\RegOrganisera.cshtml" />
     <Content Include="Views\Account\DisplayQR.cshtml" />
-
     <Content Include="Views\Admin\_AdsList.cshtml" />
     <Content Include="Views\Admin\_EventApproveList.cshtml" />
     <Content Include="Views\Admin\_EventListAdmin.cshtml" />

@@ -15,17 +15,10 @@ namespace EventManagementSystem.Models
     public partial class Advertisement
     {
         public int Id { get; set; }
-        public string name { get; set; }
-        public string des { get; set; }
         public System.DateTime startDate { get; set; }
         public System.DateTime endDate { get; set; }
-        public System.TimeSpan startTime { get; set; }
-        public System.TimeSpan endTime { get; set; }
-        public decimal charge { get; set; }
-        public string photoURL { get; set; }
         public bool status { get; set; }
-        public int userId { get; set; }
     
-        public virtual User User { get; set; }
+        public virtual Event Event { get; set; }
     }
 }

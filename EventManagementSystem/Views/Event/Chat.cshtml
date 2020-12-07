@@ -3,21 +3,20 @@
     ViewBag.Title = "Chat";
 }
 
-<fieldset>
-    <legend>Chat Test</legend>
-</fieldset>
-<div class="form-group col-xl-12">
+<h3>Public Chatroom</h3><hr />
+
+<div class="form-group col-xl-12" style="padding-left:0px;">
+    <br />
+    <label id="label2">Messages</label>
+    <div class="container chatArea">
+        <input type="hidden" id="displayname" value="@User.Identity.Name" />
+        <ul id="discussion" style="text-align:left;"></ul>
+    </div>
     <label id="label1">Write Your Message Here</label><br />
     <textarea class="form-control" rows="4" cols="40" id="message" placeholder="Share what's in your mind..."></textarea>
     <br />
     <input type="button" class="btn btn-primary" id="sendmessage" value="Send" />
     <br />
-    <br />
-    <label id="label2">Chats</label>
-    <div class="container chatArea">
-        <input type="hidden" id="displayname" value="@User.Identity.Name" />
-        <ul id="discussion"></ul>
-    </div>
 </div>
 @section foot {
         <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
@@ -27,7 +26,7 @@
             $(function () {
                 var chat = $.connection.chatHub;
                 chat.client.addNewMessageToPage = function (name, message) {
-                    $('#discussion').append('<ul style="list-style-type:square"><li>' + htmlEncode(name) + 'said:'
+                    $('#discussion').append('<ul style="list-style-type:none; text-align:left"><li><b>' + htmlEncode(name) + '</b> says:'
                           + htmlEncode(message) + '</li></ul>');
                 };
                 $('#message').focus();
@@ -42,6 +41,14 @@
                 var encodedValue = $('<div />').text(value).html();
                 return encodedValue;
             }
+
+            var input = document.getElementById("message");
+            input.addEventListener("keyup", function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    document.getElementById("sendmessage").click();
+                }
+            });
         </script>
     }
 
